@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>世界冠军编年史 · 世界杯 / 欧冠 / NBA / Dota2 TI / LoL S赛 / CS2 Major</title>
+<style>
+:root{
+  --bg:#f5f6f8; --card:#ffffff; --ink:#1c2330; --sub:#5b6577; --line:#e6e9ef;
+  --accent:#2f6fed; --gold:#c9962a; --silver:#8a93a3; --bronze:#b06a37;
+  --chip:#eef1f6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif;line-height:1.5}
+header{padding:34px 24px 10px;max-width:1280px;margin:0 auto}
+header h1{font-size:26px;font-weight:700}
+header p{color:var(--sub);font-size:13.5px;margin-top:6px}
+.tabs{max-width:1280px;margin:18px auto 0;padding:0 24px;display:flex;gap:8px;flex-wrap:wrap;position:sticky;top:0;z-index:20;background:linear-gradient(var(--bg) 85%,transparent)}
+.tab{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:9px 20px;font-size:14.5px;cursor:pointer;color:var(--sub);transition:.18s}
+.tab:hover{border-color:var(--accent);color:var(--accent)}
+.tab.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.tab .n{font-size:12px;opacity:.75;margin-left:6px}
+main{max-width:1280px;margin:0 auto;padding:10px 24px 70px}
+.meta{color:var(--sub);font-size:13px;margin:14px 2px 18px}
+.meta b{color:var(--ink)}
+.edition{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:22px;box-shadow:0 1px 2px rgba(20,30,55,.04)}
+.ed-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:1px dashed var(--line);padding-bottom:12px;margin-bottom:14px}
+.ed-label{font-size:19px;font-weight:700}
+.ed-sub{color:var(--sub);font-size:13px}
+.ed-prize{font-size:13px;color:var(--gold);font-weight:600;background:#fbf4e2;border:1px solid #f0e2ba;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.ed-prize.blue{color:#3d6fb8;background:#eaf1ff;border-color:#c9dbff}
+.ed-right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline}
+.ed-note{color:var(--sub);font-size:12.5px;margin:-6px 0 12px}
+.podium{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.team{border:1px solid var(--line);border-radius:12px;padding:13px 14px;background:#fbfcfe;display:flex;flex-direction:column;gap:10px}
+.team.r1{border-color:#eed9a2;background:linear-gradient(#fffdf5,#fdf6e1)}
+.team.r2{border-color:#d7dbe3;background:linear-gradient(#fcfdff,#f4f6fa)}
+.team.r3{border-color:#e6cfae;background:linear-gradient(#fffbf6,#faf1e7)}
+.team-top{display:flex;align-items:center;gap:11px}
+.logo{width:52px;height:52px;border-radius:10px;object-fit:contain;background:#fff;border:1px solid var(--line);flex:none;padding:4px}
+.logo.ld{background:#212a3d;border-color:#141a27}
+.logo.ph,.avatar.ph{display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:18px}
+.tname{font-weight:700;font-size:15.5px}
+.ten{color:var(--sub);font-size:11px;font-weight:500;margin-left:5px}
+.tplace{font-size:11.5px;font-weight:700;letter-spacing:.5px;border-radius:6px;padding:2px 7px;margin-left:8px;vertical-align:2px;color:#fff}
+.p1{background:var(--gold)} .p2{background:var(--silver)} .p3{background:var(--bronze)}
+.tnote{color:var(--sub);font-size:12px;margin-top:2px}
+.players{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:8px}
+.flag{width:74px;height:50px;border-radius:6px;object-fit:cover;background:#eef1f6;border:1px solid var(--line);flex:none}
+.pnote{display:inline-block;font-size:10.5px;color:#8a5a1a;background:#fdf1dc;border-radius:5px;padding:0 6px;margin-top:1px;margin-left:4px}
+.player{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px 9px}
+.avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;object-position:center 20%;background:#e8ebf1;border:1px solid var(--line);flex:none}
+.avatar.ph{font-size:14px;border-radius:50%}
+.pinfo{min-width:0}
+.ptag{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pname{color:var(--sub);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prole{display:inline-block;font-size:10.5px;color:#5d6b8a;background:var(--chip);border-radius:5px;padding:0 6px;margin-top:1px}
+.coachline{font-size:12px;color:var(--sub)}
+footer{max-width:1280px;margin:0 auto;padding:20px 24px 40px;color:var(--sub);font-size:12px;border-top:1px solid var(--line)}
+.src a{color:var(--accent);text-decoration:none}
+.note{background:#fff8ec;border:1px solid #f0dfae;border-radius:10px;padding:10px 14px;font-size:13px;color:#7a5c1e;margin-bottom:18px}
+.search{flex:1;min-width:180px;max-width:280px;border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-size:13.5px;background:var(--card);color:var(--ink);outline:none}
+.search:focus{border-color:var(--accent)}
+@media (max-width:720px){.podium{grid-template-columns:1fr}.ed-prize{margin-left:0}}
+</style>
+</head>
+<body>
+<header>
+  <h1>世界冠军编年史</h1>
+  <p>FIFA 世界杯 · 欧冠（欧洲冠军联赛）· NBA 总决赛 · Dota 2 国际邀请赛（TI）· 英雄联盟全球总决赛（S 赛）· CS2 Major —— 历届冠亚军与核心阵容，附队徽/国旗与选手头像</p>
+</header>
+<div class="tabs" id="tabs"></div>
+<main>
+  <div class="note" id="note"></div>
+  <input class="search" id="search" placeholder="搜索战队 / 选手（如 Spirit、Faker、donk）">
+  <div id="content"></div>
+</main>
+<footer>
+  <div class="src">数据整理：Wikipedia（含 UEFA 官方记录镜像）、Liquipedia、HLTV、Basketball-Reference、NBA 官方冠军登记册（截至 2026-10-15：欧冠 1955–56 至 2025–26 共 70 届、NBA 1947–2025 共 79 届均已收录）· 队徽与头像素材来自 Wikipedia · 个别远古球员/俱乐部无自由版权照片，显示姓名缩写占位</div>
+</footer>
+<script src="data.js"></script>
+<script>
+const DATA = (window.SRC_DATA||{});
+const GAMES = [
+  {key:'wc',    icon:'⚽', name:'FIFA 世界杯'},
+  {key:'ucl',   icon:'🏆', name:'欧冠 · 欧洲冠军联赛'},
+  {key:'nba',   icon:'🏀', name:'NBA 总决赛'},
+  {key:'dota2', icon:'🛡️', name:'Dota 2 · TI 国际邀请赛'},
+  {key:'lol',   icon:'⚔️', name:'英雄联盟 · S 赛全球总决赛'},
+  {key:'cs2',   icon:'🔫', name:'CS2 · Major 锦标赛'},
+];
+const PLACE = {1:'冠军',2:'亚军',3:'季军'};
+let cur=DATA.wc?'wc':'dota2';
+const tabsEl=document.getElementById('tabs'), contentEl=document.getElementById('content'),
+      noteEl=document.getElementById('note'), searchEl=document.getElementById('search');
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function hue(str){str=String(str==null?'':str)||'?';let h=0;for(const ch of str)h=(h*31+ch.charCodeAt(0))%360;return `hsl(${h} 42% 46%)`}
+function imgOr(el,url,alt,cls,fallback){
+  if(url&&url!=='null') return `<${el} src="${esc(url)}" alt="${esc(alt||'')}" loading="lazy" class="${cls}" onerror="this.outerHTML=this.dataset.fb" data-fb="${esc(fallback)}">`;
+  return fallback;
+}
+function initials(s){const t=String(s||'?').replace(/[^A-Za-z0-9\u4e00-\u9fa5.]/g,'');return t.split(/[._]/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase()||'?'}
+function logoHtml(team){
+  const fb=`<div class="logo ph" style="background:${hue(team.team_short||team.team)}">${esc(initials(team.team_short||team.team))}</div>`;
+  return team.logo?`<img src="${esc(team.logo)}" alt="${esc(team.team)}" loading="lazy" class="logo${team.ld?' ld':''}" onerror="this.outerHTML=this.dataset.fb" data-fb="${esc(fb)}">`:fb;
+}
+function flagHtml(team){
+  const fb=`<div class="logo ph" style="width:74px;height:50px;border-radius:6px;background:${hue(team.team)}">${esc(initials(team.team_short||team.team))}</div>`;
+  return team.flagimg?`<img src="${esc(team.flagimg)}" alt="${esc(team.team)}" loading="lazy" class="flag" onerror="this.outerHTML=this.dataset.fb" data-fb="${esc(fb)}">`:fb;
+}
+function teamCard(p){
+  const head=cur==='wc'?flagHtml(p):logoHtml(p);
+  const players=(p.players||[]).map(pl=>{
+    const av=`<div class="avatar ph" style="background:${hue(pl.tag)}">${esc(initials(pl.tag))}</div>`;
+    const avHtml=pl.avatar?`<img src="${esc(pl.avatar)}" alt="${esc(pl.tag)}" loading="lazy" class="avatar" onerror="this.outerHTML=this.dataset.fb" data-fb="${esc(av)}">`:av;
+    return `<div class="player">${avHtml}<div class="pinfo"><div class="ptag" title="${esc(pl.name||pl.tag)}">${esc(pl.tag)}</div>${pl.name?`<div class="pname" title="${esc(pl.name)}">${esc(pl.name)}</div>`:''}${pl.role?`<span class="prole">${esc(pl.role)}</span>`:''}${pl.note?`<span class="pnote">${esc(pl.note_cn||pl.note)}</span>`:''}</div></div>`;
+  }).join('');
+  const coach=p.coach?`<div class="coachline">教练：${esc(p.coach.tag)}${p.coach.name?'（'+esc(p.coach.name)+'）':''}</div>`:'';
+  return `<div class="team r${p.rank}">
+    <div class="team-top">${head}
+      <div><div class="tname">${esc(p.team_cn||p.team)}${p.team_cn?`<span class="ten">${esc(p.team)}</span>`:''}<span class="tplace p${p.rank}">${PLACE[p.rank]||('第'+p.rank+'名')}</span></div>
+      <div class="tnote">${esc(p.score||p.final_note||'')}</div></div></div>
+    <div class="players">${players}</div>${coach}</div>`;
+}
+function render(){
+  const g=DATA[cur]; if(!g){contentEl.innerHTML='<p>数据整理中…</p>';return}
+  const q=searchEl.value.trim().toLowerCase();
+  let html='';
+  const note = g.note || g.pending_editions_note || g.csgo_note || '';
+  if(note){noteEl.style.display='block';noteEl.textContent=note}else noteEl.style.display='none';
+  const eds=[...g.editions].sort((a,b)=>b.year-a.year);
+  for(const ed of eds){
+    let podium=ed.podium;
+    if(q){
+      const hit=t=>((t.team_cn||'')+' '+(t.team||'')+' '+(t.team_short||'')+' '+(t.players||[]).map(p=>(p.tag||'')+' '+(p.name||'')).join(' ')).toLowerCase().includes(q);
+      podium=podium.filter(hit);
+      if(!podium.length) continue;
+    }
+    html+=`<section class="edition"><div class="ed-head"><span class="ed-label">${esc(ed.label||ed.year)}</span>
+      <span class="ed-sub">${ed.year} 年${ed.host_city?' · '+esc(ed.host_city):''}${ed.teams?' · '+ed.teams+'队':''}${ed.dates?' · '+esc(ed.dates):''}</span>
+      ${ed.prize_pool_usd?`<span class="ed-prize">奖池 $${ed.prize_pool_usd.toLocaleString()}</span>`:''}
+      ${ed.mvp||ed.finals_mvp?`<span class="ed-prize" style="color:#3d6fb8;background:#eaf1ff;border-color:#c9dbff">FMVP：${esc(ed.finals_mvp||ed.mvp)}</span>`:''}
+      ${ed.golden_ball||ed.golden_boot?`<span class="ed-right">${ed.golden_ball?`<span class="ed-prize blue">金球：${esc(ed.golden_ball)}</span>`:''}${ed.golden_boot?`<span class="ed-prize blue">金靴：${esc(ed.golden_boot)}</span>`:''}</span>`:''}
+      ${cur==='nba'&&ed.podium[0]&&ed.podium[1]?`<span class="ed-right"><span class="ed-prize" style="color:#b06a37;background:#faf1e7;border-color:#e6cfae">${esc(ed.podium[0].team_cn||ed.podium[0].team)} ${esc(ed.podium[0].score)} ${esc(ed.podium[1].team_cn||ed.podium[1].team)}</span></span>`:''}
+      ${cur==='ucl'&&ed.podium[0]&&ed.podium[1]?`<span class="ed-right"><span class="ed-prize" style="color:#b06a37;background:#faf1e7;border-color:#e6cfae">${esc(ed.podium[0].team_cn||ed.podium[0].team)} ${esc(ed.podium[0].score)} ${esc(ed.podium[1].team_cn||ed.podium[1].team)}</span></span>`:''}</div>
+      ${ed.note?`<div class="ed-note">${esc(ed.note)}</div>`:''}
+      <div class="podium">${podium.map(teamCard).join('')}</div></section>`;
+  }
+  contentEl.innerHTML= html || '<p style="color:#5b6577;padding:20px">没有匹配的结果</p>';
+}
+function renderTabs(){
+  tabsEl.innerHTML=GAMES.map(g=>{
+    const d=DATA[g.key]; const n=d&&d.editions?d.editions.length:0;
+    return `<button class="tab ${g.key===cur?'on':''}" data-k="${g.key}">${g.icon} ${g.name}<span class="n">${n?n+'届':'整理中'}</span></button>`;
+  }).join('');
+  tabsEl.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{cur=b.dataset.k;renderTabs();searchEl.value='';render()});
+}
+searchEl.addEventListener('input',render);
+renderTabs();render();
+</script>
+</body>
+</html>

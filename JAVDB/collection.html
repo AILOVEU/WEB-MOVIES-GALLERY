@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JavDB · 我的收藏（演員 / 系列）— 离线画廊</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0e0f13; --bg2:#16181f; --card:#1b1e27; --card2:#222633;
+  --line:#2a2f3d; --fg:#e8eaf0; --fg2:#9aa2b4; --fg3:#6b7385;
+  --acc:#e85d3d; --star:#f7a34c;
+  --maxw:1400px;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg); color:var(--fg);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  -webkit-font-smoothing:antialiased; line-height:1.5;
+}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+
+/* ===== 顶部 ===== */
+header{
+  position:sticky; top:46px; z-index:100;
+  background:rgba(14,15,19,.92); backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+/* ===== 站点导航（三页互通） ===== */
+.sitenav{position:sticky;top:0;z-index:101;height:46px;display:flex;align-items:center;gap:14px;
+  max-width:var(--maxw);margin:0 auto;padding:0 20px;box-sizing:border-box;
+  background:rgba(14,15,19,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+.sitenav .sbrand{font-weight:700;letter-spacing:.5px;color:var(--fg);font-size:15px;flex:none}
+.sitenav .sbrand b{color:var(--acc)}
+.sitenav .slinks{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+.sitenav a{padding:5px 12px;border-radius:7px;font-size:13px;color:var(--fg2);border:1px solid transparent;transition:.15s;white-space:nowrap}
+.sitenav a:hover{color:var(--fg);background:var(--bg2)}
+.sitenav a.on{background:var(--acc);color:#fff;border-color:var(--acc);font-weight:600}
+@media(max-width:560px){.sitenav{padding:0 12px;gap:8px}.sitenav .sbrand{font-size:13px}}
+.hwrap{max-width:var(--maxw);margin:0 auto;padding:14px 20px}
+.toprow{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:10px;flex:none}
+.brand h1{font-size:19px;font-weight:700;letter-spacing:.5px}
+.brand .sub{font-size:12px;color:var(--fg3)}
+.brand .n{font-size:12px;color:var(--acc);font-weight:600;
+  background:rgba(232,93,61,.1);padding:2px 8px;border-radius:20px;border:1px solid rgba(232,93,61,.3)}
+.tabs{display:flex;gap:6px;flex:none}
+.tabs .btn{padding:8px 16px}
+.tabs .btn small{opacity:.6;margin-left:4px;font-weight:400}
+.searchbox{flex:1;min-width:200px;position:relative}
+.searchbox input{
+  width:100%;padding:9px 34px;border-radius:8px;
+  background:var(--bg2);border:1px solid var(--line);color:var(--fg);font-size:14px;outline:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+.searchbox input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(232,93,61,.12)}
+.searchbox .ic{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--fg3);font-size:14px}
+.searchbox .clr{position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  color:var(--fg3);cursor:pointer;font-size:16px;line-height:1;padding:4px;display:none}
+.searchbox.has .clr{display:block}
+.searchbox .clr:hover{color:var(--fg)}
+.btn{
+  padding:8px 13px;border-radius:8px;background:var(--bg2);border:1px solid var(--line);
+  color:var(--fg2);font-size:13px;cursor:pointer;white-space:nowrap;transition:.15s;font-family:inherit;
+}
+.btn:hover{color:var(--fg);border-color:var(--fg3)}
+.btn.on{background:var(--acc);color:#fff;border-color:var(--acc);font-weight:600}
+
+/* ===== 状态条 ===== */
+.statusbar{
+  max-width:var(--maxw);margin:0 auto;padding:10px 20px;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  font-size:12px;color:var(--fg3);border-bottom:1px solid var(--line);flex-wrap:wrap;
+}
+.statusbar b{color:var(--acc);font-weight:600}
+.statusbar .left{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.crumb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--fg2)}
+.crumb b{color:var(--fg);font-weight:600}
+.sortwrap{display:flex;gap:6px;align-items:center}
+
+main{max-width:var(--maxw);margin:0 auto;padding:22px 20px 60px}
+
+/* ===== 条目网格（演員 / 系列） ===== */
+.igrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px 16px}
+@media(max-width:900px){.igrid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px 10px}}
+@media(max-width:520px){.igrid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}}
+.icard{
+  background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  cursor:pointer;transition:transform .18s cubic-bezier(.2,.7,.3,1),box-shadow .18s,border-color .18s;
+}
+.icard:hover{
+  transform:translateY(-4px);border-color:var(--acc);
+  box-shadow:0 10px 26px rgba(0,0,0,.5),0 0 0 1px rgba(232,93,61,.3);
+}
+.iav{position:relative;aspect-ratio:1/1;background:linear-gradient(145deg,#232734,#171a22);overflow:hidden}
+/* 系列卡片用的是影片封面（16:11），按原比例显示不裁切；演員头像仍保持方形 */
+.icard.wide .iav{aspect-ratio:16/11}
+.iav img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s ease}
+.iav img.loaded{opacity:1}
+.ifb{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:30px;font-weight:700;color:#5a6377;letter-spacing:1px;
+}
+.ifb.hide{display:none}
+.iav .cnt{
+  position:absolute;right:6px;bottom:6px;font-size:10px;font-weight:700;
+  background:rgba(10,10,12,.78);color:#dfe3ec;padding:2px 7px;border-radius:999px;backdrop-filter:blur(4px);
+}
+.iav .cnt.zero{color:#8b93a5}
+.iinfo{padding:8px 10px 10px}
+.iname{
+  font-size:13px;font-weight:600;line-height:1.35;color:#f0f2f7;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:35px;
+}
+.imeta{margin-top:5px;font-size:11px;color:var(--fg3)}
+
+/* ===== 影片瀑布流（网格） ===== */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px 16px}
+@media(max-width:900px){.grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px 10px}}
+@media(max-width:520px){.grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}}
+.card{
+  background:var(--card);border-radius:10px;overflow:hidden;cursor:pointer;
+  border:1px solid var(--line);
+  transition:transform .18s cubic-bezier(.2,.7,.3,1),box-shadow .18s,border-color .18s;
+  will-change:transform; display:block;
+}
+.card:hover{
+  transform:translateY(-5px);border-color:var(--acc);
+  box-shadow:0 10px 28px rgba(0,0,0,.55),0 0 0 1px rgba(232,93,61,.35);
+}
+.poster{position:relative;aspect-ratio:16/11;background:#0a0b0e;overflow:hidden}
+.poster img{
+  width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity .4s ease,transform .35s ease;
+}
+.poster img.loaded{opacity:1}
+.card:hover .poster img{transform:scale(1.05)}
+.poster .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#3a4152;font-size:26px}
+.poster .ph.hide{display:none}
+.badges{position:absolute;top:7px;left:7px;right:7px;display:flex;gap:4px;flex-wrap:wrap}
+.bdg{
+  font-size:10px;padding:2px 7px;border-radius:4px;backdrop-filter:blur(6px);
+  background:rgba(10,10,12,.72);color:#dfe3ec;font-weight:600;letter-spacing:.4px;
+}
+.bdg.talk{background:rgba(90,162,232,.92);color:#08131f}
+.bdg.tr{background:rgba(232,93,61,.9);color:#fff}
+.info{padding:9px 11px 11px}
+.tt{
+  font-size:13px;font-weight:500;line-height:1.4;color:#f0f2f7;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  min-height:36px;
+}
+.mt{margin-top:6px;font-size:11px;color:var(--fg3);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.sc{color:var(--star);font-weight:600}
+.mt .tg{font-size:10px;padding:1px 6px;border-radius:999px;background:rgba(232,93,61,.12);color:#f0906f;border:1px solid rgba(232,93,61,.3)}
+
+/* ===== 详情弹层 ===== */
+.mask{
+  position:fixed;inset:0;background:rgba(6,6,9,.86);backdrop-filter:blur(6px);
+  z-index:200;display:none;align-items:center;justify-content:center;padding:24px;
+}
+.mask.show{display:flex;animation:fi .2s ease}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.modal{
+  background:var(--bg2);border:1px solid var(--line);border-radius:14px;
+  max-width:1100px;width:100%;max-height:92vh;overflow:auto;position:relative;
+  animation:up .25s cubic-bezier(.2,.8,.3,1);
+}
+@keyframes up{from{transform:translateY(22px);opacity:0}to{transform:none;opacity:1}}
+.x{
+  position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;
+  background:var(--card2);border:1px solid var(--line);color:var(--fg2);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:18px;z-index:2;line-height:1;
+}
+.x:hover{background:var(--line);color:var(--fg)}
+.mbody{display:flex;gap:20px;padding:22px}
+/* 本地视频（解说 / 预告片）：在第二行，整行铺满，保持 16:9，高度不超 72vh */
+.mmedia{padding:0 22px 22px}
+.mmedia .mtabs{display:flex;gap:6px;margin-bottom:9px}
+.mmedia .mtab{padding:7px 15px;border-radius:8px;font-size:13px;cursor:pointer;white-space:nowrap;
+  background:var(--bg2);border:1px solid var(--line);color:var(--fg2);transition:.15s;user-select:none}
+.mmedia .mtab:hover{color:var(--fg);border-color:var(--fg3)}
+.mmedia .mtab.on{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
+.mmedia video{display:block;width:100%;max-width:calc(72vh * 16 / 9);aspect-ratio:16/9;margin:0 auto;
+  object-fit:contain;border-radius:9px;background:#000}
+.mmedia .merr{display:none;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;
+  padding:18px 20px;border-radius:9px;background:#0a0b0e;border:1px solid var(--line);
+  color:var(--fg2);font-size:13px;line-height:1.6}
+.mmedia .merr .warnic{font-size:20px;color:var(--fg3)}
+.mmedia .merr .mpath{color:var(--fg3);word-break:break-all;font-size:12px}
+.mmedia .mfile{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  margin-top:7px;font-size:11px;color:var(--fg3)}
+.mmedia .mfile .fname{word-break:break-all}
+.mmedia .mfile a{color:var(--acc)}
+.mmedia .mfile a:hover{text-decoration:underline}
+.mside{flex:none;width:340px}
+.mside img{width:100%;aspect-ratio:16/11;object-fit:cover;border-radius:9px;border:1px solid var(--line);background:#0a0b0e}
+.minfo{flex:1;min-width:0}
+.mtitle{font-size:16px;font-weight:600;line-height:1.5}
+.mmeta{font-size:12px;color:var(--fg3);margin-top:9px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.mtags2{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.mtags2 span{font-size:11px;padding:3px 9px;border-radius:5px;background:var(--card2);border:1px solid var(--line);color:var(--fg2)}
+.mfoot{padding:0 22px 22px;display:flex;gap:10px}
+.mfoot a{
+  flex:1;padding:11px;border-radius:9px;text-align:center;
+  background:var(--acc);color:#fff;font-weight:700;font-size:14px;transition:.15s;
+}
+.mfoot a:hover{filter:brightness(1.1)}
+.mfoot a.sec{background:var(--card2);color:var(--fg2);border:1px solid var(--line);font-weight:500}
+@media(max-width:720px){.mbody{flex-direction:column;padding:16px;gap:14px}.mside{width:100%}.minfo{width:100%}.mmedia{padding:0 16px 16px}.mmedia video{max-width:100%}}
+
+/* ===== 磁力链接模块 ===== */
+.mmag{margin:0 22px 18px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.mmag-h{padding:9px 14px;font-size:13px;font-weight:700;color:var(--fg2);background:var(--card2);border-bottom:1px solid var(--line)}
+.mmag-h small{font-weight:400;color:var(--fg3);margin-left:6px}
+.mmag-item{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--line);font-size:13px}
+.mmag-item:last-child{border-bottom:none}
+.mmag-info{flex:1;min-width:0}
+.mmag-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--fg);font-weight:500;font-size:12px}
+.mmag-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;font-size:11px;color:var(--fg3)}
+.mmag-meta b{color:var(--acc);font-weight:600}
+.mmag-meta b.ltx{color:transparent;-webkit-text-fill-color:transparent;background:linear-gradient(90deg,#ff2d78,#ff8a00,#ffe600,#22d67a,#1e90ff,#a24bff,#ff2d78);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;font-weight:800;display:inline-block;padding:0 3px;animation:ltxr 6s linear infinite}@keyframes ltxr{to{background-position:200% 0}}
+.mmag-copy,.mmag-open{flex:none;padding:6px 12px;border-radius:7px;font-size:12px;cursor:pointer;border:1px solid var(--line);background:var(--card2);color:var(--fg2);text-decoration:none;line-height:1.4}
+.mmag-copy:hover,.mmag-open:hover{border-color:var(--acc);color:var(--acc)}
+.mmag-copy.ok{color:var(--acc);border-color:var(--acc)}
+@media(max-width:720px){.mmag{margin:0 16px 14px}}
+
+/* ===== 空状态 ===== */
+.empty{text-align:center;padding:80px 20px;color:var(--fg3)}
+.empty .big{font-size:42px;margin-bottom:12px;opacity:.5}
+.hidden{display:none !important}
+
+footer{border-top:1px solid var(--line);padding:22px 20px 30px;text-align:center;color:var(--fg3);font-size:12px}
+footer a{color:var(--acc)}
+footer .warn{margin-top:6px;font-size:11px;color:#5a6274}
+
+#backtop{
+  position:fixed;right:20px;bottom:20px;width:42px;height:42px;border-radius:50%;
+  background:var(--card2);border:1px solid var(--line);color:var(--fg2);cursor:pointer;
+  display:none;align-items:center;justify-content:center;font-size:18px;z-index:90;
+  box-shadow:0 4px 16px rgba(0,0,0,.4);
+}
+#backtop.show{display:flex}
+#backtop:hover{color:var(--acc);border-color:var(--acc)}
+/* ===== 分页 ===== */
+.pager{display:flex;flex-direction:column;align-items:center;gap:10px;padding:24px 0 6px}
+.pager:empty{display:none}
+.pginfo{color:var(--fg3);font-size:12px}
+.pginfo b{color:var(--acc);font-weight:700}
+.pgbtns{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.pgbtn{
+  background:var(--bg2);border:1px solid var(--line);color:var(--fg2);
+  padding:7px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;transition:.15s;
+}
+.pgbtn:hover:not(:disabled){color:var(--fg);border-color:var(--fg3)}
+.pgbtn.on{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
+.pgbtn:disabled{opacity:.38;cursor:default}
+.pgap{color:var(--fg3);font-size:12px;align-self:center;padding:0 1px}
+</style>
+</head>
+<body>
+
+<nav class="sitenav">
+  <span class="sbrand">Jav<b>DB</b></span>
+  <div class="slinks">
+    <a href="collection.html" class="on">收藏</a>
+    <a href="top250.html">TOP250</a>
+    <a href="mylist.html">片单</a>
+  </div>
+</nav>
+
+<header>
+  <div class="hwrap">
+    <div class="toprow">
+      <div class="brand">
+        <h1>JavDB · 我的收藏</h1>
+        <span class="n" id="total-badge">-</span>
+      </div>
+      <div class="tabs" id="tabs">
+        <button class="btn on" data-tab="actors">演員</button>
+        <button class="btn" data-tab="series">系列</button>
+      </div>
+      <div class="searchbox" id="sb">
+        <span class="ic">&#9906;</span>
+        <input id="q" type="search" placeholder="搜索演員 / 系列 / 番号 / 标题..." autocomplete="off">
+        <span class="clr" id="clr">&times;</span>
+      </div>
+      <button class="btn on" id="sbtn" data-sort="count">按影片数</button>
+      <button class="btn" id="sbtn2" data-sort="name">按名称</button>
+      <div class="tabs" id="imgmode" title="切换图片来源：本地资源 / 原始图源">
+        <button class="btn on" data-mode="local">本地图</button>
+        <button class="btn" data-mode="remote">原始图</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="statusbar">
+  <div class="left" id="cnt">-</div>
+  <div class="sortwrap" id="msort" style="display:none">
+    <span>排序</span>
+    <button class="btn on" data-msort="date">最新</button>
+    <button class="btn" data-msort="olddate">最早</button>
+    <button class="btn" data-msort="score">评分</button>
+    <button class="btn" data-msort="code">番号</button>
+    <button class="btn" id="mltxbtn" title="只看磁力含 LTX 标签">只看LTX</button>
+  </div>
+</div>
+
+<main>
+  <!-- 条目列表 -->
+  <div id="listView">
+    <div class="igrid" id="igrid"></div>
+    <div class="pager" id="ipager"></div>
+    <div class="empty" id="empty1" style="display:none">
+      <div class="big">&#128533;</div>
+      <div>没有匹配的条目<br><span style="font-size:12px">试试换个关键词</span></div>
+    </div>
+  </div>
+  <!-- 影片瀑布流 -->
+  <div id="movieView" class="hidden">
+    <div class="crumb" id="crumb"></div>
+    <div class="grid" id="grid"></div>
+    <div class="pager" id="pager"></div>
+    <div class="empty" id="empty2" style="display:none">
+      <div class="big">&#128533;</div>
+      <div>没有找到匹配的影片<br><span style="font-size:12px">该条目可能尚未抓取完成</span></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div>收录 <b style="color:var(--acc)" id="foot-n">-</b> 部影片 &middot; 来源
+    <a href="https://javdb.com/users/collection_actors" target="_blank" rel="noopener">收藏的演員</a> ·
+    <a href="https://javdb.com/users/collection_series" target="_blank" rel="noopener">收藏的系列</a>
+  </div>
+  <div class="warn">本页面为离线收藏索引，仅保留封面缩略图；点击卡片查看详情。</div>
+</footer>
+
+<button id="backtop" title="回到顶部">&#8593;</button>
+
+<div class="mask" id="mask">
+  <div class="modal" id="modal">
+    <button class="x" id="mx">&times;</button>
+    <div id="mbody"></div>
+  </div>
+</div>
+
+<script src="data/site/movies.js?v=20261109"></script>
+<script src="data/site/actors.js?v=20261109"></script>
+<script src="data/site/series.js?v=20261109"></script>
+<script src="data/site/ltx.js?v=20261109"></script>
+<script>
+const BUILD_V = '20261109';   // 数据文件版本号（懒加载的磁力桶靠它破缓存），由 build_collection_js.bump_refs() 自动刷成当日
+const MOVIES = window.JAVDB_MOVIES || {};
+const ACTORS = (window.JAVDB_ACTORS && window.JAVDB_ACTORS.items) || [];
+const SERIES = (window.JAVDB_SERIES && window.JAVDB_SERIES.items) || [];
+/* 磁力分桶懒加载：bucket=Σ(31*char)%16，与 build/magnet_buckets.py 一致 */
+const MAG_N=16, MAG_LOAD={};
+function magBucket(code){const s=String(code||'').toUpperCase().replace(/[^A-Z0-9]/g,'');let h=0;for(const ch of s){h=((h*31)+ch.charCodeAt(0))>>>0;}return h%MAG_N;}
+function magWin(b){return window['JAVDB_MAG_'+b];}
+function loadMag(code){const b=magBucket(code);if(magWin(b))return Promise.resolve();if(MAG_LOAD[b])return MAG_LOAD[b];MAG_LOAD[b]=new Promise((res,rej)=>{const s=document.createElement('script');s.src='data/site/mag/mag_'+b+'.js?v='+BUILD_V;s.onload=res;s.onerror=()=>rej(new Error('mag_'+b));document.head.appendChild(s);});return MAG_LOAD[b];}
+function renderMagSlots(){document.querySelectorAll('.mmag-loading[data-mag]').forEach(el=>{if(!magWin(magBucket(el.dataset.mag)))return;const html=magnetHTML(el.dataset.mag);if(html){const t=document.createElement('div');t.innerHTML=html;const nd=t.firstElementChild;if(nd)el.replaceWith(nd);}else{el.remove();}});}   // 磁力真为 0 条时也要把「加载中」占位抹掉，否则它会永远赖在弹层里
+
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const initial = s => { const t=String(s||'').trim(); return t ? t[0] : '?'; };
+
+let tab = 'actors';          // actors | series
+let view = 'list';           // list | movies
+let ITEMS = ACTORS;          // 当前 tab 的条目集合（两个清单各用各的 js）
+let cur = null;              // 当前打开的条目
+let curMovie = null;         // 当前打开的影片（详情弹层），切换图源时用于刷新
+let listQ = '';              // 进影片瀑布流之前的条目搜索词
+let DATA = [];               // 当前条目下的影片
+let VIEW = [];
+let listPage = 1;            // 条目列表当前页
+let moviePage = 1;           // 影片网格当前页
+const PAGE_SIZE = 100;       // 每页个数
+const state = { q:'', sort:'count', msort:'date', onlyLtx:false };
+
+/* ---------------- 图片模式（本地资源 / 原始图源） ---------------- */
+const IMG_MODE_KEY = 'javdb_img_mode';
+let IMG_MODE = (function(){ try { return localStorage.getItem(IMG_MODE_KEY) || 'local'; } catch(e){ return 'local'; } })();
+/* 按当前模式选图：local 优先本地，remote 优先原始 https 图源；某键缺失时自动回退到另一键，最后用 fb */
+function imgPick(obj, localKey, remoteKey, fb){
+  const a = obj[localKey], b = obj[remoteKey];
+  return IMG_MODE === 'remote' ? (b || a || fb || '') : (a || b || fb || '');
+}
+/* 条目的远程封面 = 条目内 date 最新且有 img 的影片的远程地址（与 build_collection_js.cover_of 同一套「最新」逻辑）。
+   系列基本都没头像，cover 字段又只存了本地路径，原始图模式下靠它反查远程地址，不依赖本地文件。带 memo 防止每页重复扫 codes。 */
+const RCOVER = {};
+function remoteCoverOf(it){
+  if (RCOVER[it.id] !== undefined) return RCOVER[it.id];
+  let best = null;
+  for (const c of (it.codes||[])){
+    const m = MOVIES[c]; if (!m || !m.img) continue;
+    const d = m.date || '';
+    if (!best || d > best[0]) best = [d, m.img];
+  }
+  const v = best ? best[1] : '';
+  RCOVER[it.id] = v;
+  return v;
+}
+function syncImgModeBtns(){
+  document.querySelectorAll('#imgmode .btn').forEach(x=>x.classList.toggle('on', x.dataset.mode===IMG_MODE));
+}
+function setImgMode(m){
+  IMG_MODE = m;
+  try { localStorage.setItem(IMG_MODE_KEY, m); } catch(e){}
+  syncImgModeBtns();
+  if (view === 'movies') renderGrid(); else renderItems();
+  if (curMovie) openModal(curMovie);
+}
+document.getElementById('imgmode').addEventListener('click', e=>{
+  const b = e.target.closest('.btn'); if (!b || b.dataset.mode===IMG_MODE) return;
+  setImgMode(b.dataset.mode);
+});
+
+const igrid = document.getElementById('igrid');
+const grid  = document.getElementById('grid');
+const cntEl = document.getElementById('cnt');
+const qEl   = document.getElementById('q');
+const sbEl  = document.getElementById('sb');
+const clrEl = document.getElementById('clr');
+const listView = document.getElementById('listView');
+const movieView = document.getElementById('movieView');
+const ipager = document.getElementById('ipager');
+const pagerEl = document.getElementById('pager');
+const msortEl = document.getElementById('msort');
+document.getElementById('mltxbtn').addEventListener('click', e=>{ state.onlyLtx = !state.onlyLtx; e.currentTarget.classList.toggle('on', state.onlyLtx); applyMovies(); });
+
+/* ---------------- 条目列表 ---------------- */
+function itemHTML(it){
+  /* 本地图模式：本地头像优先，没头像用 cover（本地路径）；原始图模式：远程头像优先，没头像反查最新影片的远程封面 */
+  const av = IMG_MODE === 'remote'
+    ? imgPick(it, 'avatar_local', 'avatar', remoteCoverOf(it) || it.cover || '')
+    : imgPick(it, 'avatar_local', 'avatar', it.cover || '');
+  const n = (it.codes||[]).length;                  // 一律用实际能点开的番号数（it.count 可能是页面原始数字，会虚高）
+  return `<article class="icard${tab==='series'?' wide':''}" data-id="${esc(it.id)}" title="${esc(it.name)} · ${n} 部">
+    <div class="iav">
+      ${av ? `<img loading="lazy" src="${esc(av)}" alt="${esc(it.name)}"
+          onload="this.classList.add('loaded')"
+          onerror="this.style.display='none';this.nextElementSibling.classList.remove('hide')">
+        <div class="ifb hide">${esc(initial(it.name))}</div>`
+          : `<div class="ifb">${esc(initial(it.name))}</div>`}
+      <span class="cnt${n?'':' zero'}">${n ? n+' 部' : '待抓取'}</span>
+    </div>
+    <div class="iinfo">
+      <div class="iname">${esc(it.name)}</div>
+      <div class="imeta">${n ? n+' 部影片' : '尚未抓取'}</div>
+    </div>
+  </article>`;
+}
+
+function renderItems(){
+  const q = state.q.trim().toLowerCase();
+  let list = ITEMS.filter(it => !q || (it.name||'').toLowerCase().includes(q));
+  if (state.sort === 'name') list = list.slice().sort((a,b)=>(a.name||'').localeCompare(b.name||'','zh'));
+  else list = list.slice().sort((a,b)=>((b.codes||[]).length-(a.codes||[]).length));
+  const pages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+  if (listPage > pages) listPage = pages;
+  const start = (listPage-1) * PAGE_SIZE;
+  igrid.innerHTML = list.slice(start, start+PAGE_SIZE).map(itemHTML).join('');
+  ipager.innerHTML = pagerHTML(listPage, pages, list.length, tab==='actors'?'位':'个');
+  document.getElementById('empty1').style.display = list.length ? 'none' : 'block';
+  const tot = list.reduce((s,it)=>s+(it.codes||[]).length,0);   // 与卡片同口径：只用实际番号数
+  cntEl.innerHTML = `共 <b>${list.length}</b> ${tab==='actors'?'位演員':'个系列'} &middot; 合计 <b>${tot.toLocaleString()}</b> 部影片${pages>1?` · 第 <b>${listPage}</b>/${pages} 页`:''}`;
+  document.getElementById('total-badge').textContent = list.length + (tab==='actors'?' 位':' 个');
+}
+
+/* ---------------- 影片瀑布流 ---------------- */
+function cardHTML(c){
+  const img = imgPick(c, 'local', 'img', '');
+  const score = (typeof c.score==='number') ? `<span class="sc">&#9733; ${c.score.toFixed(1)}</span>` : '';
+  const tags = (c.tags||[]).slice(0,2).map(t=>`<span class="tg">${esc(t)}</span>`).join('');
+  const yr = (c.date||'').slice(0,4);
+  return `<article class="card" data-code="${esc(c.code)}" title="${esc(c.code+' '+c.title)}">
+    <div class="poster">
+      ${img ? `<img loading="lazy" src="${esc(img)}" alt="${esc(c.code)}" onload="this.classList.add('loaded')" onerror="this.style.display='none';this.nextElementSibling.classList.remove('hide')">
+        <div class="ph hide">&#127918;</div>` : '<div class="ph">&#127918;</div>'}
+      <div class="badges">${c.code?`<span class="bdg">${esc(c.code)}</span>`:''}${c.date?`<span class="bdg">${esc(c.date)}</span>`:''}${c.talk?`<span class="bdg talk">&#127908; 解说</span>`:''}${c.video?`<span class="bdg tr">&#9654; 预告</span>`:''}</div>
+    </div>
+    <div class="info">
+      <div class="tt">${esc(c.title||c.code)}</div>
+      <div class="mt">${score}<span>${esc(yr)}</span>${tags}</div>
+    </div>
+  </article>`;
+}
+
+function renderGrid(){
+  const pages = Math.max(1, Math.ceil(VIEW.length / PAGE_SIZE));
+  if (moviePage > pages) moviePage = pages;
+  const start = (moviePage-1) * PAGE_SIZE;
+  grid.innerHTML = VIEW.slice(start, start+PAGE_SIZE).map(cardHTML).join('');
+  pagerEl.innerHTML = pagerHTML(moviePage, pages, VIEW.length);
+  document.getElementById('empty2').style.display = VIEW.length ? 'none' : 'block';
+}
+
+function applyMovies(){
+  const q = state.q.trim().toLowerCase();
+  VIEW = DATA.filter(c=>{
+    if (state.onlyLtx && !(window.JAVDB_LTX && (window.JAVDB_LTX[c.code]||[]).length)) return false;
+    if (!q) return true;
+    return ((c.code||'')+' '+(c.title||'')+' '+(c.tags||[]).join(' ')).toLowerCase().includes(q);
+  });
+  const s = state.msort;
+  VIEW.sort((a,b)=>{
+    if (s==='date') return (b.date||'').localeCompare(a.date||'');
+    if (s==='olddate') return (a.date||'').localeCompare(b.date||'');
+    if (s==='score') return (b.score??-1)-(a.score??-1);
+    if (s==='code') return (a.code||'').localeCompare(b.code||'');
+    return 0;
+  });
+  moviePage = 1;
+  renderGrid();
+}
+
+const BYCODE = {};
+function openItem(it){
+  cur = it;
+  view = 'movies';
+  listQ = state.q;              // 记住进影片前的条目搜索词，返回时还原
+  state.q = '';
+  qEl.value = '';
+  sbEl.classList.remove('has');   // 否则进影片后搜索框空着但「×」还露着
+  listView.classList.add('hidden');
+  movieView.classList.remove('hidden');
+  msortEl.style.display = 'flex';
+  DATA = (it.codes||[]).map(c => MOVIES[c]).filter(Boolean);
+  Object.keys(BYCODE).forEach(k=>delete BYCODE[k]);   // 清空重建（BYCODE 是 const，不能重新赋值）
+  DATA.forEach(c => BYCODE[c.code] = c);
+  const n = (it.codes||[]).length;
+  document.getElementById('crumb').innerHTML =
+    `<button class="btn" id="backbtn">&larr; 返回${tab==='actors'?'演員':'系列'}清单</button>
+     <span>当前：<b>${esc(it.name)}</b></span>
+     <span style="color:var(--fg3)">${DATA.length}${n>DATA.length?(' / '+n):''} 部</span>`;
+  document.getElementById('backbtn').addEventListener('click', backToList);
+  cntEl.innerHTML = `<b>${esc(it.name)}</b> &middot; ${DATA.length} 部影片`;
+  applyMovies();
+  window.scrollTo({top:0});
+}
+
+function backToList(){
+  view = 'list'; cur = null;
+  state.q = listQ; qEl.value = listQ; sbEl.classList.toggle('has', !!listQ);
+  movieView.classList.add('hidden');
+  listView.classList.remove('hidden');
+  msortEl.style.display = 'none';
+  grid.innerHTML='';
+  renderItems();
+  window.scrollTo({top:0});
+}
+
+/* ---------------- 交互 ---------------- */
+igrid.addEventListener('click', e=>{
+  const el = e.target.closest('.icard'); if (!el) return;
+  const it = ITEMS.find(x => x.id === el.dataset.id);
+  if (it) openItem(it);
+});
+
+document.getElementById('tabs').addEventListener('click', e=>{
+  const b = e.target.closest('.btn'); if (!b || b.dataset.tab===tab) return;
+  tab = b.dataset.tab;
+  document.querySelectorAll('#tabs .btn').forEach(x=>x.classList.toggle('on', x===b));
+  ITEMS = tab==='actors' ? ACTORS : SERIES;
+  qEl.value=''; state.q=''; listQ=''; sbEl.classList.remove('has');
+  qEl.placeholder = tab==='actors' ? '搜索演員 / 番号 / 标题...' : '搜索系列 / 番号 / 标题...';
+  listPage = 1;
+  backToList();
+});
+
+document.getElementById('sbtn').addEventListener('click', ()=>{
+  state.sort='count';
+  document.getElementById('sbtn').classList.add('on');
+  document.getElementById('sbtn2').classList.remove('on');
+  if (view==='list'){ listPage=1; renderItems(); }
+});
+document.getElementById('sbtn2').addEventListener('click', ()=>{
+  state.sort='name';
+  document.getElementById('sbtn2').classList.add('on');
+  document.getElementById('sbtn').classList.remove('on');
+  if (view==='list'){ listPage=1; renderItems(); }
+});
+
+qEl.addEventListener('input', ()=>{
+  state.q = qEl.value;
+  sbEl.classList.toggle('has', !!qEl.value);
+  clearTimeout(window._qt);
+  window._qt = setTimeout(()=>{ if (view==='list'){ listPage=1; renderItems(); } else applyMovies(); }, 160);
+});
+clrEl.addEventListener('click', ()=>{ qEl.value=''; state.q=''; sbEl.classList.remove('has');
+  if (view==='list'){ listPage=1; renderItems(); } else applyMovies(); qEl.focus(); });
+
+msortEl.addEventListener('click', e=>{
+  const b = e.target.closest('[data-msort]'); if (!b) return;
+  msortEl.querySelectorAll('[data-msort]').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); state.msort = b.dataset.msort; applyMovies();
+});
+
+/* ---------------- 详情弹层 ---------------- */
+const mask = document.getElementById('mask');
+function magnetHTML(code){
+  const _b = magBucket(code), _W = magWin(_b);
+  const _ltx = (window.JAVDB_LTX && window.JAVDB_LTX[code]) || [];
+  if (!_W){ loadMag(code).then(renderMagSlots).catch(()=>{});
+    return `<div class="mmag mmag-loading" data-mag="${esc(code)}"><div class="mmag-h">磁力链接 <small>加载中…</small></div></div>`; }
+  const _mags = (_W[code]||[]).slice().sort((a,b)=>{
+    const hd = m => ((m.tags||[]).includes('高清') ? 1 : 0);
+    return (hd(b)-hd(a)) || ((b.sizeMB||0)-(a.sizeMB||0));
+  });
+  const sorted = _ltx.concat(_mags);   // LTX 置顶
+  if (!sorted.length) return '';
+  return `<div class="mmag">
+    <div class="mmag-h">磁力链接 <small>${sorted.length} 条</small></div>
+    ${sorted.map(m=>`
+      <div class="mmag-item">
+        <div class="mmag-info">
+          <div class="mmag-name">${esc(m.name||code)}</div>
+          <div class="mmag-meta">
+            ${m.size?`<span>${esc(m.size)}</span>`:''}
+            ${m.files?`<span>${m.files} 个文件</span>`:''}
+            ${m.date?`<span>发布 ${esc(String(m.date))}</span>`:''}
+            ${(m.tags||[]).map(t=>`<b class="${t==='LTX'?'ltx':''}">${esc(t)}</b>`).join('')}
+          </div>
+        </div>
+        <button type="button" class="mmag-copy" data-mg="${esc(m.link)}">复制</button>
+        <a class="mmag-open" href="${esc(m.link)}">打开</a>
+      </div>`).join('')}
+  </div>`;
+}
+function fallbackCopy(t){
+  const ta=document.createElement('textarea');
+  ta.value=t; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  try{ document.execCommand('copy'); }catch(e){}
+  ta.remove();
+}
+/* ---------- 本地视频（解说 / 预告片）----------
+   数据：movies.js 的 c.talk = "assets/水果派/{CODE}.mp4"、c.video = "assets/videos/{CODE}.mp4"，默认先播解说。 */
+function mediaSources(c){
+  return [
+    c.talk  ? {label:'解说',  src:c.talk,  size:+c.talksize||0} : null,
+    c.video ? {label:'预告片', src:c.video, size:+c.videosize||0} : null,
+  ].filter(Boolean);
+}
+const fmtSize = s => s >= 1073741824 ? (s/1073741824).toFixed(2)+' GB' : Math.round(s/1048576)+' MB';
+function fileLine(src, size){
+  const name = String(src).split('/').pop();
+  return `<span class="fname">${esc(name)}${size?` · ${fmtSize(size)}`:''}</span>`
+       + `<a href="${encodeURI(src)}" target="_blank" rel="noopener">新窗口打开 &rarr;</a>`;
+}
+function mediaHTML(c){
+  const list = mediaSources(c);
+  if (!list.length) return '';
+  const tabs = list.length > 1 ? `<div class="mtabs">${list.map((s,i)=>
+    `<span class="mtab${i?'':' on'}" data-src="${esc(s.src)}" data-size="${s.size||0}">${esc(s.label)}</span>`
+  ).join('')}</div>` : '';
+  return `<div class="mmedia">${tabs}
+      <video controls preload="metadata" src="${encodeURI(list[0].src)}" onerror="mediaFail(this)"></video>
+      <div class="merr"><span class="warnic">&#9888;</span>
+        <span>本地文件读不到（多半已搬到移动硬盘/别的磁盘）</span>
+        <span class="mpath">${esc(list[0].src)}</span>
+      </div>
+      <div class="mfile">${fileLine(list[0].src, list[0].size)}</div>
+    </div>`;
+}
+function mediaFail(v){
+  const box = v.closest('.mmedia'); if (!box) return;
+  v.style.display = 'none';
+  const err = box.querySelector('.merr'); if (err) err.style.display = 'flex';
+}
+function mediaSwitch(tab){
+  const box = tab.closest('.mmedia');
+  box.querySelectorAll('.mtab').forEach(x=>x.classList.toggle('on', x===tab));
+  const src = tab.dataset.src, v = box.querySelector('video');
+  v.style.display = '';
+  v.src = encodeURI(src); v.load();
+  box.querySelector('.merr').style.display = 'none';
+  const mp = box.querySelector('.mpath'); if (mp) mp.textContent = src;
+  box.querySelector('.mfile').innerHTML = fileLine(src, +tab.dataset.size||0);
+}
+document.getElementById('mbody').addEventListener('click', e=>{
+  const t = e.target.closest('.mtab');
+  if (t){ mediaSwitch(t); return; }
+  const b = e.target.closest('.mmag-copy'); if (!b) return;
+  const ok = ()=>{ b.textContent='已复制'; b.classList.add('ok');
+    setTimeout(()=>{ b.textContent='复制'; b.classList.remove('ok'); },1200); };
+  if (navigator.clipboard && navigator.clipboard.writeText)
+    navigator.clipboard.writeText(b.dataset.mg).then(ok, ()=>{ fallbackCopy(b.dataset.mg); ok(); });
+  else { fallbackCopy(b.dataset.mg); ok(); }
+});
+
+function openModal(c){
+  curMovie = c;
+  const img = imgPick(c, 'local', 'img', '');
+  const score = (typeof c.score==='number') ? `<span class="sc">&#9733; ${c.score.toFixed(1)}</span><span>${c.votes||0} 人评价</span>` : '';
+  const tags = (c.tags||[]).map(t=>`<span>${esc(t)}</span>`).join('');
+  document.getElementById('mbody').innerHTML = `
+    <div class="mbody">
+      <div class="mside">
+        <img src="${esc(img)}" alt="${esc(c.code)}" onerror="this.style.display='none'">
+      </div>
+      <div class="minfo">
+        <div class="mtitle">${esc(c.code)} ${esc(c.title||'')}</div>
+        <div class="mmeta">${score}<span>${esc(c.date||'')}</span></div>
+        <div class="mtags2">${tags}</div>
+      </div>
+    </div>
+    ${mediaHTML(c)}
+    ${magnetHTML(c.code)}
+    <div class="mfoot">
+      <a href="${esc(c.url)}" target="_blank" rel="noopener">前往 JavDB 详情页 &rarr;</a>
+    </div>`;
+  mask.classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  const v = document.querySelector('#mbody video'); if (v) v.pause();
+  mask.classList.remove('show');
+  document.body.style.overflow='';
+  curMovie = null;
+}
+mask.addEventListener('click', e=>{ if (e.target===mask) closeModal(); });
+document.getElementById('mx').addEventListener('click', closeModal);
+document.addEventListener('keydown', e=>{ if (e.key==='Escape') closeModal(); });
+grid.addEventListener('click', e=>{
+  const el = e.target.closest('.card');
+  if (el && BYCODE[el.dataset.code]) openModal(BYCODE[el.dataset.code]);
+});
+
+/* ---------------- 分页（原来无限滚动） ---------------- */
+function pagerHTML(pg, pages, total, unit){
+  unit = unit || '部';                       // 演员清单用「位」、系列用「个」，影片网格用「部」
+  if (pages <= 1) return total ? `<div class="pginfo">共 ${total} ${unit}</div>` : '';
+  const set = new Set([1, pages]);
+  for (let i = Math.max(1, pg-2); i <= Math.min(pages, pg+2); i++) set.add(i);
+  const arr = [...set].sort((a,b)=>a-b);
+  let nums = '';
+  arr.forEach((p,i)=>{
+    if (i && p - arr[i-1] > 1) nums += '<span class="pgap">…</span>';
+    nums += `<button class="pgbtn${p===pg?' on':''}" data-p="${p}">${p}</button>`;
+  });
+  return `<div class="pginfo">第 <b>${pg}</b> / ${pages} 页 · 共 ${total} ${unit}</div>
+    <div class="pgbtns">
+      <button class="pgbtn" data-p="${pg-1}"${pg<=1?' disabled':''}>&#8249; 上一页</button>
+      ${nums}
+      <button class="pgbtn" data-p="${pg+1}"${pg>=pages?' disabled':''}>下一页 &#8250;</button>
+    </div>`;
+}
+const scrollToEl = el => {
+  const y = el.getBoundingClientRect().top + window.scrollY - 92;
+  window.scrollTo({top: Math.max(0, y), behavior:'smooth'});
+};
+ipager.addEventListener('click', e=>{
+  const b = e.target.closest('.pgbtn'); if (!b || b.disabled) return;
+  const p = +b.dataset.p; if (!p || p === listPage) return;
+  listPage = p; renderItems(); scrollToEl(igrid);
+});
+pagerEl.addEventListener('click', e=>{
+  const b = e.target.closest('.pgbtn'); if (!b || b.disabled) return;
+  const p = +b.dataset.p; if (!p || p === moviePage) return;
+  moviePage = p; renderGrid(); scrollToEl(grid);
+});
+
+const bt = document.getElementById('backtop');
+bt.addEventListener('click', ()=>window.scrollTo({top:0,behavior:'smooth'}));
+window.addEventListener('scroll', ()=>bt.classList.toggle('show', window.scrollY>600), {passive:true});
+
+/* ---------------- 启动 ---------------- */
+// footer 的「收录 N 部影片」= 演員+系列涉及影片的去重总量（不随 tab/搜索变），
+// 之前写的是「当前筛选子集各条目 codes 求和」，既会跟着搜索跳动又跨条目重复计数。
+document.getElementById('foot-n').textContent =
+  new Set([].concat(ACTORS, SERIES).flatMap(x => x.codes || [])).size.toLocaleString();
+syncImgModeBtns();
+renderItems();
+</script>
+</body>
+</html>

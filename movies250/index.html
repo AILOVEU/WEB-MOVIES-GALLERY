@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>电影荣誉殿堂 · 豆瓣/IMDb Top 250 · 奥斯卡历届获奖</title>
+<style>
+:root{
+  --bg:#121016; --bg2:#191622; --card:#221e2b; --card2:#2b2536; --line:#332c40;
+  --text:#eae6f2; --muted:#9b94a9; --gold:#d4af37; --gold2:#f2d56b;
+  --red:#e5484d; --imdb:#f5c518; --green:#3ecf8e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:linear-gradient(180deg,#0e0c12 0%,var(--bg) 300px);color:var(--text);
+  font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+  min-height:100vh;padding-bottom:60px}
+a{color:var(--gold2);text-decoration:none}
+img{display:block}
+.wrap{max-width:1440px;margin:0 auto;padding:0 22px}
+
+/* ---------- 头部 ---------- */
+header.top{padding:34px 0 18px;text-align:center;
+  background:radial-gradient(ellipse 60% 100% at 50% -30%,rgba(212,175,55,.14),transparent)}
+header.top h1{font-size:34px;letter-spacing:2px;font-weight:700}
+header.top h1 .trophy{filter:drop-shadow(0 2px 8px rgba(212,175,55,.5))}
+header.top .sub{color:var(--muted);margin-top:8px;font-size:14px;letter-spacing:1px}
+header.top .stats{margin-top:14px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+header.top .stats span{background:var(--card);border:1px solid var(--line);border-radius:999px;
+  padding:5px 14px;font-size:12.5px;color:var(--muted)}
+header.top .stats b{color:var(--gold2);font-weight:600}
+
+/* ---------- 标签页 ---------- */
+nav.tabs{position:sticky;top:0;z-index:50;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;
+  padding:12px 0;background:rgba(14,12,18,.88);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);margin-bottom:20px}
+nav.tabs button{background:var(--card);color:var(--muted);border:1px solid var(--line);
+  border-radius:10px;padding:9px 16px;font-size:14px;cursor:pointer;letter-spacing:.5px;
+  transition:all .18s;font-family:inherit}
+nav.tabs button:hover{color:var(--text);border-color:var(--gold)}
+nav.tabs button.active{background:linear-gradient(135deg,#3a2f12,#241d0a);color:var(--gold2);
+  border-color:var(--gold);font-weight:600;box-shadow:0 0 18px rgba(212,175,55,.18)}
+nav.tabs button .n{opacity:.65;font-size:12px;margin-left:4px}
+
+/* ---------- 工具栏 ---------- */
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.toolbar input[type=search]{flex:1;min-width:220px;background:var(--card);border:1px solid var(--line);
+  border-radius:10px;padding:9px 14px;color:var(--text);font-size:14px;outline:none;font-family:inherit}
+.toolbar input[type=search]:focus{border-color:var(--gold)}
+.toolbar select{background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:9px 12px;color:var(--text);font-size:13.5px;outline:none;font-family:inherit;cursor:pointer}
+.toolbar .count{color:var(--muted);font-size:13px;margin-left:auto}
+
+/* ---------- 卡片网格 ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(152px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;
+  cursor:pointer;transition:transform .18s,box-shadow .18s,border-color .18s;position:relative}
+.card:hover{transform:translateY(-5px);border-color:var(--gold);
+  box-shadow:0 10px 28px rgba(0,0,0,.5),0 0 16px rgba(212,175,55,.12)}
+.poster{position:relative;aspect-ratio:2/3;background:linear-gradient(160deg,#2b2536,#191622);
+  overflow:hidden}
+.poster img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.card:hover .poster img{transform:scale(1.05)}
+.poster .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:40px;opacity:.5}
+.rank{position:absolute;top:0;left:0;background:linear-gradient(135deg,var(--gold),#a8842a);
+  color:#1a1503;font-weight:700;font-size:13px;padding:3px 10px;border-radius:0 0 10px 0;
+  box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.rate{position:absolute;right:6px;bottom:6px;background:rgba(10,8,14,.82);border-radius:8px;
+  padding:2px 8px;font-size:13.5px;font-weight:700;color:var(--gold2);backdrop-filter:blur(4px)}
+.rate.imdb{color:var(--imdb)}
+.card .info{padding:9px 10px 11px}
+.card h3{font-size:14px;font-weight:600;line-height:1.35;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.card .en{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.3;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical}
+.card .meta{font-size:11.5px;color:var(--muted);margin-top:5px}
+.card .person{font-size:11.5px;color:var(--gold);margin-top:3px;
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.cat-badge{position:absolute;top:0;left:0;right:0;background:linear-gradient(90deg,rgba(212,175,55,.92),rgba(212,175,55,.55));
+  color:#1a1503;font-size:11.5px;font-weight:700;padding:3px 8px;letter-spacing:.5px;
+  border-radius:10px 10px 0 0}
+
+/* ---------- 奥斯卡年份栏 ---------- */
+.yearbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px;
+  background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.yearbar button{background:var(--card2);border:1px solid var(--line);color:var(--text);
+  border-radius:8px;padding:7px 14px;font-size:13.5px;cursor:pointer;font-family:inherit;transition:all .15s}
+.yearbar button:hover:not(:disabled){border-color:var(--gold);color:var(--gold2)}
+.yearbar button:disabled{opacity:.35;cursor:not-allowed}
+.yearbar select{background:var(--card2);border:1px solid var(--line);border-radius:8px;
+  padding:7px 12px;color:var(--gold2);font-size:14.5px;font-weight:600;outline:none;font-family:inherit;cursor:pointer}
+.yearbar .yinfo{color:var(--muted);font-size:13px}
+.yearbar .yinfo b{color:var(--gold2)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:999px;
+  padding:5px 13px;font-size:12.5px;color:var(--muted);cursor:pointer;transition:all .15s;user-select:none}
+.chip:hover{color:var(--text);border-color:var(--gold)}
+.chip.on{background:linear-gradient(135deg,#3a2f12,#241d0a);color:var(--gold2);border-color:var(--gold);font-weight:600}
+.chip .c{opacity:.6;font-size:11px;margin-left:3px}
+
+/* ---------- 弹窗 ---------- */
+.modal-mask{position:fixed;inset:0;background:rgba(6,5,9,.78);backdrop-filter:blur(6px);
+  z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:4vh 16px;
+  overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-mask.show{opacity:1;pointer-events:auto}
+.modal{background:var(--bg2);border:1px solid var(--line);border-radius:16px;max-width:980px;
+  width:100%;margin:auto;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.7);
+  transform:translateY(14px);transition:transform .2s}
+.modal-mask.show .modal{transform:translateY(0)}
+.m-close{position:absolute;top:14px;right:16px;z-index:5;background:rgba(20,17,26,.85);
+  border:1px solid var(--line);color:var(--text);width:34px;height:34px;border-radius:50%;
+  font-size:17px;cursor:pointer;line-height:1}
+.m-close:hover{border-color:var(--gold);color:var(--gold2)}
+.m-body{display:grid;grid-template-columns:290px 1fr;gap:0}
+.m-poster{position:relative;background:linear-gradient(160deg,#2b2536,#191622);min-height:420px}
+.m-poster img{width:100%;height:100%;object-fit:cover}
+.m-poster .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:70px;opacity:.4}
+.m-content{padding:26px 28px 28px;position:relative;min-width:0}
+.m-content h2{font-size:23px;line-height:1.3;padding-right:36px}
+.m-content h2 .en{display:block;font-size:14px;color:var(--muted);font-weight:400;margin-top:4px}
+.m-meta{color:var(--muted);font-size:13.5px;margin-top:10px;line-height:1.7}
+.m-meta b{color:var(--text);font-weight:500}
+.m-rate{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px}
+.m-rate .pill{background:var(--card2);border:1px solid var(--line);border-radius:10px;
+  padding:6px 13px;font-size:13.5px}
+.m-rate .pill b{font-size:17px;margin-right:4px}
+.m-rate .pill.db b{color:var(--gold2)}
+.m-rate .pill.im b{color:var(--imdb)}
+.m-quote{margin-top:14px;padding:10px 14px;border-left:3px solid var(--gold);
+  background:rgba(212,175,55,.07);border-radius:0 8px 8px 0;color:var(--gold2);
+  font-size:13.5px;line-height:1.7}
+.m-sec{margin-top:20px}
+.m-sec h4{font-size:14px;color:var(--gold2);letter-spacing:2px;margin-bottom:10px;
+  display:flex;align-items:center;gap:8px}
+.m-sec h4::after{content:"";flex:1;height:1px;background:var(--line)}
+.m-intro{font-size:14px;line-height:1.9;color:#cfc9dc;white-space:pre-line}
+.people{display:flex;gap:14px;flex-wrap:wrap}
+.person-item{display:flex;align-items:center;gap:9px;background:var(--card);
+  border:1px solid var(--line);border-radius:10px;padding:7px 12px 7px 7px;min-width:0}
+.person-item .av{width:44px;height:44px;border-radius:50%;object-fit:cover;flex:none;
+  background:linear-gradient(160deg,#3a3346,#221e2b)}
+.person-item .av.ph{border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:19px;color:var(--muted)}
+.person-item .nm{font-size:13px;line-height:1.3}
+.person-item .nm .rl{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+.stills{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stills .st{border-radius:10px;overflow:hidden;aspect-ratio:16/10;background:#191622;
+  border:1px solid var(--line)}
+.stills .st img{width:100%;height:100%;object-fit:cover;cursor:zoom-in;transition:transform .25s}
+.stills .st img:hover{transform:scale(1.04)}
+.m-links{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;background:var(--card2);
+  border:1px solid var(--line);border-radius:10px;padding:8px 16px;font-size:13.5px;
+  color:var(--text);cursor:pointer;transition:all .15s;font-family:inherit}
+.btn:hover{border-color:var(--gold);color:var(--gold2)}
+.btn.gold{background:linear-gradient(135deg,#3a2f12,#241d0a);border-color:var(--gold);color:var(--gold2)}
+.imgview{position:fixed;inset:0;background:rgba(4,3,7,.92);z-index:200;display:none;
+  align-items:center;justify-content:center;padding:4vh;cursor:zoom-out}
+.imgview.show{display:flex}
+.imgview img{max-width:100%;max-height:92vh;border-radius:8px;box-shadow:0 10px 60px rgba(0,0,0,.8)}
+
+footer{margin-top:46px;text-align:center;color:var(--muted);font-size:12.5px;line-height:2;
+  border-top:1px solid var(--line);padding-top:22px}
+.hidden{display:none!important}
+.empty{padding:60px 0;text-align:center;color:var(--muted);font-size:14px}
+@media (max-width:760px){
+  .m-body{grid-template-columns:1fr}
+  .m-poster{min-height:300px;max-height:46vh}
+  header.top h1{font-size:26px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:12px}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <h1><span class="trophy">🏆</span> 电影荣誉殿堂</h1>
+    <div class="sub">豆瓣电影 Top 250 &nbsp;·&nbsp; IMDb Top 250 &nbsp;·&nbsp; 奥斯卡历届获奖影片</div>
+    <div class="stats" id="stats"></div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button data-tab="douban" class="active">豆瓣 Top 250<span class="n" id="n-douban"></span></button>
+  <button data-tab="imdb">IMDb Top 250<span class="n" id="n-imdb"></span></button>
+  <button data-tab="oscar">奥斯卡历届获奖<span class="n" id="n-oscar"></span></button>
+  <button data-tab="palme">戛纳金棕榈<span class="n" id="n-palme"></span></button>
+  <button data-tab="lion">威尼斯金狮<span class="n" id="n-lion"></span></button>
+  <button data-tab="bear">柏林金熊<span class="n" id="n-bear"></span></button>
+</nav>
+
+<main class="wrap">
+  <!-- 豆瓣 -->
+  <section id="tab-douban">
+    <div class="toolbar">
+      <input type="search" id="db-q" placeholder="搜索片名 / 导演 / 演员 / 类型…">
+      <select id="db-sort">
+        <option value="rank">按榜单排名</option>
+        <option value="rating">按评分高低</option>
+        <option value="year">按年份</option>
+        <option value="votes">按评价人数</option>
+      </select>
+      <span class="count" id="db-count"></span>
+    </div>
+    <div class="grid" id="db-grid"></div>
+    <div class="empty hidden" id="db-empty">没有匹配的影片</div>
+  </section>
+
+  <!-- IMDb -->
+  <section id="tab-imdb" class="hidden">
+    <div class="toolbar">
+      <input type="search" id="im-q" placeholder="搜索片名…">
+      <select id="im-sort">
+        <option value="rank">按榜单排名</option>
+        <option value="rating">按评分高低</option>
+        <option value="year">按年份</option>
+      </select>
+      <span class="count" id="im-count"></span>
+    </div>
+    <div class="grid" id="im-grid"></div>
+    <div class="empty hidden" id="im-empty">没有匹配的影片</div>
+  </section>
+
+  <!-- 奥斯卡 -->
+  <section id="tab-oscar" class="hidden">
+    <div class="yearbar">
+      <button id="oy-prev">‹ 上一年度</button>
+      <select id="oy-select"></select>
+      <button id="oy-next">下一年度 ›</button>
+      <span class="yinfo" id="oy-info"></span>
+    </div>
+    <div class="chips" id="oc-chips"></div>
+    <div class="toolbar">
+      <input type="search" id="oc-q" placeholder="搜索影片 / 获奖人…">
+      <span class="count" id="oc-count"></span>
+    </div>
+    <div class="grid" id="oc-grid"></div>
+    <div class="empty hidden" id="oc-empty">该年度没有符合条件的获奖影片</div>
+  </section>
+
+  <!-- 三大电影节（共享 section，palme/lion/bear 三个 tab 切换奖项） -->
+  <section id="tab-festival" class="hidden">
+    <div class="yearbar">
+      <button id="fy-prev">‹ 上一年度</button>
+      <select id="fy-select"></select>
+      <button id="fy-next">下一年度 ›</button>
+      <span class="yinfo" id="fy-info"></span>
+    </div>
+    <div class="toolbar">
+      <input type="search" id="ft-q" placeholder="搜索影片 / 导演…">
+      <span class="count" id="ft-count"></span>
+    </div>
+    <div class="grid" id="ft-grid"></div>
+    <div class="empty hidden" id="ft-empty">该年度没有符合条件的获奖影片（部分年份因停办或未设该奖而空缺）</div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    数据来源：豆瓣电影 Top250（movie.douban.com）· IMDb Top 250（imdb.com/chart/top）· 奥斯卡历届获奖（维基百科）<br>
+    封面 / 剧照 / 演员照片来自各站点图片 CDN · 画廊生成于 <span id="gen-date"></span> · 本地离线可用
+  </div>
+</footer>
+
+<div class="modal-mask" id="mask">
+  <div class="modal" style="position:relative">
+    <button class="m-close" id="m-close">✕</button>
+    <div id="m-body"></div>
+  </div>
+</div>
+<div class="imgview" id="imgview"><img id="imgview-img" alt=""></div>
+
+<script src="data.js"></script>
+<script>
+(function(){
+"use strict";
+var DATA = window.MOVIE_DATA || {douban:[],imdb:[],oscar:{categories:[],years:[],entries:[]}};
+var dbMap = {}; DATA.douban.forEach(function(x){ dbMap[x.id]=x; });
+var imByDb = {}; DATA.imdb.forEach(function(x){ if(x.douban_id) imByDb[x.douban_id]=x; });
+
+function esc(s){
+  return String(s==null?"":s).replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+function fmtVotes(v){
+  if(v==null) return "";
+  v = Number(v);
+  if(v>=10000) return (v/10000).toFixed(v>=1000000?0:1).replace(/\.0$/,"")+"万";
+  return String(v);
+}
+function joinArr(a,sep){ return (a||[]).filter(Boolean).join(sep||" / "); }
+function posterHtml(src,cls){
+  if(src) return '<div class="poster"><img loading="lazy" src="'+esc(src)+'" alt="" onerror="this.style.display=\'none\'"></div>';
+  return '<div class="poster"><div class="ph">🎬</div></div>';
+}
+function imdbVotes(v){
+  if(!v) return "";
+  var m = String(v).match(/^([\d.]+)(K|M)?$/);
+  if(!m) return v;
+  var n = parseFloat(m[1]);
+  if(m[2]==="M") return (n*1000).toFixed(0)+"K 人";
+  return m[1]+"K 人";
+}
+
+/* ============ 状态与路由 ============ */
+var state = {tab:"douban", dbSort:"rank", dbQ:"", imSort:"rank", imQ:"",
+             oYear:null, oCat:"all", oQ:"", fYear:null, fQ:""};
+var oscarYears = DATA.oscar.years.slice().sort(function(a,b){return a-b;});
+var yearLabels = {};
+DATA.oscar.entries.forEach(function(e){ yearLabels[e.year_num]=e.year; });
+if(oscarYears.length) state.oYear = oscarYears[oscarYears.length-1];
+
+var FES = DATA.festival || {awards:{},entries:[]};
+var FES_TABS = ["palme","lion","bear"];
+var fesYearLabels = {};
+FES.entries.forEach(function(e){
+  var m = fesYearLabels[e.cat] || (fesYearLabels[e.cat]={});
+  m[e.year_num] = e.year;
+});
+function curAward(){ return FES.awards[state.tab] || null; }
+function fesYears(){ var a=curAward(); return a ? a.years.slice() : []; }
+function fesLabel(k,y){ return (fesYearLabels[k]||{})[y] || String(y); }
+if(FES_TABS.some(function(k){return FES.awards[k];})) state.fYear = null;
+
+var FES_ICON = {palme:"🌴", lion:"🦁", bear:"🐻"};
+
+function applyHash(){
+  var h = location.hash.replace(/^#/,"");
+  var parts = h.split("&");
+  var t = parts[0] || "douban";
+  if(["douban","imdb","oscar","palme","lion","bear"].indexOf(t)<0) t="douban";
+  state.tab = t;
+  parts.slice(1).forEach(function(p){
+    var kv = p.split("=");
+    if(kv[0]==="y"){
+      var y=parseInt(kv[1],10);
+      if(t==="oscar"){ if(oscarYears.indexOf(y)>=0) state.oYear=y; }
+      if(t==="palme"||t==="lion"||t==="bear"){ if(FES.awards[t] && FES.awards[t].years.indexOf(y)>=0) state.fYear=y; }
+    }
+    if(kv[0]==="cat") state.oCat = kv[1];
+  });
+  syncTabs();
+}
+function setHash(){
+  var h = "#"+state.tab;
+  if(state.tab==="oscar") h += "&y="+state.oYear+(state.oCat!=="all"?("&cat="+state.oCat):"");
+  if(["palme","lion","bear"].indexOf(state.tab)>=0) h += "&y="+(state.fYear||"");
+  if(location.hash !== h) history.replaceState(null,"",h);
+}
+
+/* ============ 豆瓣 ============ */
+function dbFiltered(){
+  var q = state.dbQ.trim().toLowerCase();
+  var arr = DATA.douban.filter(function(x){
+    if(!q) return true;
+    var hay = [x.title_cn,x.title_orig,x.other_titles,x.quote,
+      joinArr(x.genres),joinArr(x.countries),
+      (x.directors||[]).map(function(d){return (d.name||"")+" "+(d.latin||"");}).join(" "),
+      (x.cast||[]).map(function(c){return (c.name||"")+" "+(c.latin||"");}).join(" ")
+    ].join(" ").toLowerCase();
+    return hay.indexOf(q)>=0;
+  });
+  var s = state.dbSort;
+  arr.sort(function(a,b){
+    if(s==="rating") return (b.rating||0)-(a.rating||0);
+    if(s==="year") return (a.year||"").localeCompare(b.year||"");
+    if(s==="votes") return (b.votes||0)-(a.votes||0);
+    return (a.rank||0)-(b.rank||0);
+  });
+  return arr;
+}
+function renderDb(){
+  var arr = dbFiltered();
+  var grid = document.getElementById("db-grid");
+  var html = arr.map(function(x){
+    return '<article class="card" data-id="'+esc(x.id)+'">'
+      + posterHtml(x.poster)
+      + '<span class="rank">'+esc(x.rank)+'</span>'
+      + (x.rating?'<span class="rate">★ '+esc(x.rating)+'</span>':'')
+      + '<div class="info"><h3>'+esc(x.title_cn)+'</h3>'
+      + (x.title_orig?'<div class="en">'+esc(x.title_orig)+'</div>':'')
+      + '<div class="meta">'+esc([x.year,joinArr(x.genres," ")].filter(Boolean).join(" · "))+'</div>'
+      + '</div></article>';
+  }).join("");
+  grid.innerHTML = html;
+  document.getElementById("db-count").textContent = arr.length+" / "+DATA.douban.length+" 部";
+  document.getElementById("db-empty").classList.toggle("hidden", arr.length>0);
+}
+
+/* ============ IMDb ============ */
+function imFiltered(){
+  var q = state.imQ.trim().toLowerCase();
+  var arr = DATA.imdb.filter(function(x){
+    if(!q) return true;
+    return ((x.title||"")+" "+(x.title_cn||"")).toLowerCase().indexOf(q)>=0;
+  });
+  var s = state.imSort;
+  arr.sort(function(a,b){
+    if(s==="rating") return (b.rating||0)-(a.rating||0);
+    if(s==="year") return (a.year||0)-(b.year||0);
+    return (a.rank||0)-(b.rank||0);
+  });
+  return arr;
+}
+function renderIm(){
+  var arr = imFiltered();
+  var grid = document.getElementById("im-grid");
+  var html = arr.map(function(x){
+    return '<article class="card" data-tt="'+esc(x.id)+'">'
+      + posterHtml(x.poster)
+      + '<span class="rank">'+esc(x.rank)+'</span>'
+      + (x.rating?'<span class="rate imdb">'+esc(x.rating)+'</span>':'')
+      + '<div class="info"><h3>'+esc(x.title)+'</h3>'
+      + (x.title_cn&&x.title_cn!==x.title?'<div class="en">'+esc(x.title_cn)+'</div>':'')
+      + '<div class="meta">'+esc(x.year||"")+(x.douban_id?' · <span style="color:var(--green)">豆瓣在榜</span>':'')+'</div>'
+      + '</div></article>';
+  }).join("");
+  grid.innerHTML = html;
+  document.getElementById("im-count").textContent = arr.length+" / "+DATA.imdb.length+" 部";
+  document.getElementById("im-empty").classList.toggle("hidden", arr.length>0);
+}
+
+/* ============ 奥斯卡 ============ */
+function ocEntries(){
+  var q = state.oQ.trim().toLowerCase();
+  return DATA.oscar.entries.filter(function(e){
+    if(e.year_num!==state.oYear) return false;
+    if(state.oCat!=="all" && e.cat!==state.oCat) return false;
+    if(q){
+      var hay = ((e.film||"")+" "+(e.title_cn||"")+" "+(e.person||"")).toLowerCase();
+      if(hay.indexOf(q)<0) return false;
+    }
+    return true;
+  }).sort(function(a,b){
+    var ia = DATA.oscar.categories.findIndex(function(c){return c.key===a.cat;});
+    var ib = DATA.oscar.categories.findIndex(function(c){return c.key===b.cat;});
+    return ia-ib;
+  });
+}
+function renderOc(){
+  var arr = ocEntries();
+  var grid = document.getElementById("oc-grid");
+  var catMap = {};
+  DATA.oscar.categories.forEach(function(c){ catMap[c.key]=c.cn; });
+  var html = arr.map(function(e,i){
+    var key = e.cat+"|"+e.year+"|"+e.film;
+    return '<article class="card" data-ok="'+esc(key)+'">'
+      + posterHtml(e.cover)
+      + '<span class="cat-badge">🏆 '+esc(catMap[e.cat]||e.cat)+'</span>'
+      + '<div class="info"><h3>'+esc(e.title_cn||e.film)+'</h3>'
+      + '<div class="en">'+esc(e.film)+'</div>'
+      + '<div class="meta">'+esc(e.year)+(e.ceremony?(' · 第'+e.ceremony+'届'):'')+'</div>'
+      + (e.person?'<div class="person">'+esc(e.person)+'</div>':'')
+      + '</div></article>';
+  }).join("");
+  grid.innerHTML = html;
+  document.getElementById("oc-count").textContent = arr.length+" 项获奖";
+  document.getElementById("oc-empty").classList.toggle("hidden", arr.length>0);
+  var cer = null;
+  DATA.oscar.entries.forEach(function(e){ if(e.year_num===state.oYear && e.ceremony) cer=e.ceremony; });
+  document.getElementById("oy-info").innerHTML = cer
+    ? ('第 <b>'+cer+'</b> 届奥斯卡 · <b>'+esc(yearLabels[state.oYear]||state.oYear)+'</b> 年度 · 共 <b>'+arr.length+'</b> 项获奖')
+    : ('<b>'+esc(yearLabels[state.oYear]||state.oYear)+'</b> 年度');
+  var sel = document.getElementById("oy-select");
+  sel.value = String(state.oYear);
+  document.getElementById("oy-prev").disabled = oscarYears.indexOf(state.oYear)<=0;
+  document.getElementById("oy-next").disabled = oscarYears.indexOf(state.oYear)>=oscarYears.length-1;
+  document.querySelectorAll("#oc-chips .chip").forEach(function(c){
+    c.classList.toggle("on", c.getAttribute("data-cat")===state.oCat);
+  });
+}
+
+/* ============ 弹窗 ============ */
+var mask = document.getElementById("mask");
+function openModal(html){
+  document.getElementById("m-body").innerHTML = html;
+  mask.classList.add("show");
+  document.body.style.overflow = "hidden";
+}
+function closeModal(){
+  mask.classList.remove("show");
+  document.body.style.overflow = "";
+}
+document.getElementById("m-close").onclick = closeModal;
+mask.addEventListener("click",function(e){ if(e.target===mask) closeModal(); });
+document.addEventListener("keydown",function(e){ if(e.key==="Escape"){ closeModal(); hideImg(); } });
+var imgview = document.getElementById("imgview");
+function showImg(src){ document.getElementById("imgview-img").src=src; imgview.classList.add("show"); }
+function hideImg(){ imgview.classList.remove("show"); }
+imgview.onclick = hideImg;
+
+function peopleHtml(list, roleLabel){
+  if(!list || !list.length) return "";
+  return '<div class="people">'+list.map(function(p){
+    var av = p.avatar
+      ? '<img class="av" loading="lazy" src="'+esc(p.avatar)+'" alt="" onerror="this.outerHTML=\'<div class=&quot;av ph&quot;>👤</div>\'">'
+      : '<div class="av ph">👤</div>';
+    return '<div class="person-item">'+av+'<div class="nm">'+esc(p.name)+''
+      +(p.latin?'<span class="rl">'+esc(p.latin)+'</span>':'')
+      +(p.role?'<span class="rl">饰 '+esc(p.role)+'</span>':'')
+      +(roleLabel?'<span class="rl">'+esc(roleLabel)+'</span>':'')
+      +'</div></div>';
+  }).join("")+'</div>';
+}
+function stillsHtml(stills){
+  if(!stills || !stills.length) return "";
+  return '<div class="stills">'+stills.map(function(s){
+    return '<div class="st"><img loading="lazy" src="'+esc(s)+'" alt="剧照" onerror="this.parentElement.style.display=\'none\'"></div>';
+  }).join("")+'</div>';
+}
+function linksHtml(items){
+  return '<div class="m-links">'+items.map(function(it){
+    return it.url ? '<a class="btn'+(it.gold?" gold":"")+'" href="'+esc(it.url)+'" target="_blank" rel="noopener">'+esc(it.label)+'</a>' : "";
+  }).join("")+'</div>';
+}
+
+function doubanModal(x){
+  var im = imByDb[x.id];
+  var html = '<div class="m-body">'
+    + '<div class="m-poster">'+(x.poster?'<img loading="lazy" src="'+esc(x.poster)+'" alt="" onerror="this.style.display=\'none\'">':'<div class="ph">🎬</div>')+'</div>'
+    + '<div class="m-content"><h2>'+esc(x.title_cn)+(x.title_orig?'<span class="en">'+esc(x.title_orig)+'</span>':'')+'</h2>'
+    + '<div class="m-meta">'
+    + [x.year&&("<b>"+esc(x.year)+"</b>"), joinArr(x.countries)&&("<b>"+esc(joinArr(x.countries))+"</b>"),
+       joinArr(x.genres), joinArr(x.durations), x.other_titles&&("又名："+esc(x.other_titles))]
+      .filter(Boolean).join(" &nbsp;·&nbsp; ")
+    + '</div>'
+    + '<div class="m-rate">'
+    + (x.rating?'<div class="pill db">豆瓣 <b>'+esc(x.rating)+'</b>'+(x.votes?("（"+fmtVotes(x.votes)+"人评价）"):"")+'</div>':'')
+    + (im?('<div class="pill im">IMDb <b>'+esc(im.rating)+'</b>'+(im.votes?("（"+imdbVotes(im.votes)+"）"):"")+'</div>'):"")
+    + '</div>'
+    + (x.quote?'<div class="m-quote">“'+esc(x.quote)+'”</div>':'')
+    + (x.intro?('<div class="m-sec"><h4>剧情简介</h4><div class="m-intro">'+esc(x.intro)+'</div></div>'):"")
+    + (x.directors&&x.directors.length?('<div class="m-sec"><h4>导演</h4>'+peopleHtml(x.directors)+'</div>'):"")
+    + (x.cast&&x.cast.length?('<div class="m-sec"><h4>演员</h4>'+peopleHtml(x.cast)+'</div>'):"")
+    + (x.stills&&x.stills.length?('<div class="m-sec"><h4>剧照</h4>'+stillsHtml(x.stills)+'</div>'):"")
+    + linksHtml([{label:"豆瓣主页",url:x.url,gold:true},{label:"IMDb 主页",url:im?im.url:null}])
+    + '</div></div>';
+  openModal(html);
+  bindStillClicks();
+}
+function bindStillClicks(){
+  document.querySelectorAll(".stills .st img").forEach(function(img){
+    img.onclick = function(){ showImg(img.src); };
+  });
+}
+
+function imdbModal(x){
+  var db = x.douban_id ? dbMap[x.douban_id] : null;
+  var html = '<div class="m-body">'
+    + '<div class="m-poster">'+(x.poster?'<img loading="lazy" src="'+esc(x.poster)+'" alt="" onerror="this.style.display=\'none\'">':'<div class="ph">🎬</div>')+'</div>'
+    + '<div class="m-content"><h2>'+esc(x.title)+(x.title_cn&&x.title_cn!==x.title?('<span class="en">'+esc(x.title_cn)+'</span>'):'')+'</h2>'
+    + '<div class="m-meta">'
+    + [x.year&&("<b>"+esc(x.year)+"</b>"), db&&joinArr(db.countries)&&("<b>"+esc(joinArr(db.countries))+"</b>"),
+       db&&joinArr(db.genres), db&&joinArr(db.durations), x.id]
+      .filter(Boolean).join(" &nbsp;·&nbsp; ")
+    + '</div>'
+    + '<div class="m-rate">'
+    + (x.rating?'<div class="pill im">IMDb <b>'+esc(x.rating)+'</b>'+(x.votes?("（"+imdbVotes(x.votes)+"）"):"")+'</div>':'')
+    + (db&&db.rating?('<div class="pill db">豆瓣 <b>'+esc(db.rating)+'</b>'+(db.votes?("（"+fmtVotes(db.votes)+"人评价）"):"")+'</div>'):"")
+    + '</div>'
+    + (x.desc_en?('<div class="m-sec"><h4>剧情简介（IMDb）</h4><div class="m-intro">'+esc(x.desc_en)+'</div></div>'):"")
+    + (db&&db.quote?('<div class="m-quote">“'+esc(db.quote)+'”</div>'):"")
+    + (db?(
+        (db.directors&&db.directors.length?('<div class="m-sec"><h4>导演</h4>'+peopleHtml(db.directors)+'</div>'):"")
+        +(db.cast&&db.cast.length?('<div class="m-sec"><h4>演员</h4>'+peopleHtml(db.cast)+'</div>'):"")
+        +(db.stills&&db.stills.length?('<div class="m-sec"><h4>剧照</h4>'+stillsHtml(db.stills)+'</div>'):"")
+      ):"")
+    + linksHtml([{label:"IMDb 主页",url:x.url,gold:true},{label:"豆瓣主页",url:db?db.url:null}])
+    + '</div></div>';
+  openModal(html);
+  bindStillClicks();
+}
+
+function oscarModal(e){
+  var catMap = {};
+  DATA.oscar.categories.forEach(function(c){ catMap[c.key]=c.cn; });
+  var db = e.douban_id ? dbMap[e.douban_id] : null;
+  var html = '<div class="m-body">'
+    + '<div class="m-poster">'+(e.cover?'<img loading="lazy" src="'+esc(e.cover)+'" alt="" onerror="this.style.display=\'none\'">':'<div class="ph">🏆</div>')+'</div>'
+    + '<div class="m-content"><h2>'+esc(e.title_cn||e.film)+'<span class="en">'+esc(e.film)+'</span></h2>'
+    + '<div class="m-meta">'
+    + [("<b>"+esc(catMap[e.cat]||e.cat)+"</b>"), esc(e.year)+(e.ceremony?(" · 第"+e.ceremony+"届奥斯卡"):""), e.country&&esc(e.country)]
+      .filter(Boolean).join(" &nbsp;·&nbsp; ")
+    + '</div>'
+    + (e.person?('<div class="m-rate"><div class="pill gold" style="border-color:var(--gold);color:var(--gold2)">🏆 获奖者：'+esc(e.person)+'</div></div>'):"")
+    + (db&&db.quote?('<div class="m-quote">“'+esc(db.quote)+'”</div>'):"")
+    + (db&&db.intro?('<div class="m-sec"><h4>剧情简介</h4><div class="m-intro">'+esc(db.intro)+'</div></div>')
+        :(e.intro_en?('<div class="m-sec"><h4>剧情简介（维基百科）</h4><div class="m-intro">'+esc(e.intro_en)+'</div></div>'):""))
+    + (db?(
+        (db.cast&&db.cast.length?('<div class="m-sec"><h4>演员</h4>'+peopleHtml(db.cast)+'</div>'):"")
+        +(db.stills&&db.stills.length?('<div class="m-sec"><h4>剧照</h4>'+stillsHtml(db.stills)+'</div>'):"")
+      ):"")
+    + linksHtml([{label:"豆瓣主页",url:e.url,gold:true},{label:"豆瓣详情",url:db?db.url:null}])
+    + '</div></div>';
+  openModal(html);
+  bindStillClicks();
+}
+
+/* ============ 三大电影节 ============ */
+function ftEntries(){
+  var k = state.tab;   // palme | lion | bear
+  var q = state.fQ.trim().toLowerCase();
+  return FES.entries.filter(function(e){
+    if(e.cat!==k) return false;
+    if(state.fYear && e.year_num!==state.fYear) return false;
+    if(q){
+      var hay = ((e.film||"")+" "+(e.title_cn||"")+" "+(e.director||"")).toLowerCase();
+      if(hay.indexOf(q)<0) return false;
+    }
+    return true;
+  }).sort(function(a,b){ return (a.year_num-b.year_num) || a.film.localeCompare(b.film); });
+}
+function renderFt(){
+  var k = state.tab, aw = curAward();
+  if(!aw) return;
+  var years = aw.years;
+  if(!state.fYear || years.indexOf(state.fYear)<0) state.fYear = years[years.length-1];
+  var arr = ftEntries();
+  var icon = FES_ICON[k]||"🏆";
+  var html = arr.map(function(e){
+    var key = k+"|"+e.year+"|"+e.film;
+    return '<article class="card" data-fk="'+esc(key)+'">'
+      + posterHtml(e.cover)
+      + '<span class="cat-badge">'+icon+' '+esc(aw.cn)+'</span>'
+      + '<div class="info"><h3>'+esc(e.title_cn||e.film)+'</h3>'
+      + '<div class="en">'+esc(e.film)+'</div>'
+      + '<div class="meta">'+esc(e.year)+(e.country?(' · '+esc(e.country)):'')+'</div>'
+      + (e.director?'<div class="person">'+esc(e.director)+'</div>':'')
+      + '</div></article>';
+  }).join("");
+  document.getElementById("ft-grid").innerHTML = html;
+  document.getElementById("ft-count").textContent = arr.length + " 部";
+  document.getElementById("ft-empty").classList.toggle("hidden", arr.length>0);
+  document.getElementById("fy-info").innerHTML =
+      '<b>'+esc(aw.cn)+'</b> · <b>'+esc(fesLabel(k,state.fYear))+'</b> 年度 · <b>'+arr.length+'</b> 部获奖';
+  var sel = document.getElementById("fy-select");
+  var want = String(state.fYear);
+  if(sel.getAttribute("data-fes")!==k || sel.value!==want && !sel.options.length){
+    sel.innerHTML = years.slice().reverse().map(function(y){
+      return '<option value="'+y+'">'+esc(fesLabel(k,y))+'</option>';
+    }).join("");
+    sel.setAttribute("data-fes", k);
+  }
+  sel.value = String(state.fYear);
+  document.getElementById("fy-prev").disabled = years.indexOf(state.fYear)<=0;
+  document.getElementById("fy-next").disabled = years.indexOf(state.fYear)>=years.length-1;
+}
+function festivalModal(e){
+  var k = state.tab, aw = curAward();
+  var db = e.douban_id ? dbMap[e.douban_id] : null;
+  var html = '<div class="m-body">'
+    + '<div class="m-poster">'+(e.cover?'<img loading="lazy" src="'+esc(e.cover)+'" alt="" onerror="this.style.display=\'none\'">':'<div class="ph">'+(FES_ICON[k]||'🏆')+'</div>')+'</div>'
+    + '<div class="m-content"><h2>'+esc(e.title_cn||e.film)+'<span class="en">'+esc(e.film)+'</span></h2>'
+    + '<div class="m-meta">'
+    + [("<b>"+esc(aw?aw.cn:k)+"</b>"), ("<b>"+esc(fesLabel(k,e.year_num))+"</b> 年度"), e.country&&esc(e.country),
+       db&&joinArr(db.genres), db&&joinArr(db.durations)]
+      .filter(Boolean).join(" &nbsp;·&nbsp; ")
+    + '</div>'
+    + (e.director?('<div class="m-rate"><div class="pill gold" style="border-color:var(--gold);color:var(--gold2)">'+(FES_ICON[k]||'🏆')+' 导演：'+esc(e.director)+'</div></div>'):"")
+    + (db&&db.rating?('<div class="m-rate"><div class="pill db">豆瓣 <b>'+esc(db.rating)+'</b>'+(db.votes?("（"+fmtVotes(db.votes)+"人评价）"):"")+'</div></div>'):"")
+    + (db&&db.quote?('<div class="m-quote">“'+esc(db.quote)+'”</div>'):"")
+    + (db&&db.intro?('<div class="m-sec"><h4>剧情简介</h4><div class="m-intro">'+esc(db.intro)+'</div></div>')
+        :(e.intro_en?('<div class="m-sec"><h4>剧情简介（维基百科）</h4><div class="m-intro">'+esc(e.intro_en)+'</div></div>'):""))
+    + (db?(
+        (db.directors&&db.directors.length?('<div class="m-sec"><h4>导演</h4>'+peopleHtml(db.directors)+'</div>'):"")
+        +(db.cast&&db.cast.length?('<div class="m-sec"><h4>演员</h4>'+peopleHtml(db.cast)+'</div>'):"")
+        +(db.stills&&db.stills.length?('<div class="m-sec"><h4>剧照</h4>'+stillsHtml(db.stills)+'</div>'):"")
+      ):"")
+    + linksHtml([{label:"豆瓣主页",url:db?db.url:null,gold:true},{label:"IMDb 主页",url:imByDb[e.douban_id]?imByDb[e.douban_id].url:null}])
+    + '</div></div>';
+  openModal(html);
+  bindStillClicks();
+}
+
+/* ============ 渲染调度 ============ */
+function syncTabs(){
+  document.querySelectorAll("nav.tabs button").forEach(function(b){
+    b.classList.toggle("active", b.getAttribute("data-tab")===state.tab);
+  });
+  document.getElementById("tab-douban").classList.toggle("hidden", state.tab!=="douban");
+  document.getElementById("tab-imdb").classList.toggle("hidden", state.tab!=="imdb");
+  document.getElementById("tab-oscar").classList.toggle("hidden", state.tab!=="oscar");
+  var isFes = ["palme","lion","bear"].indexOf(state.tab)>=0;
+  document.getElementById("tab-festival").classList.toggle("hidden", !isFes);
+  if(state.tab==="douban") renderDb();
+  if(state.tab==="imdb") renderIm();
+  if(state.tab==="oscar") renderOc();
+  if(isFes) renderFt();
+  setHash();
+  window.scrollTo({top:0});
+}
+
+/* ============ 事件绑定 ============ */
+document.querySelectorAll("nav.tabs button").forEach(function(b){
+  b.onclick = function(){ state.tab = b.getAttribute("data-tab"); syncTabs(); };
+});
+document.getElementById("db-q").addEventListener("input",function(e){ state.dbQ=e.target.value; renderDb(); });
+document.getElementById("db-sort").addEventListener("change",function(e){ state.dbSort=e.target.value; renderDb(); });
+document.getElementById("im-q").addEventListener("input",function(e){ state.imQ=e.target.value; renderIm(); });
+document.getElementById("im-sort").addEventListener("change",function(e){ state.imSort=e.target.value; renderIm(); });
+document.getElementById("oc-q").addEventListener("input",function(e){ state.oQ=e.target.value; renderOc(); });
+document.getElementById("ft-q").addEventListener("input",function(e){ state.fQ=e.target.value; renderFt(); });
+document.getElementById("oy-prev").onclick = function(){
+  var i = oscarYears.indexOf(state.oYear);
+  if(i>0){ state.oYear = oscarYears[i-1]; renderOc(); setHash(); }
+};
+document.getElementById("oy-next").onclick = function(){
+  var i = oscarYears.indexOf(state.oYear);
+  if(i<oscarYears.length-1){ state.oYear = oscarYears[i+1]; renderOc(); setHash(); }
+};
+document.getElementById("oy-select").onchange = function(e){
+  state.oYear = parseInt(e.target.value,10); renderOc(); setHash();
+};
+document.getElementById("fy-prev").onclick = function(){
+  var ys = fesYears(); var i = ys.indexOf(state.fYear);
+  if(i>0){ state.fYear = ys[i-1]; renderFt(); setHash(); }
+};
+document.getElementById("fy-next").onclick = function(){
+  var ys = fesYears(); var i = ys.indexOf(state.fYear);
+  if(i<ys.length-1){ state.fYear = ys[i+1]; renderFt(); setHash(); }
+};
+document.getElementById("fy-select").onchange = function(e){
+  state.fYear = parseInt(e.target.value,10); renderFt(); setHash();
+};
+document.getElementById("db-grid").addEventListener("click",function(e){
+  var c = e.target.closest(".card"); if(!c) return;
+  var x = dbMap[c.getAttribute("data-id")]; if(x) doubanModal(x);
+});
+document.getElementById("im-grid").addEventListener("click",function(e){
+  var c = e.target.closest(".card"); if(!c) return;
+  var x = DATA.imdb.find(function(m){ return m.id===c.getAttribute("data-tt"); });
+  if(x) imdbModal(x);
+});
+document.getElementById("oc-grid").addEventListener("click",function(e){
+  var c = e.target.closest(".card"); if(!c) return;
+  var parts = c.getAttribute("data-ok").split("|");
+  var e2 = DATA.oscar.entries.find(function(en){
+    return en.cat===parts[0] && en.year===parts[1] && en.film===parts.slice(2).join("|");
+  });
+  if(e2) oscarModal(e2);
+});
+document.getElementById("ft-grid").addEventListener("click",function(e){
+  var c = e.target.closest(".card"); if(!c) return;
+  var parts = c.getAttribute("data-fk").split("|");
+  var e2 = FES.entries.find(function(en){
+    return en.cat===parts[0] && en.year===parts[1] && en.film===parts.slice(2).join("|");
+  });
+  if(e2) festivalModal(e2);
+});
+window.addEventListener("hashchange", applyHash);
+
+/* ============ 初始化 ============ */
+(function init(){
+  document.getElementById("gen-date").textContent = DATA.generated || "";
+  document.getElementById("n-douban").textContent = DATA.douban.length;
+  document.getElementById("n-imdb").textContent = DATA.imdb.length;
+  document.getElementById("n-oscar").textContent = DATA.oscar.entries.length;
+  document.getElementById("n-palme").textContent = (FES.awards.palme ? FES.awards.palme.years.length : 0);
+  document.getElementById("n-lion").textContent  = (FES.awards.lion  ? FES.awards.lion.years.length  : 0);
+  document.getElementById("n-bear").textContent  = (FES.awards.bear  ? FES.awards.bear.years.length  : 0);
+  document.getElementById("stats").innerHTML =
+    '<span>豆瓣 Top250 <b>'+DATA.douban.length+'</b> 部</span>'
+    +'<span>IMDb Top250 <b>'+DATA.imdb.length+'</b> 部</span>'
+    +'<span>奥斯卡获奖 <b>'+DATA.oscar.entries.length+'</b> 项</span>'
+    +(FES.entries.length ? ('<span>三大电影节 <b>'+FES.entries.length+'</b> 部</span>') : '')
+    +'<span>年份跨度 <b>'+esc(yearLabels[oscarYears[0]]||oscarYears[0])+' – '+esc(yearLabels[oscarYears[oscarYears.length-1]]||oscarYears[oscarYears.length-1])+'</b></span>';
+  // 奥斯卡年份下拉
+  var sel = document.getElementById("oy-select");
+  sel.innerHTML = oscarYears.map(function(y){
+    return '<option value="'+y+'">'+esc(yearLabels[y]||y)+'</option>';
+  }).join("");
+  // 奥斯卡奖项 chips
+  var chips = document.getElementById("oc-chips");
+  chips.innerHTML = '<div class="chip on" data-cat="all">全部奖项</div>'
+    + DATA.oscar.categories.map(function(c){
+        return '<div class="chip" data-cat="'+esc(c.key)+'">'+esc(c.cn)+'<span class="c">'+c.count+'</span></div>';
+      }).join("");
+  chips.querySelectorAll(".chip").forEach(function(ch){
+    ch.onclick = function(){ state.oCat = ch.getAttribute("data-cat"); renderOc(); setHash(); };
+  });
+  applyHash();
+})();
+})();
+</script>
+</body>
+</html>

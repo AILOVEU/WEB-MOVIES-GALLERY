@@ -1,0 +1,6 @@
+.venv/
+session/
+*.session
+credentials.txt
+_selftest_out/
+__pycache__/

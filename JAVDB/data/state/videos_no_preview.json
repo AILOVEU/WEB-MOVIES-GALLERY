@@ -1,0 +1,7204 @@
+{
+  "desc": "确认无预告片的番号持久记录（m3u8=404，以后也不会有）；与 videos_manifest.json 的已下载/已迁移记录分开。默认跳过不重下，除非 --refetch-no-preview。",
+  "items": {
+    "011115-781": {
+      "code": "011115-781",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "05P6E"
+    },
+    "011317-350": {
+      "code": "011317-350",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "P45Kr"
+    },
+    "012318-589": {
+      "code": "012318-589",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "kOWXN"
+    },
+    "021316_245": {
+      "code": "021316_245",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "mQDnZ"
+    },
+    "022417-380": {
+      "code": "022417-380",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "1Eqr9"
+    },
+    "031215_043": {
+      "code": "031215_043",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "WQO6e"
+    },
+    "031814-563": {
+      "code": "031814-563",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "dEYe8"
+    },
+    "032215-833": {
+      "code": "032215-833",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "wGrkb"
+    },
+    "032517_505": {
+      "code": "032517_505",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "pPPAE"
+    },
+    "032815-840": {
+      "code": "032815-840",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "WQOVe"
+    },
+    "041515-853": {
+      "code": "041515-853",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "MXgq7"
+    },
+    "042018-644": {
+      "code": "042018-644",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "MXVJ4"
+    },
+    "042117-417": {
+      "code": "042117-417",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "EvKQA"
+    },
+    "042817-420": {
+      "code": "042817-420",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "ypA2v"
+    },
+    "050815_076": {
+      "code": "050815_076",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "YEP1x"
+    },
+    "051515-001": {
+      "code": "051515-001",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "xD5ME"
+    },
+    "052317-433": {
+      "code": "052317-433",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "kBJ5J"
+    },
+    "052716-172": {
+      "code": "052716-172",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "v4wDp"
+    },
+    "060216_309": {
+      "code": "060216_309",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "D65JJ"
+    },
+    "060716-179": {
+      "code": "060716-179",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "36M5a"
+    },
+    "070417-455": {
+      "code": "070417-455",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "VXke3"
+    },
+    "070916-204": {
+      "code": "070916-204",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "RKEzR"
+    },
+    "072520-001": {
+      "code": "072520-001",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "2Dgdm"
+    },
+    "080616_355": {
+      "code": "080616_355",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Ye3Rx"
+    },
+    "080719-976": {
+      "code": "080719-976",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "qPbQe"
+    },
+    "081024_001": {
+      "code": "081024_001",
+      "first_seen": "2026-11-02",
+      "last_seen": "2026-11-02",
+      "reason": "m3u8_404",
+      "vid": "2mmX3N"
+    },
+    "090315-963": {
+      "code": "090315-963",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "a4xz4"
+    },
+    "091616_384": {
+      "code": "091616_384",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Evqm3"
+    },
+    "091917-502": {
+      "code": "091917-502",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "zMmpW"
+    },
+    "092415_159": {
+      "code": "092415_159",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ARAPe"
+    },
+    "092714-700": {
+      "code": "092714-700",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "rqdOv"
+    },
+    "100518-766": {
+      "code": "100518-766",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "kOdme"
+    },
+    "100616_399": {
+      "code": "100616_399",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "QvJk4"
+    },
+    "101013-451": {
+      "code": "101013-451",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "33qRa"
+    },
+    "101116-279": {
+      "code": "101116-279",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "XEmaM"
+    },
+    "101218-771": {
+      "code": "101218-771",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "YE6Pe"
+    },
+    "102318-778": {
+      "code": "102318-778",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "8NMxV"
+    },
+    "102817_598": {
+      "code": "102817_598",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "M64n1"
+    },
+    "110317-531": {
+      "code": "110317-531",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "v4M18"
+    },
+    "110717-533": {
+      "code": "110717-533",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "DO5DM"
+    },
+    "121914-760": {
+      "code": "121914-760",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ypqY0"
+    },
+    "122415-053": {
+      "code": "122415-053",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "DY8Op"
+    },
+    "122713-508": {
+      "code": "122713-508",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "kOd1z"
+    },
+    "122813-509": {
+      "code": "122813-509",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "05390"
+    },
+    "123118_790": {
+      "code": "123118_790",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "QnXxG"
+    },
+    "ABF-017": {
+      "code": "ABF-017",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "GMDOgJ"
+    },
+    "ABF-061": {
+      "code": "ABF-061",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "O29Nwv"
+    },
+    "ABF-125": {
+      "code": "ABF-125",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "MbmrbA"
+    },
+    "ABF-137": {
+      "code": "ABF-137",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "qAAJEP"
+    },
+    "ABF-139": {
+      "code": "ABF-139",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "3nnrva"
+    },
+    "ABF-159": {
+      "code": "ABF-159",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "WwwB97"
+    },
+    "ABF-177": {
+      "code": "ABF-177",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "7yBvyV"
+    },
+    "ABF-196": {
+      "code": "ABF-196",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "5n6WmY"
+    },
+    "ABF-213": {
+      "code": "ABF-213",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "NQZQnx"
+    },
+    "ABF-240": {
+      "code": "ABF-240",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "QNWRJM"
+    },
+    "ABF-246": {
+      "code": "ABF-246",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "a8yQXr"
+    },
+    "ABF-254": {
+      "code": "ABF-254",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "V4NKZ2"
+    },
+    "ABF-255": {
+      "code": "ABF-255",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "yx4P5W"
+    },
+    "ABF-264": {
+      "code": "ABF-264",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "dezdG8"
+    },
+    "ABF-295": {
+      "code": "ABF-295",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "z4PV7E"
+    },
+    "ABF-302": {
+      "code": "ABF-302",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "4DA1rR"
+    },
+    "ABF-304": {
+      "code": "ABF-304",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "1AMNB4"
+    },
+    "ABF-306": {
+      "code": "ABF-306",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "kKeEze"
+    },
+    "ABF-308": {
+      "code": "ABF-308",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "V40aJW"
+    },
+    "ABF-312": {
+      "code": "ABF-312",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "6dW52Z"
+    },
+    "ABF-314": {
+      "code": "ABF-314",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "OXr2zv"
+    },
+    "ABF-316": {
+      "code": "ABF-316",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "7yY9Jd"
+    },
+    "ABF-317": {
+      "code": "ABF-317",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "0e4Mea"
+    },
+    "ABF-319": {
+      "code": "ABF-319",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "2mXwgP"
+    },
+    "ABF-324": {
+      "code": "ABF-324",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "RkXpNm"
+    },
+    "ABF-325": {
+      "code": "ABF-325",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "82Zgv5"
+    },
+    "ABP-417": {
+      "code": "ABP-417",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "we1"
+    },
+    "ABP-440": {
+      "code": "ABP-440",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "qDyA9"
+    },
+    "ABP-444": {
+      "code": "ABP-444",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "r5Dz"
+    },
+    "ABP-454": {
+      "code": "ABP-454",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "2aPmP"
+    },
+    "ABP-458": {
+      "code": "ABP-458",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "0eak7"
+    },
+    "ABP-471": {
+      "code": "ABP-471",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "OXKGz"
+    },
+    "ABP-490": {
+      "code": "ABP-490",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "3nWw9"
+    },
+    "ABP-522": {
+      "code": "ABP-522",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "8VmGd"
+    },
+    "ABP-523": {
+      "code": "ABP-523",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "e3p"
+    },
+    "ABP-526": {
+      "code": "ABP-526",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "xvVvn"
+    },
+    "ABP-537": {
+      "code": "ABP-537",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "1AWG9"
+    },
+    "ABP-551": {
+      "code": "ABP-551",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "qA3bM"
+    },
+    "ABP-554": {
+      "code": "ABP-554",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "wKmYz"
+    },
+    "ABP-557": {
+      "code": "ABP-557",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "ZNxRm"
+    },
+    "ABP-562": {
+      "code": "ABP-562",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Yn4bz"
+    },
+    "ABP-585": {
+      "code": "ABP-585",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "zK3OQ"
+    },
+    "ABP-586": {
+      "code": "ABP-586",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "V4VK3"
+    },
+    "ABP-588": {
+      "code": "ABP-588",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "4D8Ov"
+    },
+    "ABP-601": {
+      "code": "ABP-601",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Aq5nO"
+    },
+    "ABP-606": {
+      "code": "ABP-606",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "1A8qZ"
+    },
+    "ABP-622": {
+      "code": "ABP-622",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "GZ6n5"
+    },
+    "ABP-633": {
+      "code": "ABP-633",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "0RD07"
+    },
+    "ABP-645": {
+      "code": "ABP-645",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Bz5P6"
+    },
+    "ABP-652": {
+      "code": "ABP-652",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Wwrpq"
+    },
+    "ABP-663": {
+      "code": "ABP-663",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "D2nK2"
+    },
+    "ABP-664": {
+      "code": "ABP-664",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "5nb3z"
+    },
+    "ABP-668": {
+      "code": "ABP-668",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "RdqgD"
+    },
+    "ABP-670": {
+      "code": "ABP-670",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "yxA5b"
+    },
+    "ABP-677": {
+      "code": "ABP-677",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "NQ6KG"
+    },
+    "ABP-721": {
+      "code": "ABP-721",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "J0qPA"
+    },
+    "ABP-749": {
+      "code": "ABP-749",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "GOD85"
+    },
+    "ABP-939": {
+      "code": "ABP-939",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Ym8Y8"
+    },
+    "ABP-950": {
+      "code": "ABP-950",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "N6m84"
+    },
+    "ABP-977": {
+      "code": "ABP-977",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "O7yDB"
+    },
+    "ABW-027": {
+      "code": "ABW-027",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "w82G2"
+    },
+    "ABW-032": {
+      "code": "ABW-032",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ZPZOX"
+    },
+    "ABW-054": {
+      "code": "ABW-054",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "y3qWX"
+    },
+    "ABW-065": {
+      "code": "ABW-065",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "y3v5r"
+    },
+    "ABW-241": {
+      "code": "ABW-241",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "7pXPV"
+    },
+    "ABW-244": {
+      "code": "ABW-244",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "kmr10"
+    },
+    "ABW-322": {
+      "code": "ABW-322",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "me3Onv"
+    },
+    "ABW-339": {
+      "code": "ABW-339",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "76mqMP"
+    },
+    "ABW-342": {
+      "code": "ABW-342",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "rmZ9Gv"
+    },
+    "ABW-345": {
+      "code": "ABW-345",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "QVyR69"
+    },
+    "ABW-366": {
+      "code": "ABW-366",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "0RX9ra"
+    },
+    "ACC-006": {
+      "code": "ACC-006",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Ywz46"
+    },
+    "ACHJ-005": {
+      "code": "ACHJ-005",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "PQ0wba"
+    },
+    "ACHJ-031": {
+      "code": "ACHJ-031",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "763ZVZ"
+    },
+    "ACHJ-060": {
+      "code": "ACHJ-060",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "0e5yda"
+    },
+    "ADN-100": {
+      "code": "ADN-100",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "yxpnb"
+    },
+    "ADN-106": {
+      "code": "ADN-106",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "BzbA6"
+    },
+    "ADN-110": {
+      "code": "ADN-110",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "zKP1b"
+    },
+    "ADN-115": {
+      "code": "ADN-115",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "K4qDP"
+    },
+    "ADN-117": {
+      "code": "ADN-117",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "vDg7b"
+    },
+    "ADN-140": {
+      "code": "ADN-140",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "NwgYr"
+    },
+    "ADN-144": {
+      "code": "ADN-144",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "YnmDd"
+    },
+    "ADN-148": {
+      "code": "ADN-148",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "ZXv1J"
+    },
+    "ADN-396": {
+      "code": "ADN-396",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Kydy0"
+    },
+    "ADN-516": {
+      "code": "ADN-516",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "yrg7ra"
+    },
+    "ADN-734": {
+      "code": "ADN-734",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "WwkJY8"
+    },
+    "ADN-747": {
+      "code": "ADN-747",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "mO40Xv"
+    },
+    "ADN-764": {
+      "code": "ADN-764",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "a8VD6p"
+    },
+    "AKA-022": {
+      "code": "AKA-022",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "eZqp"
+    },
+    "AKA-024": {
+      "code": "AKA-024",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "eKK1p"
+    },
+    "APNS-025": {
+      "code": "APNS-025",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "akXpO"
+    },
+    "ARBB-033": {
+      "code": "ARBB-033",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "vezOp"
+    },
+    "ATFB-341": {
+      "code": "ATFB-341",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "D2335"
+    },
+    "ATID-274": {
+      "code": "ATID-274",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "J2dDd"
+    },
+    "ATID-665": {
+      "code": "ATID-665",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "xAOgV6"
+    },
+    "AVOP-205": {
+      "code": "AVOP-205",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "eZmM"
+    },
+    "AVOP-208": {
+      "code": "AVOP-208",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "bA4yg"
+    },
+    "AVOP-212": {
+      "code": "AVOP-212",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "bA0VA"
+    },
+    "AVOP-245": {
+      "code": "AVOP-245",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "0RRZ0"
+    },
+    "AVOP-258": {
+      "code": "AVOP-258",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "4r56"
+    },
+    "AVOP-260": {
+      "code": "AVOP-260",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "1A979"
+    },
+    "AVOP-301": {
+      "code": "AVOP-301",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "qAx9M"
+    },
+    "AVOP-331": {
+      "code": "AVOP-331",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "ZVkP"
+    },
+    "AVOP-359": {
+      "code": "AVOP-359",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "PZnE"
+    },
+    "BDA-040": {
+      "code": "BDA-040",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "ZNdr8"
+    },
+    "BF-461": {
+      "code": "BF-461",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "YzMx"
+    },
+    "BF-521": {
+      "code": "BF-521",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "1BREY"
+    },
+    "BF-524": {
+      "code": "BF-524",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "KONA"
+    },
+    "BF-528": {
+      "code": "BF-528",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "p3D1B"
+    },
+    "BLK-506": {
+      "code": "BLK-506",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "b7WYA"
+    },
+    "Bang Bus": {
+      "code": "Bang Bus",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "K2OdM"
+    },
+    "BangBros 18": {
+      "code": "BangBros 18",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "dRM78"
+    },
+    "Big Naturals": {
+      "code": "Big Naturals",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Anzmq"
+    },
+    "CAWD-003": {
+      "code": "CAWD-003",
+      "first_seen": "2026-11-02",
+      "last_seen": "2026-11-02",
+      "reason": "m3u8_404",
+      "vid": "kBEnV"
+    },
+    "CAWD-101": {
+      "code": "CAWD-101",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Zzd3V"
+    },
+    "CAWD-365": {
+      "code": "CAWD-365",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "kWp00"
+    },
+    "CAWD-368": {
+      "code": "CAWD-368",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "pwmvE"
+    },
+    "CAWD-386": {
+      "code": "CAWD-386",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "55aEz"
+    },
+    "CAWD-400": {
+      "code": "CAWD-400",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "GMMYZJ"
+    },
+    "CAWD-589": {
+      "code": "CAWD-589",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "d42Grv"
+    },
+    "CAWD-590": {
+      "code": "CAWD-590",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "W1by9e"
+    },
+    "CAWD-676": {
+      "code": "CAWD-676",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "bKAMGA"
+    },
+    "CAWD-741": {
+      "code": "CAWD-741",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "6ddpna"
+    },
+    "CAWD-900": {
+      "code": "CAWD-900",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "V40J3Q"
+    },
+    "CHN-123": {
+      "code": "CHN-123",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "WWYB"
+    },
+    "CJOD-039": {
+      "code": "CJOD-039",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "NQ2ng"
+    },
+    "CJOD-048": {
+      "code": "CJOD-048",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "pk4GB"
+    },
+    "CJOD-067": {
+      "code": "CJOD-067",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "JZE2"
+    },
+    "CJOD-146": {
+      "code": "CJOD-146",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "XwaQe"
+    },
+    "CJOD-261": {
+      "code": "CJOD-261",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "EJAV0"
+    },
+    "CJOD-310": {
+      "code": "CJOD-310",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "R9PPR"
+    },
+    "CWP-120": {
+      "code": "CWP-120",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "2VZrN"
+    },
+    "CWPBD-120": {
+      "code": "CWPBD-120",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "qOXqr"
+    },
+    "CWPBD-138": {
+      "code": "CWPBD-138",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "vWKy9"
+    },
+    "CWPBD-152": {
+      "code": "CWPBD-152",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "QnQDG"
+    },
+    "CWPBD-153": {
+      "code": "CWPBD-153",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "byp1e"
+    },
+    "CWPBD-166": {
+      "code": "CWPBD-166",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "6x2KE"
+    },
+    "CWPBD-99": {
+      "code": "CWPBD-99",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "rqQ7R"
+    },
+    "DANDY-931": {
+      "code": "DANDY-931",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "OXXXbk"
+    },
+    "DASD-353": {
+      "code": "DASD-353",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "nZY9"
+    },
+    "DASD-370": {
+      "code": "DASD-370",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "AzzD0"
+    },
+    "DASD-397": {
+      "code": "DASD-397",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "vexd9"
+    },
+    "DASD-399": {
+      "code": "DASD-399",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "rbAD"
+    },
+    "DASD-893": {
+      "code": "DASD-893",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "7PQ0P"
+    },
+    "DASS-203": {
+      "code": "DASS-203",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "wq2K47"
+    },
+    "DASS-313": {
+      "code": "DASS-313",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "2aZ3gX"
+    },
+    "DASS-492": {
+      "code": "DASS-492",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "MbbGMJ"
+    },
+    "DASS-611": {
+      "code": "DASS-611",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "yxpE5a"
+    },
+    "DASS-715": {
+      "code": "DASS-715",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "xAbg1E"
+    },
+    "DASS-764": {
+      "code": "DASS-764",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Mb4G8A"
+    },
+    "DASS-854": {
+      "code": "DASS-854",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "P9JmY2"
+    },
+    "DLDSS-078": {
+      "code": "DLDSS-078",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "6kER0"
+    },
+    "DLDSS-289": {
+      "code": "DLDSS-289",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "82Ve1d"
+    },
+    "DLDSS-456": {
+      "code": "DLDSS-456",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "OX1zZB"
+    },
+    "DMDG-033": {
+      "code": "DMDG-033",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "x8vA"
+    },
+    "DOKS-539": {
+      "code": "DOKS-539",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "EmWM4"
+    },
+    "DPMI-017": {
+      "code": "DPMI-017",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "OnKK"
+    },
+    "DPMI-020": {
+      "code": "DPMI-020",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "yG3v"
+    },
+    "DPMI-022": {
+      "code": "DPMI-022",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "YnMqK"
+    },
+    "DPMI-055": {
+      "code": "DPMI-055",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "RAd1K"
+    },
+    "DPMI-080": {
+      "code": "DPMI-080",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "RdgKxD"
+    },
+    "DPMX-014": {
+      "code": "DPMX-014",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "r0Xvz"
+    },
+    "DPMX-015": {
+      "code": "DPMX-015",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "y3gXv"
+    },
+    "DPMX-016": {
+      "code": "DPMX-016",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Nm9ab"
+    },
+    "DSVR-1433": {
+      "code": "DSVR-1433",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "V4QKvq"
+    },
+    "DSVR-1668": {
+      "code": "DSVR-1668",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "XeEPnJ"
+    },
+    "DSVR-1669": {
+      "code": "DSVR-1669",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "P9MOk9"
+    },
+    "DVAJ-250": {
+      "code": "DVAJ-250",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "m7nv"
+    },
+    "DVAJ-261": {
+      "code": "DVAJ-261",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "bKxkv"
+    },
+    "DVAJ-450": {
+      "code": "DVAJ-450",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "RXBVp"
+    },
+    "DVAJ-708": {
+      "code": "DVAJ-708",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "a8qmbn"
+    },
+    "DVAJ-730": {
+      "code": "DVAJ-730",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "5nbaa7"
+    },
+    "DVDES-929": {
+      "code": "DVDES-929",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "p3NxE"
+    },
+    "DVDMS-911": {
+      "code": "DVDMS-911",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "RdP3Z8"
+    },
+    "Doctor Adventures": {
+      "code": "Doctor Adventures",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "WdO1p"
+    },
+    "EBOD-506": {
+      "code": "EBOD-506",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "meXDM"
+    },
+    "EBOD-525": {
+      "code": "EBOD-525",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "MVrQ"
+    },
+    "EBOD-526": {
+      "code": "EBOD-526",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "0em9k"
+    },
+    "EBOD-538": {
+      "code": "EBOD-538",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "RkW34"
+    },
+    "EBOD-545": {
+      "code": "EBOD-545",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "0em3X"
+    },
+    "EBOD-559": {
+      "code": "EBOD-559",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "4DWav"
+    },
+    "EBOD-565": {
+      "code": "EBOD-565",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "xA0JV"
+    },
+    "EBOD-571": {
+      "code": "EBOD-571",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "4DWga"
+    },
+    "EBWH-063": {
+      "code": "EBWH-063",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "rmb7VR"
+    },
+    "EBWH-146": {
+      "code": "EBWH-146",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "pkkpEm"
+    },
+    "EYAN-096": {
+      "code": "EYAN-096",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "mAzv"
+    },
+    "FC2-1050737": {
+      "code": "FC2-1050737",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Z25q7"
+    },
+    "FC2-1066192": {
+      "code": "FC2-1066192",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "YrO8x"
+    },
+    "FC2-1218432": {
+      "code": "FC2-1218432",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "pO589"
+    },
+    "FC2-1229755": {
+      "code": "FC2-1229755",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "dgVq9"
+    },
+    "FC2-1245249": {
+      "code": "FC2-1245249",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "aeYKn"
+    },
+    "FC2-1261799": {
+      "code": "FC2-1261799",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "vmqe9"
+    },
+    "FC2-1288053": {
+      "code": "FC2-1288053",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "gQbGQ"
+    },
+    "FC2-1309765": {
+      "code": "FC2-1309765",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "vyndO"
+    },
+    "FC2-1462524": {
+      "code": "FC2-1462524",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "3Q1N9"
+    },
+    "FC2-1560667": {
+      "code": "FC2-1560667",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "GK3a5"
+    },
+    "FC2-1602707": {
+      "code": "FC2-1602707",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "p53gk"
+    },
+    "FC2-1616189": {
+      "code": "FC2-1616189",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "0wy7k"
+    },
+    "FC2-1909413": {
+      "code": "FC2-1909413",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "NdPBG"
+    },
+    "FC2-1912367": {
+      "code": "FC2-1912367",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "GmQK7"
+    },
+    "FC2-1932561": {
+      "code": "FC2-1932561",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "XvKGa"
+    },
+    "FC2-1940513": {
+      "code": "FC2-1940513",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "aNman"
+    },
+    "FC2-2246125": {
+      "code": "FC2-2246125",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "g5b7A"
+    },
+    "FC2-2355314": {
+      "code": "FC2-2355314",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "bryJd"
+    },
+    "FC2-238629": {
+      "code": "FC2-238629",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "1rrQ4"
+    },
+    "FC2-2386297": {
+      "code": "FC2-2386297",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ZWeYV"
+    },
+    "FC2-2486345": {
+      "code": "FC2-2486345",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "6yE57"
+    },
+    "FC2-2498047": {
+      "code": "FC2-2498047",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "KRW1O"
+    },
+    "FC2-2526023": {
+      "code": "FC2-2526023",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "99Y9R"
+    },
+    "FC2-2549115": {
+      "code": "FC2-2549115",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "6m2An"
+    },
+    "FC2-2643836": {
+      "code": "FC2-2643836",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "5gDMz"
+    },
+    "FC2-2711719": {
+      "code": "FC2-2711719",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "12PVJ"
+    },
+    "FC2-2751830": {
+      "code": "FC2-2751830",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "3XvR3"
+    },
+    "FC2-2760723": {
+      "code": "FC2-2760723",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "EW2gx"
+    },
+    "FC2-2763672": {
+      "code": "FC2-2763672",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "BRbrO"
+    },
+    "FC2-2767346": {
+      "code": "FC2-2767346",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "1nWdn"
+    },
+    "FC2-2932490": {
+      "code": "FC2-2932490",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "9RE2p"
+    },
+    "FC2-2935820": {
+      "code": "FC2-2935820",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "wOQzb"
+    },
+    "FC2-2953018": {
+      "code": "FC2-2953018",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "p8m8q"
+    },
+    "FC2-3061625": {
+      "code": "FC2-3061625",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "zKk4B7"
+    },
+    "FC2-3087371": {
+      "code": "FC2-3087371",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "76Kp6R"
+    },
+    "FC2-3104502": {
+      "code": "FC2-3104502",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "YnZJqe"
+    },
+    "FC2-3119569": {
+      "code": "FC2-3119569",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "762w41"
+    },
+    "FC2-3121790": {
+      "code": "FC2-3121790",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "RdYaqm"
+    },
+    "FC2-3175924": {
+      "code": "FC2-3175924",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "wqM14b"
+    },
+    "FC2-3237031": {
+      "code": "FC2-3237031",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "rmZQmv"
+    },
+    "FC2-3264420": {
+      "code": "FC2-3264420",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "QVgQB7"
+    },
+    "FC2-3292343": {
+      "code": "FC2-3292343",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "qDgKy6"
+    },
+    "FC2-3363283": {
+      "code": "FC2-3363283",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "rmwGRv"
+    },
+    "FC2-3788088": {
+      "code": "FC2-3788088",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "bA6B0d"
+    },
+    "FC2-402422": {
+      "code": "FC2-402422",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "D2AP3k"
+    },
+    "FC2-4025269": {
+      "code": "FC2-4025269",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "K48vOb"
+    },
+    "FC2-4162750": {
+      "code": "FC2-4162750",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "1B7B74"
+    },
+    "FC2-4802496": {
+      "code": "FC2-4802496",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "7y2dq1"
+    },
+    "FC2-4821506": {
+      "code": "FC2-4821506",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "gyW2qy"
+    },
+    "FC2-4828968": {
+      "code": "FC2-4828968",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "NQ66Yw"
+    },
+    "FC2-4843002": {
+      "code": "FC2-4843002",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "veyMvY"
+    },
+    "FC2-559226": {
+      "code": "FC2-559226",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "86zM9"
+    },
+    "FC2-702535": {
+      "code": "FC2-702535",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "VrWq3"
+    },
+    "FC2-835964": {
+      "code": "FC2-835964",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Qw8vp"
+    },
+    "FC2-880652": {
+      "code": "FC2-880652",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "D16Q5"
+    },
+    "FC2-985469": {
+      "code": "FC2-985469",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "nzA44"
+    },
+    "FNS-035": {
+      "code": "FNS-035",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "gyqpKE"
+    },
+    "FNS-128": {
+      "code": "FNS-128",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "J0dbKq"
+    },
+    "FSDSS-046": {
+      "code": "FSDSS-046",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "eDzvz"
+    },
+    "FSDSS-272": {
+      "code": "FSDSS-272",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "OwMOB"
+    },
+    "FSDSS-282": {
+      "code": "FSDSS-282",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ERJy3"
+    },
+    "FSDSS-287": {
+      "code": "FSDSS-287",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "31AJ0"
+    },
+    "FSDSS-304": {
+      "code": "FSDSS-304",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "pdey5"
+    },
+    "FSDSS-320": {
+      "code": "FSDSS-320",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "0BX5E"
+    },
+    "FSDSS-435": {
+      "code": "FSDSS-435",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "meK3QY"
+    },
+    "FSDSS-468": {
+      "code": "FSDSS-468",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "VwXbbA"
+    },
+    "FSDSS-483": {
+      "code": "FSDSS-483",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "76qr1P"
+    },
+    "FSDSS-513": {
+      "code": "FSDSS-513",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Mm7mW4"
+    },
+    "FSDSS-525": {
+      "code": "FSDSS-525",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "8VWRyE"
+    },
+    "FSDSS-530": {
+      "code": "FSDSS-530",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "RdPEbK"
+    },
+    "FSDSS-998": {
+      "code": "FSDSS-998",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "veZwZO"
+    },
+    "FSET-597": {
+      "code": "FSET-597",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "N58N"
+    },
+    "FZ65": {
+      "code": "FZ65",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "rOqYz"
+    },
+    "FZ77": {
+      "code": "FZ77",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ypm4d"
+    },
+    "GACHI-1151": {
+      "code": "GACHI-1151",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "e7Z4R"
+    },
+    "GICP-001": {
+      "code": "GICP-001",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "AJr0"
+    },
+    "GOJU-261": {
+      "code": "GOJU-261",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Kk1ab7"
+    },
+    "GVG-256": {
+      "code": "GVG-256",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "e4GN"
+    },
+    "GVG-286": {
+      "code": "GVG-286",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "DRkkp"
+    },
+    "GVG-296": {
+      "code": "GVG-296",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "QVr94"
+    },
+    "GVG-345": {
+      "code": "GVG-345",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "J0WN3"
+    },
+    "GVH-821": {
+      "code": "GVH-821",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "r34nDZ"
+    },
+    "HBAD-336": {
+      "code": "HBAD-336",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "pkXye"
+    },
+    "HBAD-367": {
+      "code": "HBAD-367",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "xAxd8"
+    },
+    "HEYZO-0783": {
+      "code": "HEYZO-0783",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "WdVQZ"
+    },
+    "HEYZO-1031": {
+      "code": "HEYZO-1031",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "46K2R"
+    },
+    "HEYZO-1048": {
+      "code": "HEYZO-1048",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "VX8KX"
+    },
+    "HEYZO-1130": {
+      "code": "HEYZO-1130",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "46KXG"
+    },
+    "HEYZO-1151": {
+      "code": "HEYZO-1151",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "JOAwR"
+    },
+    "HEYZO-1199": {
+      "code": "HEYZO-1199",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "pxYmZ"
+    },
+    "HEYZO-1380": {
+      "code": "HEYZO-1380",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "0kyKq"
+    },
+    "HEYZO-1395": {
+      "code": "HEYZO-1395",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Yeq1b"
+    },
+    "HEYZO-1444": {
+      "code": "HEYZO-1444",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "YeqDb"
+    },
+    "HEYZO-1478": {
+      "code": "HEYZO-1478",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "XEq9a"
+    },
+    "HEYZO-1553": {
+      "code": "HEYZO-1553",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "YeqXx"
+    },
+    "HEYZO-1638": {
+      "code": "HEYZO-1638",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "y08Yg"
+    },
+    "HEYZO-1660": {
+      "code": "HEYZO-1660",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "JOAXW"
+    },
+    "HEYZO-2074": {
+      "code": "HEYZO-2074",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "yp2qg"
+    },
+    "HMGL-188": {
+      "code": "HMGL-188",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "A1JMP"
+    },
+    "HMGL-193": {
+      "code": "HMGL-193",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "O2ER5B"
+    },
+    "HMN-372": {
+      "code": "HMN-372",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "qDeV1P"
+    },
+    "HMN-446": {
+      "code": "HMN-446",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "0RWzMa"
+    },
+    "HMN-463": {
+      "code": "HMN-463",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "k4nOm0"
+    },
+    "HMN-489": {
+      "code": "HMN-489",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "d4Wbxe"
+    },
+    "HMN-623": {
+      "code": "HMN-623",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ZNNGV7"
+    },
+    "HMN-751": {
+      "code": "HMN-751",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "kKQzNe"
+    },
+    "HMN-786": {
+      "code": "HMN-786",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "3nW9O9"
+    },
+    "HMN-788": {
+      "code": "HMN-788",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "OX19pv"
+    },
+    "HND-347": {
+      "code": "HND-347",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "V4pdD"
+    },
+    "HND-400": {
+      "code": "HND-400",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "gy08m"
+    },
+    "HND-458": {
+      "code": "HND-458",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "ZXWxq"
+    },
+    "HND-863": {
+      "code": "HND-863",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "krybN"
+    },
+    "HODV-21134": {
+      "code": "HODV-21134",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "XeR9G"
+    },
+    "HODV-21878": {
+      "code": "HODV-21878",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ZNXZZP"
+    },
+    "HSODA-003": {
+      "code": "HSODA-003",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "MmRa4J"
+    },
+    "HXAD-015": {
+      "code": "HXAD-015",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "3nJd9"
+    },
+    "HXAD-033": {
+      "code": "HXAD-033",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "wa71"
+    },
+    "IDBD-870": {
+      "code": "IDBD-870",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "p8Jaw"
+    },
+    "IPVR-050": {
+      "code": "IPVR-050",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "NPPJ3"
+    },
+    "IPVR-075": {
+      "code": "IPVR-075",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "2DxOP"
+    },
+    "IPVR-088": {
+      "code": "IPVR-088",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ZPDQA"
+    },
+    "IPVR-099": {
+      "code": "IPVR-099",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "rnydq"
+    },
+    "IPX-015": {
+      "code": "IPX-015",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "MbwMP"
+    },
+    "IPX-021": {
+      "code": "IPX-021",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "wq0RB"
+    },
+    "IPX-028": {
+      "code": "IPX-028",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "0e8Xb"
+    },
+    "IPX-039": {
+      "code": "IPX-039",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "E3bd"
+    },
+    "IPX-044": {
+      "code": "IPX-044",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "8W8d"
+    },
+    "IPX-058": {
+      "code": "IPX-058",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Rkkn4"
+    },
+    "IPX-072": {
+      "code": "IPX-072",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "0R2aJ"
+    },
+    "IPX-219": {
+      "code": "IPX-219",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "AqDXq"
+    },
+    "IPX-367": {
+      "code": "IPX-367",
+      "first_seen": "2026-11-02",
+      "last_seen": "2026-11-02",
+      "reason": "m3u8_404",
+      "vid": "0kqBa"
+    },
+    "IPX-409": {
+      "code": "IPX-409",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "5XB1D"
+    },
+    "IPX-466": {
+      "code": "IPX-466",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "4xBa6"
+    },
+    "IPX-482": {
+      "code": "IPX-482",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "R6A0p"
+    },
+    "IPX-485": {
+      "code": "IPX-485",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "KPNOv"
+    },
+    "IPX-497": {
+      "code": "IPX-497",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "N7nvG"
+    },
+    "IPX-518": {
+      "code": "IPX-518",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "pz8pk"
+    },
+    "IPX-534": {
+      "code": "IPX-534",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "x9DQ6"
+    },
+    "IPX-550": {
+      "code": "IPX-550",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "qMOwM"
+    },
+    "IPX-565": {
+      "code": "IPX-565",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "mPVxn"
+    },
+    "IPX-568": {
+      "code": "IPX-568",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "0MBaa"
+    },
+    "IPX-582": {
+      "code": "IPX-582",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "2k75X"
+    },
+    "IPX-586": {
+      "code": "IPX-586",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "P6zW2"
+    },
+    "IPX-588": {
+      "code": "IPX-588",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "OqJ9K"
+    },
+    "IPX-590": {
+      "code": "IPX-590",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "xPv6E"
+    },
+    "IPX-620": {
+      "code": "IPX-620",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Npm5x"
+    },
+    "IPX-641": {
+      "code": "IPX-641",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "P0dyv"
+    },
+    "IPX-689": {
+      "code": "IPX-689",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "z69b7"
+    },
+    "IPX-725": {
+      "code": "IPX-725",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "r8p8R"
+    },
+    "IPX-736": {
+      "code": "IPX-736",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "BwrA9"
+    },
+    "IPX-742": {
+      "code": "IPX-742",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "0XZk3"
+    },
+    "IPX-743": {
+      "code": "IPX-743",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "MMP6R"
+    },
+    "IPX-750": {
+      "code": "IPX-750",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "pdMPw"
+    },
+    "IPX-757": {
+      "code": "IPX-757",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "mVV8v"
+    },
+    "IPX-758": {
+      "code": "IPX-758",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "MeeOk"
+    },
+    "IPX-777": {
+      "code": "IPX-777",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "A7B4P"
+    },
+    "IPX-784": {
+      "code": "IPX-784",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "v25PG"
+    },
+    "IPX-811": {
+      "code": "IPX-811",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "QD3n9"
+    },
+    "IPX-813": {
+      "code": "IPX-813",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "b16yP"
+    },
+    "IPX-868": {
+      "code": "IPX-868",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "rAm4z"
+    },
+    "IPX-906": {
+      "code": "IPX-906",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "KbVx7"
+    },
+    "IPX-916": {
+      "code": "IPX-916",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "k445Ye"
+    },
+    "IPX-934": {
+      "code": "IPX-934",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "J24Dg3"
+    },
+    "IPX-939": {
+      "code": "IPX-939",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "5EJzP7"
+    },
+    "IPX-951": {
+      "code": "IPX-951",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "76qGbB"
+    },
+    "IPX-956": {
+      "code": "IPX-956",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "QVWz2G"
+    },
+    "IPX-967": {
+      "code": "IPX-967",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "J2n4d8"
+    },
+    "IPZ-127": {
+      "code": "IPZ-127",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ZYDV"
+    },
+    "IPZ-689": {
+      "code": "IPZ-689",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "wq4MB"
+    },
+    "IPZ-771": {
+      "code": "IPZ-771",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "JeQA"
+    },
+    "IPZ-773": {
+      "code": "IPZ-773",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Vw7vW"
+    },
+    "IPZ-803": {
+      "code": "IPZ-803",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "r3GrJ"
+    },
+    "IPZ-809": {
+      "code": "IPZ-809",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "zKVAJ"
+    },
+    "IPZ-864": {
+      "code": "IPZ-864",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "bAd"
+    },
+    "IPZ-901": {
+      "code": "IPZ-901",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "O32z"
+    },
+    "IPZ-904": {
+      "code": "IPZ-904",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "35N9b"
+    },
+    "IPZ-905": {
+      "code": "IPZ-905",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "W2np"
+    },
+    "IPZ-910": {
+      "code": "IPZ-910",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Yww6K"
+    },
+    "IPZ-922": {
+      "code": "IPZ-922",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Ggp2"
+    },
+    "IPZ-925": {
+      "code": "IPZ-925",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "mO985"
+    },
+    "IPZ-941": {
+      "code": "IPZ-941",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "OXRYD"
+    },
+    "IPZ-950": {
+      "code": "IPZ-950",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "xve0n"
+    },
+    "IPZ-952": {
+      "code": "IPZ-952",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "kg9V"
+    },
+    "IPZ-971": {
+      "code": "IPZ-971",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "ak3WX"
+    },
+    "IPZ-986": {
+      "code": "IPZ-986",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "vDzAW"
+    },
+    "IPZZ-054": {
+      "code": "IPZZ-054",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Rd9EB8"
+    },
+    "IPZZ-120": {
+      "code": "IPZZ-120",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "2aQQXm"
+    },
+    "IPZZ-137": {
+      "code": "IPZZ-137",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "765VEM"
+    },
+    "IPZZ-170": {
+      "code": "IPZZ-170",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "B87Mma"
+    },
+    "IPZZ-236": {
+      "code": "IPZZ-236",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "0evEBq"
+    },
+    "IPZZ-266": {
+      "code": "IPZZ-266",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "2mak6m"
+    },
+    "IPZZ-269": {
+      "code": "IPZZ-269",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "7y69MV"
+    },
+    "IPZZ-393": {
+      "code": "IPZZ-393",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ZNN31m"
+    },
+    "IPZZ-427": {
+      "code": "IPZZ-427",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "mOQ2GZ"
+    },
+    "IPZZ-484": {
+      "code": "IPZZ-484",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "kKB290"
+    },
+    "IPZZ-508": {
+      "code": "IPZZ-508",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "NQ9aPr"
+    },
+    "IPZZ-598": {
+      "code": "IPZZ-598",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "BzKMW4"
+    },
+    "IPZZ-703": {
+      "code": "IPZZ-703",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "J0d7P8"
+    },
+    "IPZZ-766": {
+      "code": "IPZZ-766",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "BzPXX1"
+    },
+    "JAC-072": {
+      "code": "JAC-072",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "zQP37"
+    },
+    "JUFD-567": {
+      "code": "JUFD-567",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "RJnn"
+    },
+    "JUFD-587": {
+      "code": "JUFD-587",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "65RPM"
+    },
+    "JUFD-615": {
+      "code": "JUFD-615",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "96Bg8"
+    },
+    "JUFD-677": {
+      "code": "JUFD-677",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "p7Ve"
+    },
+    "JUFD-697": {
+      "code": "JUFD-697",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "EbAr2"
+    },
+    "JUFD-716": {
+      "code": "JUFD-716",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "PQaN9"
+    },
+    "JUFD-738": {
+      "code": "JUFD-738",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "bKdYa"
+    },
+    "JUFD-739": {
+      "code": "JUFD-739",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "yrMYX"
+    },
+    "JUFD-741": {
+      "code": "JUFD-741",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "v8Bb"
+    },
+    "JUFD-767": {
+      "code": "JUFD-767",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "EbAxJ"
+    },
+    "JUFD-784": {
+      "code": "JUFD-784",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "J2ANR"
+    },
+    "JUFD-798": {
+      "code": "JUFD-798",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "45W6a"
+    },
+    "JUFD-818": {
+      "code": "JUFD-818",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "2mpap"
+    },
+    "JUFD-833": {
+      "code": "JUFD-833",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "8VdAV"
+    },
+    "JUFD-835": {
+      "code": "JUFD-835",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Yn95d"
+    },
+    "JUFD-839": {
+      "code": "JUFD-839",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "ganZ"
+    },
+    "JUFE-164": {
+      "code": "JUFE-164",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "kb9W4"
+    },
+    "JUFE-384": {
+      "code": "JUFE-384",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "BY42a"
+    },
+    "JUFE-437": {
+      "code": "JUFE-437",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "zKPapy"
+    },
+    "JUL-259": {
+      "code": "JUL-259",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "DXVnk"
+    },
+    "JUL-268": {
+      "code": "JUL-268",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "EO6nQ"
+    },
+    "JUL-271": {
+      "code": "JUL-271",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "P1KV9"
+    },
+    "JUL-274": {
+      "code": "JUL-274",
+      "first_seen": "2026-11-02",
+      "last_seen": "2026-11-02",
+      "reason": "m3u8_404",
+      "vid": "O7zVv"
+    },
+    "JUL-401": {
+      "code": "JUL-401",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ppE6E"
+    },
+    "JUL-706": {
+      "code": "JUL-706",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "8ygyE"
+    },
+    "JUL-784": {
+      "code": "JUL-784",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "OYewv"
+    },
+    "JUL-854": {
+      "code": "JUL-854",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "WD6QQ"
+    },
+    "JUQ-050": {
+      "code": "JUQ-050",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "qDDznP"
+    },
+    "JUQ-081": {
+      "code": "JUQ-081",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "9DWPZ8"
+    },
+    "JUQ-219": {
+      "code": "JUQ-219",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "neVPAV"
+    },
+    "JUQ-241": {
+      "code": "JUQ-241",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ZXAPpv"
+    },
+    "JUQ-340": {
+      "code": "JUQ-340",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "zK24B7"
+    },
+    "JUQ-510": {
+      "code": "JUQ-510",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "MmrQVR"
+    },
+    "JUQ-517": {
+      "code": "JUQ-517",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "akx9bp"
+    },
+    "JUQ-553": {
+      "code": "JUQ-553",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "E25gV2"
+    },
+    "JUR-040": {
+      "code": "JUR-040",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ZNqYW7"
+    },
+    "JUR-064": {
+      "code": "JUR-064",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "2mXD8X"
+    },
+    "JUR-165": {
+      "code": "JUR-165",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "nKPMPV"
+    },
+    "JUR-407": {
+      "code": "JUR-407",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "a8yNqp"
+    },
+    "JUR-446": {
+      "code": "JUR-446",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Bzgmr1"
+    },
+    "JUR-466": {
+      "code": "JUR-466",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "QNJwR9"
+    },
+    "JUR-492": {
+      "code": "JUR-492",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "QNr9y9"
+    },
+    "JUR-600": {
+      "code": "JUR-600",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "bKOGbP"
+    },
+    "JUR-622": {
+      "code": "JUR-622",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "nK378M"
+    },
+    "JUR-642": {
+      "code": "JUR-642",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "V4VzvQ"
+    },
+    "JUVR-234": {
+      "code": "JUVR-234",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ZNd9bX"
+    },
+    "JUVR-237": {
+      "code": "JUVR-237",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "a8B0bq"
+    },
+    "JUX-888": {
+      "code": "JUX-888",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Ee22"
+    },
+    "JUY-299": {
+      "code": "JUY-299",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "3n8gN"
+    },
+    "JUY-331": {
+      "code": "JUY-331",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "5ERBD"
+    },
+    "KATU-134": {
+      "code": "KATU-134",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "OXXk5v"
+    },
+    "KAWD-696": {
+      "code": "KAWD-696",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "ZN0D6"
+    },
+    "KAWD-701": {
+      "code": "KAWD-701",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "MbAOQ"
+    },
+    "KAWD-709": {
+      "code": "KAWD-709",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "P9rZe"
+    },
+    "KAWD-710": {
+      "code": "KAWD-710",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Aqrwm"
+    },
+    "KAWD-716": {
+      "code": "KAWD-716",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "RkWnm"
+    },
+    "KAWD-731": {
+      "code": "KAWD-731",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "kKA1Y"
+    },
+    "KAWD-744": {
+      "code": "KAWD-744",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "96rOp"
+    },
+    "KAWD-795": {
+      "code": "KAWD-795",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Aq07q"
+    },
+    "KAWD-796": {
+      "code": "KAWD-796",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "a8WXO"
+    },
+    "KAWD-807": {
+      "code": "KAWD-807",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "1ARGY"
+    },
+    "KAWD-816": {
+      "code": "KAWD-816",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "ZN9rX"
+    },
+    "KBI-044": {
+      "code": "KBI-044",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "q7wPa"
+    },
+    "KBI-048": {
+      "code": "KBI-048",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "evd8r"
+    },
+    "KBR-026": {
+      "code": "KBR-026",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Xe47J4"
+    },
+    "KBR-030": {
+      "code": "KBR-030",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "r3D3Mr"
+    },
+    "KRVS-002": {
+      "code": "KRVS-002",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "8Np59"
+    },
+    "KSBJ-291": {
+      "code": "KSBJ-291",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "76V52B"
+    },
+    "KUSE-038": {
+      "code": "KUSE-038",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "qAbGZD"
+    },
+    "KUSE-039": {
+      "code": "KUSE-039",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "z4b92J"
+    },
+    "KV-189": {
+      "code": "KV-189",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "3n1AN"
+    },
+    "KYMI-051": {
+      "code": "KYMI-051",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "mOb3rv"
+    },
+    "LAF-41": {
+      "code": "LAF-41",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "eprMR"
+    },
+    "LAFBD-41": {
+      "code": "LAFBD-41",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "78vkJ"
+    },
+    "LOVE-281": {
+      "code": "LOVE-281",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "JJp2"
+    },
+    "LOVE-348": {
+      "code": "LOVE-348",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "gyxZg"
+    },
+    "LULU-119": {
+      "code": "LULU-119",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "MD081"
+    },
+    "LULU-234": {
+      "code": "LULU-234",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "vDvNPn"
+    },
+    "LULU-249": {
+      "code": "LULU-249",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "xvEmVQ"
+    },
+    "LULU-332": {
+      "code": "LULU-332",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "nKKR8M"
+    },
+    "LUXU-164": {
+      "code": "LUXU-164",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "EZ252"
+    },
+    "LUXU-381": {
+      "code": "LUXU-381",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "DY2pa"
+    },
+    "LUXU-426": {
+      "code": "LUXU-426",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "ARzd0"
+    },
+    "LUXU-427": {
+      "code": "LUXU-427",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "kO45z"
+    },
+    "LUXU-863": {
+      "code": "LUXU-863",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "GOMeb"
+    },
+    "LUXU-899": {
+      "code": "LUXU-899",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "gB05A"
+    },
+    "MANX-026": {
+      "code": "MANX-026",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "r3x8ER"
+    },
+    "MCB3DBD-47": {
+      "code": "MCB3DBD-47",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "eBk9E"
+    },
+    "MDON-087": {
+      "code": "MDON-087",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "bKOwPA"
+    },
+    "MDVR-276": {
+      "code": "MDVR-276",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "5n9Ggp"
+    },
+    "MDVR-341": {
+      "code": "MDVR-341",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "MbY4KJ"
+    },
+    "MDVR-363": {
+      "code": "MDVR-363",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "AqKAKM"
+    },
+    "MDVR-388": {
+      "code": "MDVR-388",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "MbnYm1"
+    },
+    "MEYD-115": {
+      "code": "MEYD-115",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "k4GDe"
+    },
+    "MEYD-147": {
+      "code": "MEYD-147",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Aqp0q"
+    },
+    "MEYD-223": {
+      "code": "MEYD-223",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "761bZ"
+    },
+    "MEYD-245": {
+      "code": "MEYD-245",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "2a1rP"
+    },
+    "MEYD-248": {
+      "code": "MEYD-248",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "AgMy"
+    },
+    "MEYD-264": {
+      "code": "MEYD-264",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "NwbPr"
+    },
+    "MEYD-698": {
+      "code": "MEYD-698",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "G95Gz"
+    },
+    "MEYD-881": {
+      "code": "MEYD-881",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "MmOZBX"
+    },
+    "MEYD-929": {
+      "code": "MEYD-929",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "OX2NGv"
+    },
+    "MEYD-994": {
+      "code": "MEYD-994",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "pkxeRw"
+    },
+    "MIAA-062": {
+      "code": "MIAA-062",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "rOPmq"
+    },
+    "MIAA-354": {
+      "code": "MIAA-354",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "pp6Yq"
+    },
+    "MIAA-369": {
+      "code": "MIAA-369",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "W4Oxg"
+    },
+    "MIAA-490": {
+      "code": "MIAA-490",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "rXgOz"
+    },
+    "MIAA-525": {
+      "code": "MIAA-525",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "zwkw5"
+    },
+    "MIAA-565": {
+      "code": "MIAA-565",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "q040P"
+    },
+    "MIAA-715": {
+      "code": "MIAA-715",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "PQ41yr"
+    },
+    "MIAA-968": {
+      "code": "MIAA-968",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "RdBx84"
+    },
+    "MIAB-045": {
+      "code": "MIAB-045",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "QVBJOJ"
+    },
+    "MIAB-053": {
+      "code": "MIAB-053",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "bApOYv"
+    },
+    "MIAB-317": {
+      "code": "MIAB-317",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "J00zQz"
+    },
+    "MIAB-360": {
+      "code": "MIAB-360",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Www8Yg"
+    },
+    "MIAB-385": {
+      "code": "MIAB-385",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "qAQ2aN"
+    },
+    "MIAB-462": {
+      "code": "MIAB-462",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "mOQNyr"
+    },
+    "MIAB-473": {
+      "code": "MIAB-473",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "3nyWM9"
+    },
+    "MIAB-488": {
+      "code": "MIAB-488",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "96eKe8"
+    },
+    "MIAB-567": {
+      "code": "MIAB-567",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "qAnBdN"
+    },
+    "MIAB-585": {
+      "code": "MIAB-585",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "kKbqOV"
+    },
+    "MIAB-603": {
+      "code": "MIAB-603",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "V4VN33"
+    },
+    "MIAD-898": {
+      "code": "MIAD-898",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "1BODn"
+    },
+    "MIAD-907": {
+      "code": "MIAD-907",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "W3qq"
+    },
+    "MIAD-908": {
+      "code": "MIAD-908",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "1ABJ9"
+    },
+    "MIAD-924": {
+      "code": "MIAD-924",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "0eRm7"
+    },
+    "MIAD-952": {
+      "code": "MIAD-952",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "yY8a"
+    },
+    "MIAD-955": {
+      "code": "MIAD-955",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "rA0N"
+    },
+    "MIAD-970": {
+      "code": "MIAD-970",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "nKDqe"
+    },
+    "MIAD-983": {
+      "code": "MIAD-983",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "82d1O"
+    },
+    "MIAD-987": {
+      "code": "MIAD-987",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "7R9V"
+    },
+    "MIAE-003": {
+      "code": "MIAE-003",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "EXmd"
+    },
+    "MIAE-094": {
+      "code": "MIAE-094",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "pkRqw"
+    },
+    "MIAE-122": {
+      "code": "MIAE-122",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "5nWxY"
+    },
+    "MIAE-157": {
+      "code": "MIAE-157",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "meRpy"
+    },
+    "MIAE-332": {
+      "code": "MIAE-332",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Wwgpq"
+    },
+    "MIDA-002": {
+      "code": "MIDA-002",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ZNyygV"
+    },
+    "MIDA-008": {
+      "code": "MIDA-008",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "96WW1X"
+    },
+    "MIDA-039": {
+      "code": "MIDA-039",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "r3O2Xq"
+    },
+    "MIDA-079": {
+      "code": "MIDA-079",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "2m9PKp"
+    },
+    "MIDA-117": {
+      "code": "MIDA-117",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "GZdnBJ"
+    },
+    "MIDA-184": {
+      "code": "MIDA-184",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "veZ9ZO"
+    },
+    "MIDA-192": {
+      "code": "MIDA-192",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "pkqO6k"
+    },
+    "MIDA-234": {
+      "code": "MIDA-234",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "WwVNmq"
+    },
+    "MIDA-345": {
+      "code": "MIDA-345",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "OX8w0B"
+    },
+    "MIDA-490": {
+      "code": "MIDA-490",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "e8qDEd"
+    },
+    "MIDA-493": {
+      "code": "MIDA-493",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "a8eJMp"
+    },
+    "MIDA-533": {
+      "code": "MIDA-533",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "z4b9O7"
+    },
+    "MIDE-295": {
+      "code": "MIDE-295",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Mmz7R"
+    },
+    "MIDE-301": {
+      "code": "MIDE-301",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "AzdVw"
+    },
+    "MIDE-302": {
+      "code": "MIDE-302",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "AzXYM"
+    },
+    "MIDE-312": {
+      "code": "MIDE-312",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "96rV6"
+    },
+    "MIDE-316": {
+      "code": "MIDE-316",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "p3d7Z"
+    },
+    "MIDE-324": {
+      "code": "MIDE-324",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "k48rN"
+    },
+    "MIDE-379": {
+      "code": "MIDE-379",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "QV8XJ"
+    },
+    "MIDE-395": {
+      "code": "MIDE-395",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "neQ7X"
+    },
+    "MIDE-409": {
+      "code": "MIDE-409",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "PQRb0"
+    },
+    "MIDE-411": {
+      "code": "MIDE-411",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "ZGVX"
+    },
+    "MIDE-419": {
+      "code": "MIDE-419",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "761Ed"
+    },
+    "MIDE-442": {
+      "code": "MIDE-442",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "0eJb7"
+    },
+    "MIDE-443": {
+      "code": "MIDE-443",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "0RPa7"
+    },
+    "MIDE-448": {
+      "code": "MIDE-448",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "2a1ep"
+    },
+    "MIDE-475": {
+      "code": "MIDE-475",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Aq9DO"
+    },
+    "MIDE-477": {
+      "code": "MIDE-477",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "AzdXw"
+    },
+    "MIDE-487": {
+      "code": "MIDE-487",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "qAGpa"
+    },
+    "MIDE-500": {
+      "code": "MIDE-500",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "g0RMy"
+    },
+    "MIDE-585": {
+      "code": "MIDE-585",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "96PpE"
+    },
+    "MIDE-599": {
+      "code": "MIDE-599",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Qn67M"
+    },
+    "MIDE-636": {
+      "code": "MIDE-636",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "6xMpa"
+    },
+    "MIDE-715": {
+      "code": "MIDE-715",
+      "first_seen": "2026-11-02",
+      "last_seen": "2026-11-02",
+      "reason": "m3u8_404",
+      "vid": "J61Nd"
+    },
+    "MIDE-775": {
+      "code": "MIDE-775",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "pz5Bb"
+    },
+    "MIDE-799": {
+      "code": "MIDE-799",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "dqrQQ"
+    },
+    "MIDE-906": {
+      "code": "MIDE-906",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "6w3Va"
+    },
+    "MIDE-924": {
+      "code": "MIDE-924",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "eYp6b"
+    },
+    "MIDE-949": {
+      "code": "MIDE-949",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "DE6Xa"
+    },
+    "MIDV-041": {
+      "code": "MIDV-041",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "7OQGB"
+    },
+    "MIDV-049": {
+      "code": "MIDV-049",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "W6kn8"
+    },
+    "MIDV-192": {
+      "code": "MIDV-192",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ak23nn"
+    },
+    "MIDV-229": {
+      "code": "MIDV-229",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "eKqg51"
+    },
+    "MIDV-259": {
+      "code": "MIDV-259",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "yrYKKA"
+    },
+    "MIDV-260": {
+      "code": "MIDV-260",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "76aAeV"
+    },
+    "MIDV-277": {
+      "code": "MIDV-277",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "65Oz1a"
+    },
+    "MIDV-296": {
+      "code": "MIDV-296",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "vDxnEG"
+    },
+    "MIDV-472": {
+      "code": "MIDV-472",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "k49VrY"
+    },
+    "MIDV-506": {
+      "code": "MIDV-506",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "bA6OdP"
+    },
+    "MIDV-518": {
+      "code": "MIDV-518",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "rmEZgz"
+    },
+    "MIDV-623": {
+      "code": "MIDV-623",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "vDKQq8"
+    },
+    "MIDV-713": {
+      "code": "MIDV-713",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "z4KV4b"
+    },
+    "MIDV-719": {
+      "code": "MIDV-719",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "J02P0d"
+    },
+    "MIDV-822": {
+      "code": "MIDV-822",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "qAAAVP"
+    },
+    "MIDV-907": {
+      "code": "MIDV-907",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "MbbvBJ"
+    },
+    "MIDV-995": {
+      "code": "MIDV-995",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "6dxa89"
+    },
+    "MIDV-999": {
+      "code": "MIDV-999",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "3nnxq0"
+    },
+    "MIGD-698": {
+      "code": "MIGD-698",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "OAqk"
+    },
+    "MIGD-725": {
+      "code": "MIGD-725",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "0eA8E"
+    },
+    "MIGD-731": {
+      "code": "MIGD-731",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "0eYga"
+    },
+    "MIGD-745": {
+      "code": "MIGD-745",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "bK3we"
+    },
+    "MIGD-765": {
+      "code": "MIGD-765",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "ZXX18"
+    },
+    "MIGD-770": {
+      "code": "MIGD-770",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "8V1JW"
+    },
+    "MIGD-781": {
+      "code": "MIGD-781",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "GX9D"
+    },
+    "MIKR-018": {
+      "code": "MIKR-018",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "gyz5kg"
+    },
+    "MIKR-023": {
+      "code": "MIKR-023",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "XeYkdb"
+    },
+    "MIMK-045": {
+      "code": "MIMK-045",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "d4NzB"
+    },
+    "MIMK-049": {
+      "code": "MIMK-049",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "8VV8W"
+    },
+    "MIMK-093": {
+      "code": "MIMK-093",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "4R9da"
+    },
+    "MIMK-132": {
+      "code": "MIMK-132",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Azan8O"
+    },
+    "MIMK-136": {
+      "code": "MIMK-136",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "zKJaVW"
+    },
+    "MIRD-163": {
+      "code": "MIRD-163",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "MgOk"
+    },
+    "MIRD-268": {
+      "code": "MIRD-268",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Eb4Ra2"
+    },
+    "MISM-225": {
+      "code": "MISM-225",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Bnaza"
+    },
+    "MISM-231": {
+      "code": "MISM-231",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "v6vBO"
+    },
+    "MISM-239": {
+      "code": "MISM-239",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "V5GaQ"
+    },
+    "MIUM-086": {
+      "code": "MIUM-086",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "MXbPX"
+    },
+    "MIUM-1311": {
+      "code": "MIUM-1311",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "bKOvWe"
+    },
+    "MKBD-S03": {
+      "code": "MKBD-S03",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "YeK7p"
+    },
+    "MKBD-S118": {
+      "code": "MKBD-S118",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "kBR6J"
+    },
+    "MKBD-S123": {
+      "code": "MKBD-S123",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "0kvKk"
+    },
+    "MKBD-S127": {
+      "code": "MKBD-S127",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "zkd4W"
+    },
+    "MKBD-S89": {
+      "code": "MKBD-S89",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "rOBEk"
+    },
+    "MKBD-S94": {
+      "code": "MKBD-S94",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "8XDbd"
+    },
+    "MKD-S127": {
+      "code": "MKD-S127",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "KmAkQ"
+    },
+    "MKD-S144": {
+      "code": "MKD-S144",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "a4OkO"
+    },
+    "MKMP-492": {
+      "code": "MKMP-492",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "J2dxe8"
+    },
+    "MKMP-668": {
+      "code": "MKMP-668",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "mOyR7r"
+    },
+    "MLP-003": {
+      "code": "MLP-003",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "zZAx4"
+    },
+    "MNGS-038": {
+      "code": "MNGS-038",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "NQ6Pvx"
+    },
+    "MSAJ-012": {
+      "code": "MSAJ-012",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Mmg3Kk"
+    },
+    "MSFH-010": {
+      "code": "MSFH-010",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Gn9ND"
+    },
+    "MSFH-021": {
+      "code": "MSFH-021",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "9nAb6"
+    },
+    "MSFH-032": {
+      "code": "MSFH-032",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "EJZW4"
+    },
+    "MSFH-040": {
+      "code": "MSFH-040",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "vRndz"
+    },
+    "MUDR-010": {
+      "code": "MUDR-010",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "pkW8k"
+    },
+    "MUDR-125": {
+      "code": "MUDR-125",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "DXwGa"
+    },
+    "MUM-203": {
+      "code": "MUM-203",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "RGxm"
+    },
+    "MVG-022": {
+      "code": "MVG-022",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "a8y9W"
+    },
+    "MVSD-329": {
+      "code": "MVSD-329",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Xe42a"
+    },
+    "MVSD-453": {
+      "code": "MVSD-453",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "0w5qq"
+    },
+    "MVSD-471": {
+      "code": "MVSD-471",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "0Yq8a"
+    },
+    "MXGS-837": {
+      "code": "MXGS-837",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "O2KmD"
+    },
+    "MXGS-846": {
+      "code": "MXGS-846",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Az4qP"
+    },
+    "MXGS-859": {
+      "code": "MXGS-859",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "akP23"
+    },
+    "MXGS-861": {
+      "code": "MXGS-861",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "ak2pX"
+    },
+    "MXGS-868": {
+      "code": "MXGS-868",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "D2Og2"
+    },
+    "MXGS-885": {
+      "code": "MXGS-885",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "wqnGn"
+    },
+    "MXGS-898": {
+      "code": "MXGS-898",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "8VXAW"
+    },
+    "MXGS-906": {
+      "code": "MXGS-906",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "VwQB2"
+    },
+    "MXGS-913": {
+      "code": "MXGS-913",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "p3ywq"
+    },
+    "MXGS-917": {
+      "code": "MXGS-917",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "AzbB0"
+    },
+    "NAMH-053": {
+      "code": "NAMH-053",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "r34PNv"
+    },
+    "NCYF-026": {
+      "code": "NCYF-026",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "k4gZJ0"
+    },
+    "NDRA-094": {
+      "code": "NDRA-094",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "2NbPX"
+    },
+    "NHDTA-808": {
+      "code": "NHDTA-808",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "PPQv"
+    },
+    "NHDTA-833": {
+      "code": "NHDTA-833",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "WOB7"
+    },
+    "NHDTB-052": {
+      "code": "NHDTB-052",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "akgP3"
+    },
+    "NHDTC-13104": {
+      "code": "NHDTC-13104",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "wKDEpD"
+    },
+    "NIMA-024": {
+      "code": "NIMA-024",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "yrOY8a"
+    },
+    "NMSL-022": {
+      "code": "NMSL-022",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Aq9yrP"
+    },
+    "NMSL-030": {
+      "code": "NMSL-030",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "J0d5WR"
+    },
+    "NSFS-037": {
+      "code": "NSFS-037",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "0zG40"
+    },
+    "NSFS-039": {
+      "code": "NSFS-039",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Pee7E"
+    },
+    "NSFS-064": {
+      "code": "NSFS-064",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "kv6Ye"
+    },
+    "NSPS-537": {
+      "code": "NSPS-537",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "vmPO"
+    },
+    "NSPS-897": {
+      "code": "NSPS-897",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "a3mYR"
+    },
+    "NSPS-982": {
+      "code": "NSPS-982",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ZYVnP"
+    },
+    "OFES-003": {
+      "code": "OFES-003",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "J063Y8"
+    },
+    "OFJE-614": {
+      "code": "OFJE-614",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "BzP5Na"
+    },
+    "ONGP-097": {
+      "code": "ONGP-097",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "qAYZe"
+    },
+    "PFES-009": {
+      "code": "PFES-009",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "P0x2a"
+    },
+    "PGD-844": {
+      "code": "PGD-844",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "MX6OX"
+    },
+    "PGD-857": {
+      "code": "PGD-857",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "vexx9"
+    },
+    "PGD-911": {
+      "code": "PGD-911",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Xexg4"
+    },
+    "PGD-945": {
+      "code": "PGD-945",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "GM1Qq"
+    },
+    "PGD-953": {
+      "code": "PGD-953",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Xevda"
+    },
+    "PIYO-118": {
+      "code": "PIYO-118",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "exADb"
+    },
+    "POW-040": {
+      "code": "POW-040",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "wxXnY"
+    },
+    "PPPD-439": {
+      "code": "PPPD-439",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "B8BAd"
+    },
+    "PPPD-445": {
+      "code": "PPPD-445",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "yr2nv"
+    },
+    "PPPD-458": {
+      "code": "PPPD-458",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "8VkJV"
+    },
+    "PPPD-468": {
+      "code": "PPPD-468",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "GM5QJ"
+    },
+    "PPPD-531": {
+      "code": "PPPD-531",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "6mwD"
+    },
+    "PPPD-543": {
+      "code": "PPPD-543",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "KkWBP"
+    },
+    "PPPD-573": {
+      "code": "PPPD-573",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "vDYRW"
+    },
+    "PPPD-582": {
+      "code": "PPPD-582",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "a8bV3"
+    },
+    "PPPD-599": {
+      "code": "PPPD-599",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "meX7M"
+    },
+    "PPPD-807": {
+      "code": "PPPD-807",
+      "first_seen": "2026-11-02",
+      "last_seen": "2026-11-02",
+      "reason": "m3u8_404",
+      "vid": "vZJ4O"
+    },
+    "PPPE-052": {
+      "code": "PPPE-052",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "p3K5Ow"
+    },
+    "PRED-002": {
+      "code": "PRED-002",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "XMbV"
+    },
+    "PRED-004": {
+      "code": "PRED-004",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "a8NdW"
+    },
+    "PRED-036": {
+      "code": "PRED-036",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "vD81n"
+    },
+    "PRED-403": {
+      "code": "PRED-403",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "8x3Gx"
+    },
+    "PRED-427": {
+      "code": "PRED-427",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "J2OP9q"
+    },
+    "PRED-465": {
+      "code": "PRED-465",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "J2qxp3"
+    },
+    "PRED-485": {
+      "code": "PRED-485",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "0RV3Bq"
+    },
+    "PRED-715": {
+      "code": "PRED-715",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "z44yO7"
+    },
+    "PRED-738": {
+      "code": "PRED-738",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ZN4BA7"
+    },
+    "PRED-772": {
+      "code": "PRED-772",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "82q4nx"
+    },
+    "PRED-785": {
+      "code": "PRED-785",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "kKy2nV"
+    },
+    "PRVR-081": {
+      "code": "PRVR-081",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "GZMEpq"
+    },
+    "Pornstars Like it Big": {
+      "code": "Pornstars Like it Big",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "9d04w"
+    },
+    "RBD-772": {
+      "code": "RBD-772",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "5Emz6"
+    },
+    "RBD-776": {
+      "code": "RBD-776",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "QV2DJ"
+    },
+    "RBD-780": {
+      "code": "RBD-780",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "zKXqW"
+    },
+    "RBD-805": {
+      "code": "RBD-805",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "deZz0"
+    },
+    "RCT-858": {
+      "code": "RCT-858",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "AzrGn"
+    },
+    "RCT-904": {
+      "code": "RCT-904",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "rN3R"
+    },
+    "REAL-598": {
+      "code": "REAL-598",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Nw54b"
+    },
+    "REAL-610": {
+      "code": "REAL-610",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "DaXJ"
+    },
+    "REBD-584": {
+      "code": "REBD-584",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "7wweV"
+    },
+    "REBD-727": {
+      "code": "REBD-727",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "0Rx5Ba"
+    },
+    "RK Prime": {
+      "code": "RK Prime",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "AEzeK"
+    },
+    "RKI-413": {
+      "code": "RKI-413",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "0emDq"
+    },
+    "RKI-451": {
+      "code": "RKI-451",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "5YQB"
+    },
+    "RKI-693": {
+      "code": "RKI-693",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "DRRxnp"
+    },
+    "ROE-175": {
+      "code": "ROE-175",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "vD7GmO"
+    },
+    "ROYD-110": {
+      "code": "ROYD-110",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "45Az1R"
+    },
+    "ROYD-200": {
+      "code": "ROYD-200",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "mOORMr"
+    },
+    "S2MBD-055": {
+      "code": "S2MBD-055",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "6x2gZ"
+    },
+    "SAME-013": {
+      "code": "SAME-013",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "2aawdm"
+    },
+    "SAME-091": {
+      "code": "SAME-091",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "xv594E"
+    },
+    "SAME-144": {
+      "code": "SAME-144",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "P9qQQ2"
+    },
+    "SDAB-049": {
+      "code": "SDAB-049",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "PQGP0"
+    },
+    "SDDE-461": {
+      "code": "SDDE-461",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "5E46B"
+    },
+    "SDDE-522": {
+      "code": "SDDE-522",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "bbyP"
+    },
+    "SDDE-559": {
+      "code": "SDDE-559",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Kkwvb"
+    },
+    "SDJS-325": {
+      "code": "SDJS-325",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "z4BbPE"
+    },
+    "SDJS-344": {
+      "code": "SDJS-344",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "qAbJMM"
+    },
+    "SDMU-673": {
+      "code": "SDMU-673",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "GZE4D"
+    },
+    "SDNM-256": {
+      "code": "SDNM-256",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Vgex3"
+    },
+    "SDNM-330": {
+      "code": "SDNM-330",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "bDnxA"
+    },
+    "SDNM-529": {
+      "code": "SDNM-529",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "4DA7da"
+    },
+    "SDNM-531": {
+      "code": "SDNM-531",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "deQ9ea"
+    },
+    "SDSI-040": {
+      "code": "SDSI-040",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "XWAD4"
+    },
+    "SERO-390": {
+      "code": "SERO-390",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "vAwk"
+    },
+    "SGKI-010": {
+      "code": "SGKI-010",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ZXD68J"
+    },
+    "SHKD-676": {
+      "code": "SHKD-676",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "2ae3B"
+    },
+    "SHKD-696": {
+      "code": "SHKD-696",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "E2yVA"
+    },
+    "SHKD-713": {
+      "code": "SHKD-713",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "wKY5z"
+    },
+    "SHKD-736": {
+      "code": "SHKD-736",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "76DaR"
+    },
+    "SHKD-737": {
+      "code": "SHKD-737",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "PQGD0"
+    },
+    "SHKD-752": {
+      "code": "SHKD-752",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "zKAMW"
+    },
+    "SHKD-755": {
+      "code": "SHKD-755",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "va6n"
+    },
+    "SHKD-988": {
+      "code": "SHKD-988",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "GaqAJ"
+    },
+    "SIRO-3171": {
+      "code": "SIRO-3171",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "051r7"
+    },
+    "SIVR-033": {
+      "code": "SIVR-033",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "vWD3W"
+    },
+    "SIVR-057": {
+      "code": "SIVR-057",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "xgvan"
+    },
+    "SIVR-059": {
+      "code": "SIVR-059",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "pq7Ke"
+    },
+    "SIVR-061": {
+      "code": "SIVR-061",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ay6DX"
+    },
+    "SIVR-102": {
+      "code": "SIVR-102",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "bPmaP"
+    },
+    "SIVR-270": {
+      "code": "SIVR-270",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "2ay9nm"
+    },
+    "SIVR-310": {
+      "code": "SIVR-310",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "wKnQ17"
+    },
+    "SIVR-412": {
+      "code": "SIVR-412",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "a8BM0p"
+    },
+    "SIVR-414": {
+      "code": "SIVR-414",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "J06GGd"
+    },
+    "SKY-140": {
+      "code": "SKY-140",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "wGvEn"
+    },
+    "SKY-247": {
+      "code": "SKY-247",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "KmzaP"
+    },
+    "SKY-329": {
+      "code": "SKY-329",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "9WR5V"
+    },
+    "SKYHD-084": {
+      "code": "SKYHD-084",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ARwPP"
+    },
+    "SMBD-108": {
+      "code": "SMBD-108",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "EZ8wA"
+    },
+    "SMBD-115": {
+      "code": "SMBD-115",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "QnqOJ"
+    },
+    "SMBD-136": {
+      "code": "SMBD-136",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "J4rkd"
+    },
+    "SMBD-161": {
+      "code": "SMBD-161",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "rqgbA"
+    },
+    "SMBD-172": {
+      "code": "SMBD-172",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "mrNwR"
+    },
+    "SMD-115": {
+      "code": "SMD-115",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "VBYq2"
+    },
+    "SMD-136": {
+      "code": "SMD-136",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "zkndb"
+    },
+    "SNIS-585": {
+      "code": "SNIS-585",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "pk4Ew"
+    },
+    "SNIS-594": {
+      "code": "SNIS-594",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "wqwAD"
+    },
+    "SNIS-596": {
+      "code": "SNIS-596",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "ZN3Yv"
+    },
+    "SNIS-609": {
+      "code": "SNIS-609",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "WwAkq"
+    },
+    "SNIS-614": {
+      "code": "SNIS-614",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "qDQg9"
+    },
+    "SNIS-618": {
+      "code": "SNIS-618",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "3n293"
+    },
+    "SNIS-636": {
+      "code": "SNIS-636",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "4Dnma"
+    },
+    "SNIS-645": {
+      "code": "SNIS-645",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "VEaA"
+    },
+    "SNIS-653": {
+      "code": "SNIS-653",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "2mwZw"
+    },
+    "SNIS-656": {
+      "code": "SNIS-656",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "5EVPa"
+    },
+    "SNIS-659": {
+      "code": "SNIS-659",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "z7E6"
+    },
+    "SNIS-665": {
+      "code": "SNIS-665",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "1BEQA"
+    },
+    "SNIS-666": {
+      "code": "SNIS-666",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "AqVMM"
+    },
+    "SNIS-669": {
+      "code": "SNIS-669",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "DRAQK"
+    },
+    "SNIS-675": {
+      "code": "SNIS-675",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "ZNYr8"
+    },
+    "SNIS-692": {
+      "code": "SNIS-692",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "xvy6Q"
+    },
+    "SNIS-696": {
+      "code": "SNIS-696",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "RdpO4"
+    },
+    "SNIS-707": {
+      "code": "SNIS-707",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "veQpz"
+    },
+    "SNIS-710": {
+      "code": "SNIS-710",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "0BGq"
+    },
+    "SNIS-717": {
+      "code": "SNIS-717",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "OPaB"
+    },
+    "SNIS-724": {
+      "code": "SNIS-724",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "82BwO"
+    },
+    "SNIS-731": {
+      "code": "SNIS-731",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "zKr86"
+    },
+    "SNIS-744": {
+      "code": "SNIS-744",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "yxzzW"
+    },
+    "SNIS-745": {
+      "code": "SNIS-745",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "pk5W5"
+    },
+    "SNIS-752": {
+      "code": "SNIS-752",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "K4877"
+    },
+    "SNIS-764": {
+      "code": "SNIS-764",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "96nw8"
+    },
+    "SNIS-779": {
+      "code": "SNIS-779",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "7A51"
+    },
+    "SNIS-788": {
+      "code": "SNIS-788",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "2a9wB"
+    },
+    "SNIS-789": {
+      "code": "SNIS-789",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Ww7We"
+    },
+    "SNIS-800": {
+      "code": "SNIS-800",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "ZNgAm"
+    },
+    "SNIS-811": {
+      "code": "SNIS-811",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "PQdOr"
+    },
+    "SNIS-812": {
+      "code": "SNIS-812",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "meQWd"
+    },
+    "SNIS-815": {
+      "code": "SNIS-815",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "3n2Ae"
+    },
+    "SNIS-827": {
+      "code": "SNIS-827",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "OXqO8"
+    },
+    "SNIS-839": {
+      "code": "SNIS-839",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Yw3Nb"
+    },
+    "SNIS-842": {
+      "code": "SNIS-842",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "kKqAJ"
+    },
+    "SNIS-862": {
+      "code": "SNIS-862",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "ZN3YA"
+    },
+    "SNIS-885": {
+      "code": "SNIS-885",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "wK447"
+    },
+    "SNIS-895": {
+      "code": "SNIS-895",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "eK3nM"
+    },
+    "SNIS-896": {
+      "code": "SNIS-896",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "wKZ3z"
+    },
+    "SNIS-908": {
+      "code": "SNIS-908",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Bp2A"
+    },
+    "SNIS-923": {
+      "code": "SNIS-923",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "9D2XR"
+    },
+    "SNIS-930": {
+      "code": "SNIS-930",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "82wPd"
+    },
+    "SNIS-940": {
+      "code": "SNIS-940",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "1A1m9"
+    },
+    "SNIS-951": {
+      "code": "SNIS-951",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "deDDQ"
+    },
+    "SNIS-953": {
+      "code": "SNIS-953",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "KkNBQ"
+    },
+    "SNIS-976": {
+      "code": "SNIS-976",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "QNkqn"
+    },
+    "SNIS-983": {
+      "code": "SNIS-983",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "XwdP"
+    },
+    "SNIS-985": {
+      "code": "SNIS-985",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "65JA7"
+    },
+    "SNIS-990": {
+      "code": "SNIS-990",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "g0kWZ"
+    },
+    "SNIS-992": {
+      "code": "SNIS-992",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "kKOZN"
+    },
+    "SNOS-038": {
+      "code": "SNOS-038",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "BzV2a9"
+    },
+    "SNOS-078": {
+      "code": "SNOS-078",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "5nbaR7"
+    },
+    "SNOS-082": {
+      "code": "SNOS-082",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "a8VKep"
+    },
+    "SNOS-094": {
+      "code": "SNOS-094",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "EbnOJ2"
+    },
+    "SNOS-112": {
+      "code": "SNOS-112",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "6dWQ8a"
+    },
+    "SOAN-002": {
+      "code": "SOAN-002",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Rk9Pm"
+    },
+    "SONE-049": {
+      "code": "SONE-049",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "E252xA"
+    },
+    "SONE-052": {
+      "code": "SONE-052",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "2aZazp"
+    },
+    "SONE-054": {
+      "code": "SONE-054",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "AzAd1q"
+    },
+    "SONE-097": {
+      "code": "SONE-097",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "r3mOqz"
+    },
+    "SONE-103": {
+      "code": "SONE-103",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Ww9zN8"
+    },
+    "SONE-182": {
+      "code": "SONE-182",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ZNXmWm"
+    },
+    "SONE-201": {
+      "code": "SONE-201",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Ww1PN8"
+    },
+    "SONE-246": {
+      "code": "SONE-246",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "e8KGxd"
+    },
+    "SONE-305": {
+      "code": "SONE-305",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "P9913r"
+    },
+    "SONE-308": {
+      "code": "SONE-308",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "GZZ4OJ"
+    },
+    "SONE-597": {
+      "code": "SONE-597",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "NQRZPx"
+    },
+    "SONE-614": {
+      "code": "SONE-614",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "WwQ3VB"
+    },
+    "SONE-615": {
+      "code": "SONE-615",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "DROqWa"
+    },
+    "SONE-616": {
+      "code": "SONE-616",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "DRO7ZM"
+    },
+    "SONE-618": {
+      "code": "SONE-618",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "a82aqp"
+    },
+    "SONE-632": {
+      "code": "SONE-632",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "mOQEJ5"
+    },
+    "SONE-638": {
+      "code": "SONE-638",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "RkG2b8"
+    },
+    "SONE-705": {
+      "code": "SONE-705",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "4D6Me3"
+    },
+    "SONE-846": {
+      "code": "SONE-846",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Mb4ZdR"
+    },
+    "SONE-974": {
+      "code": "SONE-974",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "e8EXO1"
+    },
+    "SPRD-1499": {
+      "code": "SPRD-1499",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "7rmb4"
+    },
+    "SSIS-005": {
+      "code": "SSIS-005",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "amdRp"
+    },
+    "SSIS-158": {
+      "code": "SSIS-158",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "abZJp"
+    },
+    "SSIS-200": {
+      "code": "SSIS-200",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "v584n"
+    },
+    "SSIS-204": {
+      "code": "SSIS-204",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "PApMr"
+    },
+    "SSIS-215": {
+      "code": "SSIS-215",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "4zwAb"
+    },
+    "SSIS-223": {
+      "code": "SSIS-223",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "DaMAa"
+    },
+    "SSIS-308": {
+      "code": "SSIS-308",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "dXWVe"
+    },
+    "SSIS-333": {
+      "code": "SSIS-333",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "r6yJR"
+    },
+    "SSIS-386": {
+      "code": "SSIS-386",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "EM5Y2"
+    },
+    "SSIS-402": {
+      "code": "SSIS-402",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "VyExQ"
+    },
+    "SSIS-469": {
+      "code": "SSIS-469",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Mm2QnR"
+    },
+    "SSIS-528": {
+      "code": "SSIS-528",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "5E6zz7"
+    },
+    "SSIS-545": {
+      "code": "SSIS-545",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "O2W87v"
+    },
+    "SSIS-584": {
+      "code": "SSIS-584",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "GMwxbJ"
+    },
+    "SSIS-587": {
+      "code": "SSIS-587",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "K4qxx7"
+    },
+    "SSIS-624": {
+      "code": "SSIS-624",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "VwvxY3"
+    },
+    "SSIS-687": {
+      "code": "SSIS-687",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "76W4XB"
+    },
+    "SSIS-701": {
+      "code": "SSIS-701",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "RdrPKK"
+    },
+    "SSIS-724": {
+      "code": "SSIS-724",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "YnJMed"
+    },
+    "SSIS-747": {
+      "code": "SSIS-747",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "yrQKgv"
+    },
+    "SSIS-782": {
+      "code": "SSIS-782",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "akGkGp"
+    },
+    "SSIS-804": {
+      "code": "SSIS-804",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "J270dd"
+    },
+    "SSIS-823": {
+      "code": "SSIS-823",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "RdmkJR"
+    },
+    "SSIS-948": {
+      "code": "SSIS-948",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "K4VRvO"
+    },
+    "SSIS-950": {
+      "code": "SSIS-950",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "zK3x8E"
+    },
+    "SSIS-971": {
+      "code": "SSIS-971",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "zK7Kab"
+    },
+    "SSIS-985": {
+      "code": "SSIS-985",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "D29DZa"
+    },
+    "SSNI-014": {
+      "code": "SSNI-014",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "0e5Q7"
+    },
+    "SSNI-021": {
+      "code": "SSNI-021",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "z4Qn5"
+    },
+    "SSNI-043": {
+      "code": "SSNI-043",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Bzaaa"
+    },
+    "SSNI-048": {
+      "code": "SSNI-048",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "JpYB"
+    },
+    "SSNI-056": {
+      "code": "SSNI-056",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "YwE9B"
+    },
+    "SSNI-057": {
+      "code": "SSNI-057",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "5EMm8"
+    },
+    "SSNI-058": {
+      "code": "SSNI-058",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "kwEm"
+    },
+    "SSNI-075": {
+      "code": "SSNI-075",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Kk0Xm"
+    },
+    "SSNI-080": {
+      "code": "SSNI-080",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "AwPw"
+    },
+    "SSNI-081": {
+      "code": "SSNI-081",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "EbZyQ"
+    },
+    "SSNI-309": {
+      "code": "SSNI-309",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "0eGn3"
+    },
+    "SSNI-420": {
+      "code": "SSNI-420",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Pq312"
+    },
+    "SSNI-658": {
+      "code": "SSNI-658",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "3rNxD"
+    },
+    "SSNI-708": {
+      "code": "SSNI-708",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "PJ4Ne"
+    },
+    "SSNI-716": {
+      "code": "SSNI-716",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "An1yP"
+    },
+    "SSNI-784": {
+      "code": "SSNI-784",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "5Nk8a"
+    },
+    "SSNI-818": {
+      "code": "SSNI-818",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "rzbPJ"
+    },
+    "SSNI-895": {
+      "code": "SSNI-895",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "5RDe9"
+    },
+    "SSNI-939": {
+      "code": "SSNI-939",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "GKvZz"
+    },
+    "SSNI-941": {
+      "code": "SSNI-941",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "x9VvE"
+    },
+    "SSPD-137": {
+      "code": "SSPD-137",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "eKq1x"
+    },
+    "STAR-652": {
+      "code": "STAR-652",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "pkDVq"
+    },
+    "STAR-659": {
+      "code": "STAR-659",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Mbn54"
+    },
+    "STAR-676": {
+      "code": "STAR-676",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "kKeJe"
+    },
+    "STAR-784": {
+      "code": "STAR-784",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "XeAmM"
+    },
+    "STARS-120": {
+      "code": "STARS-120",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Z4MRA"
+    },
+    "STARS-133": {
+      "code": "STARS-133",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "qPGON"
+    },
+    "STARS-145": {
+      "code": "STARS-145",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "1y9Yw"
+    },
+    "STARS-166": {
+      "code": "STARS-166",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "NP6AG"
+    },
+    "STARS-168": {
+      "code": "STARS-168",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "pqey5"
+    },
+    "STARS-172": {
+      "code": "STARS-172",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "R2EKR"
+    },
+    "STARS-205": {
+      "code": "STARS-205",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Zxp7q"
+    },
+    "STARS-224": {
+      "code": "STARS-224",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "1WDMY"
+    },
+    "STARS-225": {
+      "code": "STARS-225",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Dn7K8"
+    },
+    "STARS-229": {
+      "code": "STARS-229",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "aVveO"
+    },
+    "STARS-232": {
+      "code": "STARS-232",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "3WexD"
+    },
+    "STARS-260": {
+      "code": "STARS-260",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "dPEW5"
+    },
+    "STARS-299": {
+      "code": "STARS-299",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "gPvkQ"
+    },
+    "STARS-311": {
+      "code": "STARS-311",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "KN1Db"
+    },
+    "STARS-326": {
+      "code": "STARS-326",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "n55p6"
+    },
+    "STARS-388": {
+      "code": "STARS-388",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "b79YA"
+    },
+    "STARS-430": {
+      "code": "STARS-430",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "pypWB"
+    },
+    "STARS-435": {
+      "code": "STARS-435",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "PrYe2"
+    },
+    "STARS-590": {
+      "code": "STARS-590",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "WgQwg"
+    },
+    "STARS-630": {
+      "code": "STARS-630",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "76veqB"
+    },
+    "STARS-656": {
+      "code": "STARS-656",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "W11YQQ"
+    },
+    "STARS-703": {
+      "code": "STARS-703",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "rmqJGZ"
+    },
+    "STARS-725": {
+      "code": "STARS-725",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "D24qOa"
+    },
+    "STARS-729": {
+      "code": "STARS-729",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Mm8rrR"
+    },
+    "STARS-759": {
+      "code": "STARS-759",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "qDBv2N"
+    },
+    "STARS-804": {
+      "code": "STARS-804",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "qDYQzM"
+    },
+    "STARS-854": {
+      "code": "STARS-854",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "E2xkBx"
+    },
+    "STARS-870": {
+      "code": "STARS-870",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "E20bZ2"
+    },
+    "STARS-896": {
+      "code": "STARS-896",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "RdDD44"
+    },
+    "STARS-910": {
+      "code": "STARS-910",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "p3MAY5"
+    },
+    "STARS-932": {
+      "code": "STARS-932",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "d4anN0"
+    },
+    "START-135": {
+      "code": "START-135",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "z44xxb"
+    },
+    "START-158": {
+      "code": "START-158",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "MbbGd1"
+    },
+    "START-164": {
+      "code": "START-164",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "gyy627"
+    },
+    "START-166": {
+      "code": "START-166",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "kKKp2e"
+    },
+    "START-169": {
+      "code": "START-169",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "2mmAxp"
+    },
+    "START-184": {
+      "code": "START-184",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "r336Nr"
+    },
+    "START-185": {
+      "code": "START-185",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "0ee87J"
+    },
+    "START-202": {
+      "code": "START-202",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Wwwq6g"
+    },
+    "START-223": {
+      "code": "START-223",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "P99vZ0"
+    },
+    "START-257": {
+      "code": "START-257",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "Mb63P7"
+    },
+    "START-273": {
+      "code": "START-273",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "mOp3Qr"
+    },
+    "START-451": {
+      "code": "START-451",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "gyQNym"
+    },
+    "START-471": {
+      "code": "START-471",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "OX1YDv"
+    },
+    "START-475": {
+      "code": "START-475",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "qAxm1P"
+    },
+    "START-488": {
+      "code": "START-488",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "J0nqQB"
+    },
+    "START-491": {
+      "code": "START-491",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "bKOGG6"
+    },
+    "START-497": {
+      "code": "START-497",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "wKgxKe"
+    },
+    "START-498": {
+      "code": "START-498",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "MbKMG1"
+    },
+    "START-521": {
+      "code": "START-521",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "mObkxZ"
+    },
+    "SUKE-162": {
+      "code": "SUKE-162",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "1BVkGW"
+    },
+    "SUPD-135": {
+      "code": "SUPD-135",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "76bdZ"
+    },
+    "SVFLA-010": {
+      "code": "SVFLA-010",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "5n4xQM"
+    },
+    "SW-493": {
+      "code": "SW-493",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "NwZyx"
+    },
+    "TAAK-006": {
+      "code": "TAAK-006",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "z4D0E"
+    },
+    "TEAM-102": {
+      "code": "TEAM-102",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "5QJ7"
+    },
+    "TEK-072": {
+      "code": "TEK-072",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Rk9rD"
+    },
+    "TEK-089": {
+      "code": "TEK-089",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "E2NP0"
+    },
+    "TEK-097": {
+      "code": "TEK-097",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "5J9N7"
+    },
+    "TEN-031": {
+      "code": "TEN-031",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "rgEWZ"
+    },
+    "TKI-066": {
+      "code": "TKI-066",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "bKbwP"
+    },
+    "TeamSkeet X BAEB": {
+      "code": "TeamSkeet X BAEB",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "6QwpM"
+    },
+    "TeamSkeet X Eva Elfie": {
+      "code": "TeamSkeet X Eva Elfie",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "2k50Z"
+    },
+    "UFD-068": {
+      "code": "UFD-068",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Ywkvb"
+    },
+    "URE-032": {
+      "code": "URE-032",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "BrJd"
+    },
+    "URE-040": {
+      "code": "URE-040",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "7EB1"
+    },
+    "URE-093": {
+      "code": "URE-093",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "g0bz5E"
+    },
+    "URE-103": {
+      "code": "URE-103",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "vDg7N9"
+    },
+    "URE-111": {
+      "code": "URE-111",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "r3mJpr"
+    },
+    "VDD-111": {
+      "code": "VDD-111",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "QV7Kn"
+    },
+    "VDD-114": {
+      "code": "VDD-114",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "MmOJA"
+    },
+    "VDD-126": {
+      "code": "VDD-126",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "KwPP"
+    },
+    "VRKM-590": {
+      "code": "VRKM-590",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "JRbvW"
+    },
+    "VRTM-218": {
+      "code": "VRTM-218",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "bA9GB"
+    },
+    "VRTM-247": {
+      "code": "VRTM-247",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "34VD"
+    },
+    "VRTM-302": {
+      "code": "VRTM-302",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "N4Kg"
+    },
+    "VRTM-310": {
+      "code": "VRTM-310",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "yxpzX"
+    },
+    "VRTM-493": {
+      "code": "VRTM-493",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "QrdJG"
+    },
+    "WAAA-067": {
+      "code": "WAAA-067",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "pWZ7m"
+    },
+    "WAAA-123": {
+      "code": "WAAA-123",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "E7rd2"
+    },
+    "WAAA-249": {
+      "code": "WAAA-249",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "9D2B5E"
+    },
+    "WAAA-374": {
+      "code": "WAAA-374",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "pk3pMw"
+    },
+    "WAAA-597": {
+      "code": "WAAA-597",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "xA4B1E"
+    },
+    "WAAA-617": {
+      "code": "WAAA-617",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "KkrKO0"
+    },
+    "WANZ-429": {
+      "code": "WANZ-429",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Pm6e"
+    },
+    "WANZ-440": {
+      "code": "WANZ-440",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "7ybqB"
+    },
+    "WANZ-598": {
+      "code": "WANZ-598",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Ww73R"
+    },
+    "WANZ-651": {
+      "code": "WANZ-651",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "GGqD"
+    },
+    "WANZ-661": {
+      "code": "WANZ-661",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "YngZ6"
+    },
+    "WANZ-671": {
+      "code": "WANZ-671",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "V4pZQ"
+    },
+    "WANZ-928": {
+      "code": "WANZ-928",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "ke96Y"
+    },
+    "WANZ-959": {
+      "code": "WANZ-959",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "W7wp7"
+    },
+    "YST-309": {
+      "code": "YST-309",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "0Rg2da"
+    },
+    "ZIZG-018": {
+      "code": "ZIZG-018",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "ak3Rn"
+    },
+    "heydouga-4030-1938": {
+      "code": "heydouga-4030-1938",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "yzx6Z"
+    },
+    "heydouga-4170-101": {
+      "code": "heydouga-4170-101",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "vzDKn"
+    },
+    "k1363": {
+      "code": "k1363",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "Yq9xK"
+    },
+    "n0659": {
+      "code": "n0659",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "backfill_ckpt",
+      "vid": "bgr6d"
+    },
+    "n1136": {
+      "code": "n1136",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "4KYxG"
+    },
+    "n1146": {
+      "code": "n1146",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "g4VWA"
+    },
+    "n1148": {
+      "code": "n1148",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "dRb3B"
+    },
+    "n1161": {
+      "code": "n1161",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "4KYGa"
+    },
+    "n1180": {
+      "code": "n1180",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "4KY8a"
+    },
+    "n1188": {
+      "code": "n1188",
+      "first_seen": "2026-10-31",
+      "last_seen": "2026-10-31",
+      "reason": "m3u8_404",
+      "vid": "y09Ed"
+    }
+  },
+  "total": 1028,
+  "updated_at": "2026-11-02 15:31:24",
+  "version": 1
+}

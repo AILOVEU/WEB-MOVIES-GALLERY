@@ -1,0 +1,10 @@
+Telethon==1.45.0
+cryptg==0.6.0
+pyaes==1.6.1
+pyasn1==0.6.5
+python-socks==3.2.0
+rsa==4.9.1
+
+# 安装：本机 pip 全局配了清华镜像且它不可达，必须显式覆盖索引
+#   python -m venv .venv
+#   .venv/Scripts/python.exe -m pip install -i https://pypi.org/simple -r requirements.txt

@@ -1,0 +1,40 @@
+# ============================================================
+# 四个影片项目：只保留红框内的内容（_scripts、data 及指定 html/md），
+# 其余子文件夹忽略。其余顶层文件夹（k12-book / month-etf /
+# movies250 / sports 等）正常跟踪，不在此处列名即不忽略。
+# ============================================================
+
+# ---- 9dy电影 ----
+9dy电影/_backup/
+9dy电影/_logs/
+9dy电影/_pipeline/
+9dy电影/_rawdata/
+9dy电影/assets/
+
+# ---- FULIBA ----
+FULIBA/_backup/
+FULIBA/_logs/
+FULIBA/_pipeline/
+FULIBA/_rawdata/
+FULIBA/assets/
+FULIBA/nul
+
+# ---- JAVBUS ----
+JAVBUS/_backup/
+JAVBUS/_logs/
+JAVBUS/_pipeline/
+JAVBUS/_rawdata/
+JAVBUS/assets/
+
+# ---- JAVDB ----
+JAVDB/_backup/
+JAVDB/_logs/
+JAVDB/_pipeline/
+JAVDB/_rawdata/
+JAVDB/assets/
+
+# ============================================================
+# 全局：缓存与编译产物
+# ============================================================
+__pycache__/
+*.pyc

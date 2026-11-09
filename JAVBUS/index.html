@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>老司機論壇 · 福利討論區(fid=2) 离线画廊</title>
+<!-- 本地起服务复测提示：用标准库 http.server 跑本地预览时没有 Cache-Control头， 改过本页后要 Ctrl+Shift+R 硬重载，否则拿到旧缓存会看见假失败 -->
+<style>
+  :root{--bg:#0e1116;--card:#161a21;--fg:#e6e8eb;--muted:#8a93a3;--line:#232a34;--acc:#e2417a;--link:#5aa9ff;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.6 "Segoe UI","Microsoft YaHei",system-ui,sans-serif}
+  a{color:inherit;text-decoration:none}
+  header{position:sticky;top:0;z-index:10;background:rgba(14,17,22,.95);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:12px 18px}
+  h1{margin:0 0 8px;font-size:18px}
+  h1 .sub{color:var(--muted);font-size:13px;font-weight:400;margin-left:10px}
+  .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{padding:4px 11px;border:1px solid var(--line);border-radius:16px;background:#0f1319;color:var(--muted);cursor:pointer;font-size:13px;user-select:none}
+  .chip.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+  /* 图片来源开关：蓝色 = 原始 https 地址，默认灰 = 本地 assets */
+  .chip.mode{min-width:104px;text-align:center}
+  .chip.mode.on{background:#2b6cb0;border-color:#2b6cb0;color:#fff}
+  /* 本地下载协议（ed2k/magnet…）：虚线下划线标记，点击唤起迅雷/qBittorrent 而不是打开网页 */
+  a[href^="ed2k://"],a[href^="magnet:"],a[href^="thunder://"],a[href^="ftp://"]{border-bottom:1px dashed #6a7482}
+  input[type=search]{flex:1;min-width:180px;padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:#0f1319;color:var(--fg);font-size:14px}
+  .list{max-width:1120px;margin:0 auto;padding:12px 14px 60px}
+  .row{display:flex;gap:14px;align-items:flex-start;padding:14px;border:1px solid var(--line);background:var(--card);border-radius:10px;margin-bottom:8px;transition:.12s;position:relative}
+  .row:hover{border-color:#3a4656;background:#1a1f28}
+  .rleft{display:flex;gap:12px;flex:1;min-width:0}
+  .av{width:42px;height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:17px;flex:none;text-transform:uppercase;background:#333}
+  .rbody{flex:1;min-width:0}
+  .rtit{font-size:16px;font-weight:600;line-height:1.4}
+  .rtit .tl:hover{color:var(--link)}
+  .cat{color:var(--acc);font-weight:600;margin-right:6px}
+  .pgtag{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:0 5px;margin-left:8px;vertical-align:middle}
+  /* 网盘标记：正文(1L)含网盘链接的行高亮，chip 实心；只在回复楼层出现的用虚线 */
+  .row.panrow{border-color:#4a3a17;background:#1b1a13}
+  .row.panrow:hover{border-color:#6d5522;background:#211f16}
+  .row.panrow::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:#f0c060;border-radius:10px 0 0 10px}
+  .pantag{display:inline-block;font-size:11px;line-height:1;padding:3px 7px;border-radius:5px;margin-left:7px;
+    vertical-align:middle;border:1px solid #6b5220;background:#2a2113;color:#f0c060;letter-spacing:.2px}
+  .pantag.fl{border-style:dashed;border-color:#4b4f5a;background:#1b1f27;color:#9aa4b2}
+  .rprev{color:#9aa4b2;font-size:13px;margin-top:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .rmeta{color:var(--muted);font-size:12px;margin-top:7px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .rmeta .au{color:#c2cad6;font-weight:600}
+  .nod{color:#c9783a}
+  .rstat{width:132px;flex:none;display:flex;gap:16px;justify-content:center;text-align:center;padding-top:2px}
+  .nums b{font-size:16px;display:block;color:#dfe4ea}
+  .nums i{font-style:normal;color:var(--muted);font-size:11px}
+  .rthumb{width:104px;height:78px;flex:none;border-radius:8px;overflow:hidden;background:#0b0e12;border:1px solid var(--line)}
+  .rthumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .rlast{width:130px;flex:none;color:var(--muted);font-size:12px;text-align:right;line-height:1.5;padding-top:2px}
+  .rlast b{color:#c2cad6;font-weight:600}
+  .foot{color:var(--muted);text-align:center;padding:22px;font-size:12px}
+  /* ==== 帖子详情视图（原 thread.html，全部限定在 #view-thread 内，避免与列表样式打架）==== */
+  #view-thread{font-size:15px;line-height:1.7}
+  #view-thread a{color:var(--link)}
+  #view-thread .nav{position:sticky;top:0;z-index:10;background:rgba(14,17,22,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:10px 18px;display:flex;gap:14px;align-items:center}
+  #view-thread .nav a{color:var(--muted)} #view-thread .nav a:hover{color:#fff}
+  #view-thread .wrap{max-width:960px;margin:0 auto;padding:20px 16px 80px}
+  #view-thread h1.tt{font-size:22px;line-height:1.4;margin:6px 0 10px}
+  #view-thread .badge{display:inline-block;background:var(--acc);color:#fff;font-size:12px;padding:2px 9px;border-radius:6px;vertical-align:middle;margin-right:8px}
+  #view-thread .h1pan{font-size:13px;color:var(--muted);margin:-4px 0 10px}
+  #view-thread .arthead{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:13px;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:16px;flex-wrap:wrap}
+  #view-thread .av{width:34px;height:34px;font-size:15px}
+  #view-thread .av.sm{width:22px;height:22px;font-size:11px;vertical-align:middle}
+  #view-thread .au{color:#cfd6df;font-weight:600}
+  #view-thread .content{word-break:break-word}
+  #view-thread .content img,#view-thread .floor .fb img{max-width:100%;height:auto;border-radius:6px;margin:6px 0;display:block;cursor:zoom-in;background:#000}
+  #view-thread .content .quote,#view-thread .floor .quote{border-left:3px solid var(--line);margin:8px 0;padding:6px 12px;color:#b6bfcc;background:#12161c;border-radius:0 6px 6px 0}
+  #view-thread .load,#view-thread .err{padding:60px;text-align:center;color:var(--muted)}
+  #view-thread .cmt-title{margin:30px 0 12px;font-size:16px;color:#cfd6df;border-top:1px solid var(--line);padding-top:18px}
+  #view-thread .floor{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+  #view-thread .fl{width:30px;height:30px;border-radius:6px;background:#222;color:#8a93a3;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none}
+  #view-thread .fb{flex:1;min-width:0}
+  #view-thread .fh{color:var(--muted);font-size:12px;margin-bottom:6px}
+  #view-thread .fh .au{font-size:13px}
+  /* lightbox（详情视图与任何视图都能用，挂在 body 上） */
+  #lb{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;z-index:100;overflow:auto;text-align:center}
+  #lb.on{display:block}
+  #lb img{max-width:96%;margin:20px auto;display:block;cursor:zoom-out}
+  #lb .tip{position:fixed;top:10px;left:0;right:0;color:#ccc;font-size:13px;text-align:center}
+  @media(max-width:820px){.rlast,.rthumb{display:none}.rstat{width:auto}}
+</style>
+</head>
+<body>
+<!-- 列表视图 -->
+<div id="view-list">
+  <header>
+    <h1>老司機論壇 · 福利討論區 <span class="sub">fid=2 · 离线累积库（正文原图已本地化，头像用占位图）</span></h1>
+    <div class="bar">
+      <div class="chips" id="chips"></div>
+      <div class="chips"><div class="chip" id="panchip" title="只看正文或回复楼层里带网盘分享链接的帖子">含网盘</div></div>
+      <div class="chips"><div class="chip mode" data-mode-chip title="切换图片来源：本地读 assets/images（离线可用，全量图在移动硬盘）；原始直连 https 原图（需联网，且图床强制校验 Referer=https://www.javbus.com/，浏览器直连通常 404，需扩展或本地中转补请求头）">图片：本地</div></div>
+      <input type="search" id="q" placeholder="搜索标题/作者/网盘名…">
+    </div>
+  </header>
+  <div class="list" id="list"></div>
+  <div class="foot" id="foot"></div>
+</div>
+<!-- 详情视图（点标题进入，#tid=xxxxxx；← 返回画廊 或浏览器后退键回列表）-->
+<div id="view-thread" style="display:none">
+  <div class="nav"><a href="#">← 返回画廊</a><span id="navinfo" style="color:#6a7482"></span><div class="chip mode" data-mode-chip style="margin-left:auto" title="切换图片来源：本地读 assets/images（离线可用，全量图在移动硬盘）；原始直连 https 原图（需联网，且图床强制校验 Referer=https://www.javbus.com/，浏览器直连通常 404，需扩展或本地中转补请求头）">图片：本地</div></div>
+  <div class="wrap" id="main"><div class="load">正在载入帖子…</div></div>
+</div>
+<div id="lb"><div class="tip">点击图片 / Esc 关闭</div><img id="lbimg" src="" alt=""></div>
+<script src="data/data.js"></script>
+<script src="data/imgsrc.js"></script>
+<script>
+(function(){
+  /* ---------------- 列表 ---------------- */
+  var DATA = window.FORUM_INDEX || [];
+  var SHARD_N = window.SHARD_N || 16;   // 详情分片数：由 data/data.js 写入，务必与 build.py/paths.SHARD_N 一致
+  var list = document.getElementById('list');
+  var viewList = document.getElementById('view-list');
+  var viewThread = document.getElementById('view-thread');
+  var mainEl = document.getElementById('main');
+  var navInfo = document.getElementById('navinfo');
+  var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg');
+  var GALLERY_TITLE = document.title;
+
+  /* ---------------- 图片来源：本地 assets / 原始 https ----------------
+     data/imgsrc.js 由 build.py 从 _pipeline/imgmap.json 倒排生成（本地路径 -> 原始 URL）。
+     不改动任何交付数据文件：列表缩略图与正文 <img> 一律保持 assets/ 本地路径，
+     只在渲染后按当前模式改 DOM 的 src；表情/下载失败的原图不在台账里，两种模式都不动。
+     注意：原图床强制校验 Referer，从 file:// 双击打开时浏览器发不出该头，原始模式会 404；
+     要真正显示原图需浏览器扩展补 Referer，或走带正确 Referer 的本地中转。 */
+  var ORIG_MAP = window.IMG_ORIG_MAP || {};
+  var MODE_KEY = 'javbus_img_mode';
+  var mode = 'local';
+  try { if (localStorage.getItem(MODE_KEY) === 'remote') mode = 'remote'; } catch(e){}
+  var modeChips = [].slice.call(document.querySelectorAll('[data-mode-chip]'));
+  var IMG_PREFIX = 'assets/images/';
+
+  function applyImgMode(root){
+    [].forEach.call(root.querySelectorAll('img'), function(im){
+      var loc = im.getAttribute('data-local-src') || im.getAttribute('src') || '';
+      if (loc.indexOf(IMG_PREFIX) !== 0) return;
+      im.setAttribute('data-local-src', loc);
+      var box = im.parentNode;                 // 上一种模式加载失败被 onerror 藏掉的，切回来要恢复
+      if (box && box.classList && box.classList.contains('rthumb')) box.style.display = '';
+      if (im.style.display === 'none') im.style.display = '';
+      var target = (mode === 'remote' && ORIG_MAP[loc]) ? ORIG_MAP[loc] : loc;
+      // 不干预 referrerPolicy：图床要求 Referer 恰为 https://www.javbus.com/，而 file:// 页面无法伪造，
+      // 保留浏览器默认行为，改由扩展或本地中转补请求头（见按钮 title）
+      if (im.getAttribute('src') !== target) im.src = target;
+    });
+  }
+  function syncModeChips(){
+    modeChips.forEach(function(c){
+      c.textContent = mode === 'remote' ? '图片：原始' : '图片：本地';
+      c.classList.toggle('on', mode === 'remote');
+    });
+  }
+  modeChips.forEach(function(c){
+    c.onclick = function(){
+      if (mode === 'local' && !Object.keys(ORIG_MAP).length){
+        alert('缺少 data/imgsrc.js（原始 URL 映射表），请先跑一次 _scripts/site/build.py');
+        return;
+      }
+      mode = (mode === 'remote') ? 'local' : 'remote';
+      try { localStorage.setItem(MODE_KEY, mode); } catch(e){}    // 记住选择；file:// 下不可用时仅本次会话有效
+      syncModeChips();
+      applyImgMode(mainEl);      // 详情页：直接改已渲染 img 的 src，保住滚动位置
+      render();                  // 列表页：重建缩略图（render 内部会再 applyImgMode）
+      closeLb();                 // 放大图里别留着上一种模式的地址
+    };
+  });
+  syncModeChips();
+
+  var cur = {cat:'全部', kw:'', panOnly:false};
+  function panLabels(t){ return (t.pan||[]).concat(t.pan_floor||[]).map(function(x){return x.label||x.key||'';}).join(' '); }
+  var hasPan = function(t){ return (t.pan&&t.pan.length) || (t.pan_floor&&t.pan_floor.length); };
+  var PAN_N = DATA.filter(hasPan).length;
+  var PAN_ART = DATA.filter(function(t){ return t.pan&&t.pan.length; }).length;
+  var cats = {};
+  DATA.forEach(function(t){ if(t.category) cats[t.category]=(cats[t.category]||0)+1; });
+  var order = ['全部'].concat(Object.keys(cats).sort(function(a,b){return cats[b]-cats[a];}));
+  var chips = document.getElementById('chips');
+  order.forEach(function(c,i){
+    var el=document.createElement('div'); el.className='chip'+(i===0?' on':''); el.textContent=c+(c==='全部'?' ('+DATA.length+')':' ('+(cats[c]||0)+')'); el.dataset.cat=c;
+    el.onclick=function(){ cur.cat=c; [].forEach.call(chips.children,function(x){x.classList.toggle('on',x===el);}); render(); };
+    chips.appendChild(el);
+  });
+  document.getElementById('q').oninput=function(e){ cur.kw=e.target.value.trim().toLowerCase(); render(); };
+  var pchip = document.getElementById('panchip');
+  pchip.textContent = '含网盘 ('+PAN_N+')';
+  pchip.onclick = function(){ cur.panOnly=!cur.panOnly; pchip.classList.toggle('on',cur.panOnly); render(); };
+
+  function esc(s){return (s||'').replace(/[&<>"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];});}
+  function av(name,sm){ name=(name||'').trim()||'匿'; var ch=Array.from(name)[0]||'?'; var h=0; for(var i=0;i<name.length;i++){h=(h*31+name.charCodeAt(i))>>>0;} return '<span class="av'+(sm?' sm':'')+'" style="background:hsl('+(h%360)+',42%,38%)">'+esc(ch)+'</span>'; }
+  function pass(t){
+    if(cur.cat!=='全部' && t.category!==cur.cat) return false;
+    if(cur.panOnly && !hasPan(t)) return false;
+    if(cur.kw){ var h=(t.title+' '+(t.author||'')+' '+panLabels(t)).toLowerCase(); if(h.indexOf(cur.kw)<0) return false; }
+    return true;
+  }
+  function panTags(t){
+    return (t.pan||[]).map(function(x){return '<span class="pantag">'+esc(x.label||x.key)+'</span>';}).join('')
+      + (t.pan_floor||[]).map(function(x){return '<span class="pantag fl" title="网盘链接出现在回复楼层，不在正文">'+esc(x.label||x.key)+'·楼</span>';}).join('');
+  }
+  function render(){
+    var rows=DATA.filter(pass);
+    list.innerHTML=rows.map(function(t){
+      var pg = t.pages>1 ? '<span class="pgtag">'+t.pages+' 页/'+t.post_count+' 楼</span>' : (t.post_count?'<span class="pgtag">'+t.post_count+' 楼</span>':'');
+      var thumb = t.cover ? '<div class="rthumb"><img loading="lazy" src="'+esc(t.cover)+'" alt="" onerror="this.parentNode.style.display=\'none\'"></div>' : '';
+      var last = t.last_reply ? ('<div class="rlast">最后回复<br><b>'+esc(t.last_reply.author)+'</b><br>'+esc(t.last_reply.date||'')+'</div>') : '<div class="rlast"></div>';
+      return '<div class="row'+(hasPan(t)?' panrow':'')+'">'+
+        '<div class="rleft">'+av(t.author)+
+          '<div class="rbody">'+
+            '<div class="rtit"><a class="tl" href="#tid='+t.tid+'">'+(t.category?'<span class="cat">['+esc(t.category)+']</span>':'')+esc(t.title)+'</a>'+pg+panTags(t)+'</div>'+
+            (t.preview?'<div class="rprev">'+esc(t.preview)+'</div>':'')+
+            '<div class="rmeta"><span class="au">'+esc(t.author||'匿名')+'</span><span>@</span><span>'+esc(t.date||'')+'</span>'+(t.has_detail?'':'<span class="nod">· 未抓详情</span>')+'</div>'+
+          '</div>'+
+        '</div>'+
+        '<div class="rstat"><div class="nums"><b>'+t.views+'</b><i>浏览</i></div><div class="nums"><b>'+t.replies+'</b><i>回复</i></div></div>'+
+        thumb+last+
+      '</div>';
+    }).join('');
+    document.getElementById('foot').textContent='共 '+DATA.length+' 帖，当前显示 '+rows.length+' 帖 · 含网盘 '+PAN_N+
+      ' 帖（正文 '+PAN_ART+' / 仅楼层 '+(PAN_N-PAN_ART)+'）· 图片来源：'+
+      (mode==='remote'?'原始 https 地址（需联网）':'本地 assets（离线可用）');
+    applyImgMode(list);
+  }
+  render();
+
+  /* ---------------- 详情（原 thread.html 的渲染逻辑，改成 index.html 内的一个视图）----------------
+     详情按 tid%SHARD_N 分片存于 data/posts/shard_<i>.js（一帖一行 window.THREADS["<tid>"]={...}）。
+     点开某帖只注入它所在那一片（约 1MB），该片全部帖随后进 window.THREADS；同片第二帖命中即秒开。
+     这与"一帖一文件"旧格式的关键差别：不再逐帖 window.THREAD=undefined 清全局，THREADS 是累加的全局表，
+     故靠本地 cache[tid] 决定要不要再注入，注入状态用 shardState 跟踪（'loaded' / 等待队列 / undefined 未开始）。 */
+  var cache = {};            // tid -> thread 对象：点开过就缓存，回头再看同一帖不必再走 ensureShard 回调
+  var shardState = {};       // 分片序号 -> 'loaded'（已注入）| [回调数组]（正在注入，后续排队）| undefined（未开始）
+  var currentTid = null;     // 防串：连续点进不同帖时，只渲染"当前想要"的那帖
+
+  function shardOf(tid){
+    var n = parseInt(tid, 10);
+    if (isNaN(n)) return 0;                       // 脏 tid 兜底到第 0 片（与 build.py 的 paths.shard_of 同口径）
+    return ((n % SHARD_N) + SHARD_N) % SHARD_N;
+  }
+  function ensureShard(i, done){
+    // done(ok)：ok=false 表示该片脚本没加载上（目录没生成/被删），下轮可重试
+    var st = shardState[i];
+    if (st === 'loaded'){ done(true); return; }
+    if (Array.isArray(st)){ st.push(done); return; }   // 已在注入中，排队等同一片加载完
+    var waiters = [done];
+    shardState[i] = waiters;
+    window.THREADS = window.THREADS || {};             // 分片文件的赋值行需要一个已存在的全局对象兜底
+    var s = document.createElement('script');
+    s.src = 'data/posts/shard_' + i + '.js';
+    var settle = function(ok){
+      dropScript(s);
+      shardState[i] = ok ? 'loaded' : undefined;       // 失败清空，允许下次点同片重试
+      for (var k = 0; k < waiters.length; k++) waiters[k](ok);
+    };
+    s.onload = function(){ settle(true); };
+    s.onerror = function(){ settle(false); };
+    document.head.appendChild(s);
+  }
+
+  function renderThread(d){
+    if(!d||!d.tid){ mainEl.innerHTML='<div class="err">数据为空。</div>'; return; }
+    document.title=(d.title||'帖子')+' · 老司機論壇';
+    navInfo.textContent=(d.category||'')+' · 抓取了前 '+d.pages_fetched+' 页 / 共 '+d.post_count+' 楼';
+    var a=d.article;
+    var tags=(d.pan||[]).map(function(x){return '<span class="pantag">'+esc(x.label||x.key)+'</span>';}).join('')
+           +(d.pan_floor||[]).map(function(x){return '<span class="pantag fl">'+esc(x.label||x.key)+'·楼</span>';}).join('');
+    var html='<div>'+
+      (d.category?'<span class="badge">'+esc(d.category)+'</span>':'')+'<h1 class="tt">'+esc(d.title)+'</h1>'+
+      (tags?'<div class="h1pan">本帖含网盘链接 '+tags+'</div>':'')+
+      '<div class="arthead">'+
+        av(a.author||d.author)+
+        '<span class="au">'+esc(a.author||d.author||'匿名')+'</span>'+
+        '<span>'+esc(a.date||d.date||'')+'</span>'+
+        '<span>👁 '+d.views+' · 💬 '+d.replies+' · 本抓取 '+d.post_count+' 楼</span>'+
+      '</div>'+
+      '<div class="content">'+a.html+'</div>';
+    if(d.comments && d.comments.length){
+      html+='<div class="cmt-title">回复 / 评论（前 '+d.pages_fetched+' 页，共 '+d.comments.length+' 条）</div>';
+      html+=d.comments.map(function(c){
+        return '<div class="floor"><div class="fl">'+c.floor+'</div><div class="fb">'+
+          '<div class="fh">'+av(c.author,1)+' '+
+          '<span class="au">'+esc(c.author||'匿名')+'</span> · '+esc(c.date||'')+'</div>'+
+          '<div class="content">'+c.html+'</div></div></div>';
+      }).join('');
+    } else {
+      html+='<div class="cmt-title">暂无回复</div>';
+    }
+    html+='</div>';
+    mainEl.innerHTML=html;
+    applyImgMode(mainEl);
+    window.scrollTo(0,0);
+  }
+  function dropScript(s){ if(s && s.parentNode) s.parentNode.removeChild(s); }   // 注入完就摘，别在 head 里堆
+  function failThread(s, msg){
+    // 错误态也得清掉上一个帖的残留（navinfo / 标题），否则看着像串台
+    dropScript(s);
+    navInfo.textContent = '';
+    document.title = '帖子未找到 · 老司機論壇';
+    mainEl.innerHTML='<div class="err">'+msg+'<br><a href="#">返回画廊</a></div>';
+  }
+  function openThread(tid){
+    currentTid = tid;
+    viewList.style.display='none'; viewThread.style.display='';
+    if(cache[tid]){ renderThread(cache[tid]); return; }   // 已缓存：直接渲染，不再注入
+    mainEl.innerHTML='<div class="load">正在载入帖子…</div>';
+    var si = shardOf(tid);
+    ensureShard(si, function(ok){
+      if(currentTid !== tid) return;                 // 载入期间用户已切到别的帖，丢弃这次结果
+      var d = ok ? (window.THREADS && window.THREADS[tid]) : null;
+      if(d && d.tid){ cache[tid] = d; renderThread(d); }
+      else if(!ok){ failThread(null, '详情分片 shard_'+si+'.js 加载失败（data/posts 可能未生成，请先跑 _scripts/site/build.py）'); }
+      else if(ok){ failThread(null, '帖子 '+esc(tid)+' 不在分片 shard_'+si+'.js 里（该帖可能尚未抓取详情）'); }
+    });
+  }
+  function showList(){
+    currentTid = null;
+    viewThread.style.display='none'; viewList.style.display='';
+    document.title=GALLERY_TITLE;
+    closeLb();
+    window.scrollTo(0,0);
+  }
+  function route(){
+    var m=(location.hash.match(/tid=(\d+)/)||[])[1];
+    if(m){ openThread(m); } else { showList(); }
+  }
+  window.addEventListener('hashchange', route);
+
+  /* 图片放大：事件委托，只认详情正文里的 <img>，监听器全程只挂一次 */
+  function closeLb(){ lb.classList.remove('on'); lbimg.src=''; }
+  mainEl.addEventListener('click', function(e){
+    var im=e.target;
+    if(im && im.tagName==='IMG' && im.closest && im.closest('.content')){ lbimg.src=im.src; lb.classList.add('on'); }
+  });
+  lb.addEventListener('click', closeLb);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeLb(); });
+
+  /* 本地下载协议（ed2k/magnet/thunder…）不是网页地址：本站是 file:// 打开的，这类链接带
+     target="_blank" 时 Chrome 会把未知协议的顶层导航拦成 about:blank#blocked（新标签一片空白）。
+     build.py 生成时已摘掉 target，这里再兜一层并覆盖历史数据：拦掉默认行为，同标签交给协议处理程序，
+     本机装了迅雷/qBittorrent 就会弹「打开方式」，取消也仍停在原帖。 */
+  var CUSTOM_SCHEME = /^(?:ed2k|magnet|thunder|flashget|ftp|svn|quark|amule|bittorrent):/i;
+  mainEl.addEventListener('click', function(e){
+    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a) return;
+    var h = a.getAttribute('href') || '';
+    if (!CUSTOM_SCHEME.test(h)) return;
+    e.preventDefault();
+    location.href = h;
+  });
+
+  route();   // 首屏：带 #tid= 直接进详情，否则显示画廊
+})();
+</script>
+</body>
+</html>

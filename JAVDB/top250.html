@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JavDB TOP250 排行榜</title>
+<style>
+:root{
+  --bg:#0e0f13; --bg2:#16181f; --card:#1b1e27; --card2:#222633;
+  --line:#2a2f3d; --fg:#e8eaf0; --fg2:#9aa2b4; --fg3:#6b7385;
+  --acc:#e85d3d; --star:#f7a34c;
+  --panel:#16181f; --tx:#e8eaf0; --tx2:#9aa2b4; --acc2:#5aa2e8;
+  --maxw:1400px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:"Segoe UI",system-ui,"Microsoft YaHei",sans-serif;min-height:100vh}
+/* ===== 站点导航（三页互通） ===== */
+.sitenav{position:sticky;top:0;z-index:101;height:46px;display:flex;align-items:center;gap:14px;
+  max-width:var(--maxw);margin:0 auto;padding:0 20px;box-sizing:border-box;
+  background:rgba(14,15,19,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+.sitenav .sbrand{font-weight:700;letter-spacing:.5px;color:var(--fg);font-size:15px;flex:none}
+.sitenav .sbrand b{color:var(--acc)}
+.sitenav .slinks{display:flex;gap:6px;flex:1;flex-wrap:wrap}
+.sitenav a{padding:5px 12px;border-radius:7px;font-size:13px;color:var(--fg2);border:1px solid transparent;transition:.15s;white-space:nowrap}
+.sitenav a:hover{color:var(--fg);background:var(--bg2)}
+.sitenav a.on{background:var(--acc);color:#fff;border-color:var(--acc);font-weight:600}
+@media(max-width:560px){.sitenav{padding:0 12px;gap:8px}.sitenav .sbrand{font-size:13px}}
+header{position:sticky;top:46px;z-index:100;background:rgba(14,15,19,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.hwrap{max-width:var(--maxw);margin:0 auto;padding:14px 20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+h1{font-size:20px;font-weight:700;color:var(--fg);white-space:nowrap}
+h1 small{color:var(--fg2);font-weight:400;font-size:12px;margin-left:8px}
+.vrow{width:100%;display:flex;align-items:center;gap:12px}
+#q{flex:1;min-width:200px;background:var(--panel);border:1px solid var(--line);border-radius:8px;color:var(--tx);padding:9px 14px;font-size:14px;outline:none}
+#q:focus{border-color:var(--acc2)}
+.sorts{display:flex;gap:6px}
+.sbtn{background:var(--panel);border:1px solid var(--line);color:var(--tx2);padding:7px 13px;border-radius:8px;cursor:pointer;font-size:13px}
+.sbtn.on{color:var(--acc);border-color:var(--acc);font-weight:600}
+.cnt{color:var(--tx2);font-size:12px;width:100%}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px 16px;padding:18px 20px 60px;max-width:var(--maxw);margin:0 auto}
+@media(max-width:900px){.grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px 10px}}
+@media(max-width:520px){.grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;padding:12px}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;transition:transform .15s,border-color .15s;display:block;text-decoration:none;color:inherit;position:relative}
+.card:hover{transform:translateY(-3px);border-color:var(--acc)}
+.poster{position:relative;aspect-ratio:25/17;background:#0a0c10;overflow:hidden}
+.poster img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .3s}
+.poster img.loaded{opacity:1}
+.ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:34px;opacity:.25}
+.ph.hide{display:none}
+.rankb{position:absolute;top:8px;left:8px;min-width:34px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:7px;font-weight:800;font-size:14px;background:rgba(0,0,0,.72);color:#fff;padding:0 7px;z-index:2}
+.rankb.r1{background:linear-gradient(135deg,#f5c542,#d99a1b);color:#1a1a1a}
+.rankb.r2{background:linear-gradient(135deg,#c8cdd6,#8f97a5);color:#1a1a1a}
+.rankb.r3{background:linear-gradient(135deg,#d09a62,#9a6234);color:#1a1a1a}
+.bdg{position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,.72);color:#dfe4ec;font-size:11px;padding:2px 7px;border-radius:5px;z-index:2}
+.mtag{position:absolute;top:8px;right:8px;background:rgba(232,179,57,.92);color:#1a1a1a;font-size:11px;font-weight:600;padding:2px 7px;border-radius:5px;z-index:2}
+.vbdg{position:absolute;bottom:8px;right:8px;display:flex;gap:4px;z-index:2}
+.vbdg i{font-style:normal;font-size:11px;padding:2px 7px;border-radius:5px;background:rgba(0,0,0,.72);color:#dfe4ec;font-weight:600}
+.vbdg i.talk{background:rgba(90,162,232,.92);color:#08131f}
+.vbdg i.tr{background:rgba(232,93,61,.9);color:#fff}
+.info{padding:9px 11px 11px}
+.tt{font-size:13px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:37px}
+.mt{display:flex;align-items:center;gap:8px;margin-top:7px;flex-wrap:wrap}
+.sc{color:var(--acc);font-weight:700;font-size:13px}
+.vt{color:var(--tx2);font-size:11px}
+.code{color:var(--acc2);font-size:12px;font-weight:600}
+.aw{color:var(--acc);font-size:11px;margin-top:5px;line-height:1.4}
+.maward{margin-top:8px;font-size:13px;color:var(--acc);font-weight:600}
+.sbtn small{font-weight:400;opacity:.65}
+.vsel{background:var(--panel);border:1px solid var(--line);border-radius:8px;color:var(--tx);padding:7px 10px;font-size:13px;outline:none;cursor:pointer}
+.vsel:focus{border-color:var(--acc2)}
+.cnt b{color:var(--acc);font-weight:600}
+.empty{padding:60px;text-align:center;color:var(--tx2)}
+/* ===== 分页 ===== */
+.pager{display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 20px 46px}
+.pager:empty{display:none}
+.pginfo{color:var(--tx2);font-size:12px}
+.pginfo b{color:var(--acc);font-weight:700}
+.pgbtns{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.pgbtn{background:var(--panel);border:1px solid var(--line);color:var(--tx2);padding:7px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;transition:.15s}
+.pgbtn:hover:not(:disabled){color:var(--acc);border-color:var(--acc)}
+.pgbtn.on{background:var(--acc);border-color:var(--acc);color:#1a1a1a;font-weight:700}
+.pgbtn:disabled{opacity:.38;cursor:default}
+.pgap{color:var(--tx2);font-size:12px;align-self:center;padding:0 1px}
+#backtop{position:fixed;right:22px;bottom:26px;width:44px;height:44px;border-radius:50%;background:var(--acc);color:#1a1a1a;border:none;font-size:20px;cursor:pointer;display:none;box-shadow:0 4px 14px rgba(0,0,0,.4);z-index:9}
+
+/* ===== 详情弹层 ===== */
+.mask{position:fixed;inset:0;background:rgba(6,6,9,.86);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.mask.show{display:flex;animation:fi .2s ease}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.modal{background:var(--panel);border:1px solid var(--line);border-radius:14px;max-width:1100px;width:100%;max-height:92vh;overflow:auto;position:relative;animation:up .25s cubic-bezier(.2,.8,.3,1)}
+@keyframes up{from{transform:translateY(22px);opacity:0}to{transform:none;opacity:1}}
+.x{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:var(--card);border:1px solid var(--line);color:var(--tx2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;z-index:2;line-height:1}
+.x:hover{background:var(--line);color:var(--tx)}
+.mbody{display:flex;gap:20px;padding:22px}
+/* 本地视频（解说 / 预告片）：在第二行（封面+介绍那行的下面），整行铺满，高度不超 72vh */
+.mmedia{padding:0 22px 22px}
+.mmedia .mtabs{display:flex;gap:6px;margin-bottom:9px}
+.mmedia .mtab{padding:7px 15px;border-radius:8px;font-size:13px;cursor:pointer;white-space:nowrap;
+  background:var(--card);border:1px solid var(--line);color:var(--tx2)}
+.mmedia .mtab:hover{color:var(--tx);border-color:var(--tx2)}
+.mmedia .mtab.on{color:var(--acc);border-color:var(--acc);font-weight:600}
+.mmedia video{display:block;width:100%;max-width:calc(72vh * 16 / 9);aspect-ratio:16/9;margin:0 auto;
+  object-fit:contain;border-radius:9px;background:#000}
+.mmedia .merr{display:none;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;
+  padding:14px 16px;border-radius:9px;background:#0a0c10;border:1px solid var(--line);color:var(--tx);font-size:13px;line-height:1.55}
+.mmedia .merr .warnic{font-size:20px;color:var(--acc)}
+.mmedia .merr .mpath{color:var(--tx2);word-break:break-all;font-size:12px}
+.mmedia .mfile{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  margin-top:7px;font-size:11px;color:var(--tx2)}
+.mmedia .mfile .fname{word-break:break-all}
+.mmedia .mfile a{color:var(--acc2);text-decoration:none}
+.mmedia .mfile a:hover{text-decoration:underline}
+.mside{flex:none;width:340px}
+.mside img{width:100%;border-radius:9px;border:1px solid var(--line);display:block;background:#0a0c10}
+.minfo{flex:1;min-width:0}
+.mtitle{font-size:15px;font-weight:600;line-height:1.5}
+.mmeta{font-size:12px;color:var(--tx2);margin-top:8px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.mmeta .rk,.mmeta .sc{color:var(--acc);font-weight:700}
+.mtags2{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.mtags2 span{font-size:11px;padding:3px 9px;border-radius:5px;background:var(--card);border:1px solid var(--line);color:var(--tx2)}
+.mfoot{padding:0 22px 22px;display:flex;gap:10px}
+.mfoot a{flex:1;padding:11px;border-radius:9px;text-align:center;background:var(--acc);color:#1a1a1a;font-weight:700;font-size:14px;text-decoration:none;transition:.15s}
+.mfoot a:hover{filter:brightness(1.08)}
+
+/* ===== 磁力链接模块 ===== */
+.mmag{margin:0 22px 18px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.mmag-h{padding:9px 14px;font-size:13px;font-weight:700;color:var(--tx);background:var(--card);border-bottom:1px solid var(--line)}
+.mmag-h small{font-weight:400;color:var(--tx2);margin-left:6px}
+.mmag-item{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--line);font-size:13px}
+.mmag-item:last-child{border-bottom:none}
+.mmag-info{flex:1;min-width:0}
+.mmag-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--tx);font-weight:500;font-size:12px}
+.mmag-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;font-size:11px;color:var(--tx2)}
+.mmag-meta b{color:var(--acc);font-weight:600}
+.mmag-meta b.ltx{color:transparent;-webkit-text-fill-color:transparent;background:linear-gradient(90deg,#ff2d78,#ff8a00,#ffe600,#22d67a,#1e90ff,#a24bff,#ff2d78);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;font-weight:800;display:inline-block;padding:0 3px;animation:ltxr 6s linear infinite}@keyframes ltxr{to{background-position:200% 0}}
+.mmag-copy,.mmag-open{flex:none;padding:6px 12px;border-radius:7px;font-size:12px;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--tx2);text-decoration:none;line-height:1.4}
+.mmag-copy:hover,.mmag-open:hover{border-color:var(--acc);color:var(--acc)}
+.mmag-copy.ok{color:var(--acc);border-color:var(--acc)}
+@media(max-width:720px){.mbody{flex-direction:column;padding:16px}.mside{width:100%}.mmag{margin:0 16px 14px}.mmedia{padding:0 16px 16px}.mmedia video{max-width:100%}}
+</style>
+</head>
+<body>
+<nav class="sitenav">
+  <span class="sbrand">Jav<b>DB</b></span>
+  <div class="slinks">
+    <a href="collection.html">收藏</a>
+    <a href="top250.html" class="on">TOP250</a>
+    <a href="mylist.html">片单</a>
+  </div>
+</nav>
+<header>
+  <div class="hwrap">
+    <h1>TOP250 <small>JavDB · 点击卡片看详情</small></h1>
+    <input id="q" type="search" placeholder="搜索番号 / 标题…">
+    <div class="sorts">
+      <button class="sbtn on" data-s="rank">按排名</button>
+      <button class="sbtn" data-s="score">按评分</button>
+      <button class="sbtn" data-s="votes">按票数</button>
+      <button class="sbtn" id="ltxbtn" title="只看磁力含 LTX 标签的影片">只看LTX</button>
+      <button class="sbtn on" data-mode="local" title="切换图片来源：本地资源 / 原始图源">本地图</button>
+      <button class="sbtn" data-mode="remote" title="切换图片来源：本地资源 / 原始图源">原始图</button>
+    </div>
+    <div class="vrow">
+      <select id="vsel" class="vsel"></select>
+      <div class="cnt" id="cnt" style="width:auto"></div>
+    </div>
+  </div>
+</header>
+<div class="grid" id="grid"></div>
+<div class="pager" id="pager"></div>
+<div class="empty" id="empty" style="display:none">没有匹配的影片</div>
+<button id="backtop" title="回到顶部">&#8593;</button>
+
+<div class="mask" id="mask">
+  <div class="modal" id="modal">
+    <button class="x" id="mx">&times;</button>
+    <div id="mbody"></div>
+  </div>
+</div>
+
+<script src="data/site/movies.js?v=20261109"></script>
+<script src="data/site/ltx.js?v=20261109"></script>
+<script src="data/site/top250.js?v=20261109"></script>
+<script>
+const BUILD_V = '20261109';   // 数据文件版本号（懒加载的磁力桶靠它破缓存），由 build_collection_js.bump_refs() 自动刷成当日
+const MOVIES = window.JAVDB_MOVIES || {};
+const RANKS = window.JAVDB_RANKINGS || { top250: { name: 'TOP250', variants: { all: { name: '全部', updated: '', items: [] } } } };
+const CATS = Object.keys(RANKS);
+let cat = CATS.includes('top250') ? 'top250' : CATS[0];
+let variant = 'all';
+let sort = 'rank';
+let onlyLtx = false;
+let page = 1;                    // 当前页（每页 PAGE_SIZE 个）
+const PAGE_SIZE = 100;
+
+/* ---------------- 图片模式（本地资源 / 原始图源） ---------------- */
+const IMG_MODE_KEY = 'javdb_img_mode';
+let IMG_MODE = (function(){ try { return localStorage.getItem(IMG_MODE_KEY) || 'local'; } catch(e){ return 'local'; } })();
+/* 按当前模式选图：local 优先本地，remote 优先原始 https 图源；某键缺失时自动回退到另一键，最后用 fb */
+function imgPick(obj, localKey, remoteKey, fb){
+  const a = obj[localKey], b = obj[remoteKey];
+  return IMG_MODE === 'remote' ? (b || a || fb || '') : (a || b || fb || '');
+}
+let curMovie = null;         // 当前打开的影片（详情弹层），切换图源时用于刷新
+function syncImgModeBtns(){
+  document.querySelectorAll('[data-mode]').forEach(x=>x.classList.toggle('on', x.dataset.mode===IMG_MODE));
+}
+function setImgMode(m){
+  IMG_MODE = m;
+  try { localStorage.setItem(IMG_MODE_KEY, m); } catch(e){}
+  syncImgModeBtns();
+  render();
+  if (curMovie) openModal(curMovie);
+}
+document.querySelectorAll('[data-mode]').forEach(b=>{
+  b.addEventListener('click', ()=>{ if (b.dataset.mode!==IMG_MODE) setImgMode(b.dataset.mode); });
+});
+const grid = document.getElementById('grid');
+const cntEl = document.getElementById('cnt');
+const qEl = document.getElementById('q');
+const emptyEl = document.getElementById('empty');
+const backtop = document.getElementById('backtop');
+const selEl = document.getElementById('vsel');
+const pagerEl = document.getElementById('pager');
+
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const curCat = () => RANKS[cat] || { variants: {} };
+const curVar = () => curCat().variants[variant] || Object.values(curCat().variants)[0] || { items: [] };
+const curItems = () => curVar().items || [];
+// 条目为 {rank, code}，详情统一从 movies.js 解析
+const resolve = it => Object.assign({}, MOVIES[it.code] || { code: it.code, title: it.code, url: 'https://javdb.com/search?q=' + encodeURIComponent(it.code) }, { rank: it.rank });
+const todayStr = new Date().toISOString().slice(0, 10);
+function fmtUpdated(d) {
+  if (!d) return '';
+  return d === todayStr ? '今天' : d;
+}
+
+function renderVariantSel(){
+  const vs = curCat().variants;
+  const keys = Object.keys(vs);
+  if (keys.length <= 1) { selEl.style.display = 'none'; return; }
+  selEl.style.display = '';
+  selEl.innerHTML = keys.map(k =>
+    `<option value="${esc(k)}"${k===variant?' selected':''}>${esc(vs[k].name || k)}</option>`
+  ).join('');
+}
+selEl.addEventListener('change', ()=>{ variant = selEl.value; page = 1; render(); });
+
+function cardHTML(c){
+  const rankCls = c.rank<=3 ? ` r${c.rank}` : '';
+  const poster = imgPick(c, 'local', 'img', '');   // 本地封面（分桶路径）优先，没有就直接远程图，两者都无走占位图
+  const tags = (c.tags||[]).map(t=>`<span class="mtag">${esc(t)}</span>`).join('');
+  return `<div class="card" data-code="${esc(c.code)}">
+    <div class="poster">
+      <span class="rankb${rankCls}">${c.rank}</span>
+      ${tags}
+      ${poster ? `<img loading="lazy" src="${esc(poster)}" onload="this.classList.add('loaded')"
+        onerror="this.style.display='none';this.nextElementSibling.classList.remove('hide')">
+      <div class="ph hide">&#127918;</div>` : '<div class="ph">&#127918;</div>'}
+      <span class="bdg">${esc(c.code)}</span>
+      ${(c.talk||c.video)?`<span class="vbdg">${c.talk?'<i class="talk">&#127908; 解说</i>':''}${c.video?'<i class="tr">&#9654; 预告</i>':''}</span>`:''}
+    </div>
+    <div class="info">
+      <div class="tt">${esc(c.title)}</div>
+      <div class="mt">
+        <span class="code">${esc(c.code)}</span>
+        <span class="sc">${c.score!=null?'&#9733; '+c.score.toFixed(2):''}</span>
+        <span class="vt">${c.votes!=null?c.votes.toLocaleString()+' 人评':esc(c.date||'')}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ---------- 分页（每页 PAGE_SIZE 个） ---------- */
+function pagerHTML(pg, pages, total){
+  if (pages <= 1) return total ? `<div class="pginfo">共 ${total} 部</div>` : '';
+  const set = new Set([1, pages]);
+  for (let i = Math.max(1, pg-2); i <= Math.min(pages, pg+2); i++) set.add(i);
+  const arr = [...set].sort((a,b)=>a-b);
+  let nums = '';
+  arr.forEach((p,i)=>{
+    if (i && p - arr[i-1] > 1) nums += '<span class="pgap">…</span>';
+    nums += `<button class="pgbtn${p===pg?' on':''}" data-p="${p}">${p}</button>`;
+  });
+  return `<div class="pginfo">第 <b>${pg}</b> / ${pages} 页 · 共 ${total} 部</div>
+    <div class="pgbtns">
+      <button class="pgbtn" data-p="${pg-1}"${pg<=1?' disabled':''}>&#8249; 上一页</button>
+      ${nums}
+      <button class="pgbtn" data-p="${pg+1}"${pg>=pages?' disabled':''}>下一页 &#8250;</button>
+    </div>`;
+}
+
+function render(){
+  const items = curItems().map(resolve);
+  const q = qEl.value.trim().toLowerCase();
+  let list = items.filter(c => (!onlyLtx || (window.JAVDB_LTX && (window.JAVDB_LTX[c.code]||[]).length)) && (!q || (c.code+' '+c.title).toLowerCase().includes(q)));
+  list = list.slice().sort((a,b)=> sort==='rank' ? (a.rank||0)-(b.rank||0) : (b[sort]||0)-(a[sort]||0));
+  const pages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+  if (page > pages) page = pages;
+  const start = (page-1) * PAGE_SIZE;
+  grid.innerHTML = list.slice(start, start+PAGE_SIZE).map(cardHTML).join('');
+  const catName = curCat().name + (curVar().name && curVar().name !== '全部' ? ' · ' + curVar().name : '');
+  const upd = curVar().updated ? ` · 更新於 <b>${fmtUpdated(curVar().updated)}</b>` : '';
+  cntEl.innerHTML = `${esc(catName)} · 共 ${list.length} / ${items.length} 部${pages>1?` · 第 <b>${page}</b>/${pages} 页`:''}${upd}`;
+  pagerEl.innerHTML = pagerHTML(page, pages, list.length);
+  emptyEl.style.display = list.length ? 'none' : 'block';
+}
+pagerEl.addEventListener('click', e=>{
+  const b = e.target.closest('.pgbtn'); if (!b || b.disabled) return;
+  const p = +b.dataset.p; if (!p || p === page) return;
+  page = p; render();
+  const y = grid.getBoundingClientRect().top + window.scrollY - 86;
+  window.scrollTo({top: Math.max(0, y), behavior:'smooth'});
+});
+qEl.addEventListener('input', ()=>{ page = 1; render(); });
+document.querySelectorAll('.sbtn[data-s]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.sbtn[data-s]').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); sort = b.dataset.s; page = 1; render();
+}));
+document.getElementById('ltxbtn').addEventListener('click', e=>{ onlyLtx = !onlyLtx; e.currentTarget.classList.toggle('on', onlyLtx); page = 1; render(); });
+
+/* ---------- 详情弹层 ---------- */
+/* 磁力分桶懒加载：bucket=Σ(31*char)%16，与 build/magnet_buckets.py 一致 */
+const MAG_N=16, MAG_LOAD={};
+function magBucket(code){const s=String(code||'').toUpperCase().replace(/[^A-Z0-9]/g,'');let h=0;for(const ch of s){h=((h*31)+ch.charCodeAt(0))>>>0;}return h%MAG_N;}
+function magWin(b){return window['JAVDB_MAG_'+b];}
+function loadMag(code){const b=magBucket(code);if(magWin(b))return Promise.resolve();if(MAG_LOAD[b])return MAG_LOAD[b];MAG_LOAD[b]=new Promise((res,rej)=>{const s=document.createElement('script');s.src='data/site/mag/mag_'+b+'.js?v='+BUILD_V;s.onload=res;s.onerror=()=>rej(new Error('mag_'+b));document.head.appendChild(s);});return MAG_LOAD[b];}
+function renderMagSlots(){document.querySelectorAll('.mmag-loading[data-mag]').forEach(el=>{if(!magWin(magBucket(el.dataset.mag)))return;const html=magnetHTML(el.dataset.mag);if(html){const t=document.createElement('div');t.innerHTML=html;const nd=t.firstElementChild;if(nd)el.replaceWith(nd);}else{el.remove();}});}   // 磁力真为 0 条时也要把「加载中」占位抹掉，否则它会永远赖在弹层里
+const mask = document.getElementById('mask');
+function magnetHTML(code){
+  const _b = magBucket(code), _W = magWin(_b);
+  const _ltx = (window.JAVDB_LTX && window.JAVDB_LTX[code]) || [];
+  if (!_W){ loadMag(code).then(renderMagSlots).catch(()=>{});
+    return `<div class="mmag mmag-loading" data-mag="${esc(code)}"><div class="mmag-h">磁力链接 <small>加载中…</small></div></div>`; }
+  const _mags = (_W[code]||[]).slice().sort((a,b)=>{
+    const hd = m => ((m.tags||[]).includes('高清') ? 1 : 0);
+    return (hd(b)-hd(a)) || ((b.sizeMB||0)-(a.sizeMB||0));
+  });
+  const sorted = _ltx.concat(_mags);   // LTX 置顶
+  if (!sorted.length) return '';
+  return `<div class="mmag">
+    <div class="mmag-h">磁力链接 <small>${sorted.length} 条</small></div>
+    ${sorted.map(m=>`
+      <div class="mmag-item">
+        <div class="mmag-info">
+          <div class="mmag-name">${esc(m.name||code)}</div>
+          <div class="mmag-meta">
+            ${m.size?`<span>${esc(m.size)}</span>`:''}
+            ${m.files?`<span>${m.files} 个文件</span>`:''}
+            ${m.date?`<span>发布 ${esc(String(m.date))}</span>`:''}
+            ${(m.tags||[]).map(t=>`<b class="${t==='LTX'?'ltx':''}">${esc(t)}</b>`).join('')}
+          </div>
+        </div>
+        <button type="button" class="mmag-copy" data-mg="${esc(m.link)}">复制</button>
+        <a class="mmag-open" href="${esc(m.link)}">打开</a>
+      </div>`).join('')}
+  </div>`;
+}
+function fallbackCopy(t){
+  const ta = document.createElement('textarea');
+  ta.value = t; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  try{ document.execCommand('copy'); }catch(e){}
+  ta.remove();
+}
+/* ---------- 本地视频（解说 / 预告片）----------
+   数据：movies.js 的 c.talk = "assets/水果派/{CODE}.mp4"、c.video = "assets/videos/{CODE}.mp4"，默认先播解说。 */
+function mediaSources(c){
+  return [
+    c.talk  ? {label:'解说',  src:c.talk,  size:+c.talksize||0} : null,
+    c.video ? {label:'预告片', src:c.video, size:+c.videosize||0} : null,
+  ].filter(Boolean);
+}
+const fmtSize = s => s >= 1073741824 ? (s/1073741824).toFixed(2)+' GB' : Math.round(s/1048576)+' MB';
+function fileLine(src, size){
+  const name = String(src).split('/').pop();
+  return `<span class="fname">${esc(name)}${size?` · ${fmtSize(size)}`:''}</span>`
+       + `<a href="${encodeURI(src)}" target="_blank" rel="noopener">新窗口打开 &rarr;</a>`;
+}
+function mediaHTML(c){
+  const list = mediaSources(c);
+  if (!list.length) return '';
+  const tabs = list.length > 1 ? `<div class="mtabs">${list.map((s,i)=>
+    `<span class="mtab${i?'':' on'}" data-src="${esc(s.src)}" data-size="${s.size||0}">${esc(s.label)}</span>`
+  ).join('')}</div>` : '';
+  return `<div class="mmedia">${tabs}
+      <video controls preload="metadata" src="${encodeURI(list[0].src)}" onerror="mediaFail(this)"></video>
+      <div class="merr"><span class="warnic">&#9888; 本地文件读不到</span>
+        <span>多半已搬到移动硬盘/别的磁盘；文件回到原路径后刷新页面即可播</span>
+        <span class="mpath">${esc(list[0].src)}</span>
+      </div>
+      <div class="mfile">${fileLine(list[0].src, list[0].size)}</div>
+    </div>`;
+}
+function mediaFail(v){
+  const box = v.closest('.mmedia'); if (!box) return;
+  v.style.display = 'none';
+  const err = box.querySelector('.merr'); if (err) err.style.display = 'flex';
+}
+function mediaSwitch(tab){
+  const box = tab.closest('.mmedia');
+  box.querySelectorAll('.mtab').forEach(x=>x.classList.toggle('on', x===tab));
+  const src = tab.dataset.src, v = box.querySelector('video');
+  v.style.display = '';
+  v.src = encodeURI(src); v.load();
+  box.querySelector('.merr').style.display = 'none';
+  const mp = box.querySelector('.mpath'); if (mp) mp.textContent = src;
+  box.querySelector('.mfile').innerHTML = fileLine(src, +tab.dataset.size||0);
+}
+document.getElementById('mbody').addEventListener('click', e=>{
+  const t = e.target.closest('.mtab');
+  if (t){ mediaSwitch(t); return; }
+  const b = e.target.closest('.mmag-copy'); if(!b) return;
+  const ok = ()=>{ b.textContent='已复制'; b.classList.add('ok');
+    setTimeout(()=>{ b.textContent='复制'; b.classList.remove('ok'); },1200); };
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(b.dataset.mg).then(ok, ()=>{ fallbackCopy(b.dataset.mg); ok(); });
+  } else { fallbackCopy(b.dataset.mg); ok(); }
+});
+
+function openModal(c){
+  curMovie = c;
+  const tags = (c.tags||[]).map(t=>`<span>${esc(t)}</span>`).join('');
+  const poster = imgPick(c, 'local', 'img', '');
+  document.getElementById('mbody').innerHTML = `
+    <div class="mbody">
+      <div class="mside">
+        ${poster ? `<img src="${esc(poster)}" alt="${esc(c.code)}" onerror="this.style.display='none'">` : ''}
+      </div>
+      <div class="minfo">
+        <div class="mtitle">${esc(c.code)} ${esc(c.title)}</div>
+        <div class="mmeta">
+          <span class="rk">#${c.rank}</span>
+          ${c.score!=null?`<span class="sc">&#9733; ${c.score.toFixed(2)}</span>`:''}
+          <span>${c.votes!=null?c.votes.toLocaleString()+' 人评价':esc(c.date||'')}</span>
+        </div>
+        <div class="mtags2">${tags}</div>
+      </div>
+    </div>
+    ${mediaHTML(c)}
+    ${magnetHTML(c.code)}
+    <div class="mfoot">
+      <a href="${esc(c.url)}" target="_blank" rel="noopener">前往 JavDB 详情页 &rarr;</a>
+    </div>`;
+  mask.classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  const v = document.querySelector('#mbody video'); if (v) v.pause();
+  mask.classList.remove('show');
+  document.body.style.overflow='';
+  curMovie = null;
+}
+mask.addEventListener('click', e=>{ if (e.target===mask) closeModal(); });
+document.getElementById('mx').addEventListener('click', closeModal);
+document.addEventListener('keydown', e=>{ if (e.key==='Escape' && mask.classList.contains('show')) closeModal(); });
+grid.addEventListener('click', e=>{
+  const el = e.target.closest('.card'); if(!el) return;
+  const it = curItems().find(x=>x.code===el.dataset.code);
+  if (it) openModal(resolve(it));
+});
+backtop.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+addEventListener('scroll',()=>{ backtop.style.display = scrollY>500?'block':'none'; });
+renderVariantSel();
+syncImgModeBtns();
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+{
+  "_readme": "图片/文件存放策略。所有字段由 _scripts/store/external_store.py 读取；改完直接跑 `python _scripts/store/external_store.py plan` 看影响面（plan 不写盘）。当前 mode.images=local：新图只落本机，复制到移动硬盘由人工执行。",
+  "hdd_root": "",
+  "hdd_project_subdir": "site",
+  "hdd_volume_serial": "",
+  "hdd_label": "",
+  "marker_name": "JAVBUS_STORE.json",
+  "scope": {
+    "images_dir": "assets/images",
+    "image_exts": [
+      ".jpg",
+      ".jpeg",
+      ".png",
+      ".gif",
+      ".webp",
+      ".bmp"
+    ],
+    "require_magic_byte": true,
+    "copy_excludes": [
+      "**/__pycache__/**",
+      "_logs/**",
+      "_pipeline/store_state.json",
+      "**/*.part",
+      "**/Thumbs.db",
+      "**/.DS_Store"
+    ],
+    "_copy_excludes_note": "store_state.json 由每次运行自己写到硬盘（push_state），不进常规同步集，否则每次 sync 都会因为记账变化而拷 1 个文件、永远不收敛。_logs/ 整目录是可随便删的信息性输出（日志+验证截图），也不跟硬盘同步。"
+  },
+  "mode": {
+    "_flow": "2026-10-30 定的日常流程（2026-11-02 两次目录整理：图片 assets/images、交付数据 data/、原始抓取件 _rawdata/、过程与台账 _pipeline/、日志与截图 _logs/）：增量更新把新帖和新图全部落本机（assets/images 目录缺了自动重建）→ 用户自己把整份 JAVBUS 文件夹复制到移动硬盘的站点目录（覆盖，硬盘保留全量图片）→ 删本机 assets/images/ → 下一轮照旧。2026-11-03 定口径：硬盘那份也是一份完整可独立打开的站点，所以图片必须落在站点内的 assets\\images\\<tid>\\，不是硬盘根上的 images\\（见 EXTERNAL_STORE.md §3.1）。工具不参与复制到硬盘，也不再建目录联接。快照备份统一落在 `_backup/YYYYMMDD/`（由 _scripts/inc/backup.py 维护，每日一份、保留最近 14 天），它跟着整份复制到硬盘，相当于累积库台账的第二副本（_logs/ 则不同步）。",
+    "images": "local",
+    "non_images": "copy",
+    "keep_local_non_images": true,
+    "images_only_move_to_hdd": false,
+    "make_junction": false,
+    "prune_hdd": false
+  },
+  "verify": {
+    "hash": "sha256",
+    "min_free_ratio": 1.05,
+    "delete_source_only_after_verified": true,
+    "sample_files_for_full_hash": 0,
+    "allow_same_volume": false
+  },
+  "limits": {
+    "max_files_per_run": 0,
+    "_max_files_per_run_note": "0=不限；设成 N 则 sync/move-images 每次只处理前 N 个，可反复跑续做（想分批搬 4.6GB 时用）",
+    "ledger_flush_every": 200
+  }
+}
