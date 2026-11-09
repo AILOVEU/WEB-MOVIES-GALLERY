@@ -5,11 +5,11 @@
 # ============================================================
 
 # ---- 9dy电影 ----
-9dy电影/_backup/
-9dy电影/_logs/
-9dy电影/_pipeline/
-9dy电影/_rawdata/
-9dy电影/assets/
+9DY/_backup/
+9DY/_logs/
+9DY/_pipeline/
+9DY/_rawdata/
+9DY/assets/
 
 # ---- FULIBA ----
 FULIBA/_backup/
