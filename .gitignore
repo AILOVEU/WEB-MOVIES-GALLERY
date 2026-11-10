@@ -16,7 +16,7 @@ FULIBA/_backup/
 FULIBA/_logs/
 FULIBA/_pipeline/
 FULIBA/_rawdata/
-FULIBA/assets/
+# FULIBA 已部署 GitHub Pages：assets 是站点必需发布物（style.css / images 等），不再忽略
 FULIBA/nul
 
 # ---- JAVBUS ----

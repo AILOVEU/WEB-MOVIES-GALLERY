@@ -52,6 +52,18 @@
   .rlast{width:130px;flex:none;color:var(--muted);font-size:12px;text-align:right;line-height:1.5;padding-top:2px}
   .rlast b{color:#c2cad6;font-weight:600}
   .foot{color:var(--muted);text-align:center;padding:22px;font-size:12px}
+  /* 点过的帖子：置灰 + 「已读」徽标，明显区分 */
+  .row.read{opacity:.5}
+  .row.read:hover{opacity:.62}
+  .row.read .rtit{color:var(--muted)}
+  .readtag{display:inline-block;font-size:11px;line-height:1;padding:2px 7px;border-radius:5px;margin-left:7px;vertical-align:middle;border:1px solid #3a444f;background:#1b1f27;color:#7e8896}
+  /* 最近一次点击的帖子：醒目「上次」角标 + 左侧高亮边，每次点击只保留一个 */
+  .row.last{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc) inset}
+  .row.last::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--acc);border-radius:10px 0 0 10px}
+  .lastag{display:inline-block;font-size:11px;line-height:1;padding:2px 7px;border-radius:5px;margin-left:7px;vertical-align:middle;border:1px solid var(--acc);background:rgba(226,65,122,.16);color:var(--acc);font-weight:600}
+  /* 还原按钮：红色危险色，提示会清空所有本地记录 */
+  .chip.reset{color:#e07a8a;border-color:#5a2f37;background:#1b1216}
+  .chip.reset:hover{background:#241419;border-color:#7a3a45}
   /* ==== 帖子详情视图（原 thread.html，全部限定在 #view-thread 内，避免与列表样式打架）==== */
   #view-thread{font-size:15px;line-height:1.7}
   #view-thread a{color:var(--link)}
@@ -93,6 +105,7 @@
       <div class="chips"><div class="chip" id="panchip" title="只看正文或回复楼层里带网盘分享链接的帖子">含网盘</div></div>
       <div class="chips"><div class="chip mode" data-mode-chip title="切换图片来源：本地读 assets/images（离线可用，全量图在移动硬盘）；原始直连 https 原图（需联网，且图床强制校验 Referer=https://www.javbus.com/，浏览器直连通常 404，需扩展或本地中转补请求头）">图片：本地</div></div>
       <input type="search" id="q" placeholder="搜索标题/作者/网盘名…">
+      <div class="chips"><div class="chip reset" id="resetchip" title="一键还原：清空所有本地记录（筛选条件/已读痕迹/图片来源模式），回到初始状态">还原</div></div>
     </div>
   </header>
   <div class="list" id="list"></div>
@@ -174,7 +187,22 @@
   });
   syncModeChips();
 
+  /* ---------------- 筛选 & 已读 持久化（localStorage）----------------
+     刷新页面 / 浏览器前进后退都保留筛选；点过的帖子写进 readSet，列表置灰 + 「已读」徽标。
+     还原按钮会 localStorage.clear() 删掉全部记录（含图片模式）。 */
+  var FILTER_KEY = 'javbus_filter';
+  var READ_KEY = 'javbus_read';
+  var LAST_KEY = 'javbus_last';
+  var readSet = {};
+  function loadRead(){ try{ readSet = JSON.parse(localStorage.getItem(READ_KEY)||'{}')||{}; }catch(e){ readSet={}; } }
+  function saveRead(){ try{ localStorage.setItem(READ_KEY, JSON.stringify(readSet)); }catch(e){} }
+  loadRead();
+  var lastTid = null;
+  try { lastTid = localStorage.getItem(LAST_KEY) || null; } catch(e){}
+  function saveLast(){ try{ localStorage.setItem(LAST_KEY, lastTid||''); }catch(e){} }
   var cur = {cat:'全部', kw:'', panOnly:false};
+  try { var sf = JSON.parse(localStorage.getItem(FILTER_KEY)||'null'); if(sf && typeof sf==='object'){ cur.cat=sf.cat||'全部'; cur.kw=sf.kw||''; cur.panOnly=!!sf.panOnly; } } catch(e){}
+  function saveFilter(){ try{ localStorage.setItem(FILTER_KEY, JSON.stringify(cur)); }catch(e){} }
   function panLabels(t){ return (t.pan||[]).concat(t.pan_floor||[]).map(function(x){return x.label||x.key||'';}).join(' '); }
   var hasPan = function(t){ return (t.pan&&t.pan.length) || (t.pan_floor&&t.pan_floor.length); };
   var PAN_N = DATA.filter(hasPan).length;
@@ -182,16 +210,26 @@
   var cats = {};
   DATA.forEach(function(t){ if(t.category) cats[t.category]=(cats[t.category]||0)+1; });
   var order = ['全部'].concat(Object.keys(cats).sort(function(a,b){return cats[b]-cats[a];}));
+  if(order.indexOf(cur.cat) < 0) cur.cat = '全部';   // 数据更新后旧分类失效，回退到全部
   var chips = document.getElementById('chips');
   order.forEach(function(c,i){
-    var el=document.createElement('div'); el.className='chip'+(i===0?' on':''); el.textContent=c+(c==='全部'?' ('+DATA.length+')':' ('+(cats[c]||0)+')'); el.dataset.cat=c;
-    el.onclick=function(){ cur.cat=c; [].forEach.call(chips.children,function(x){x.classList.toggle('on',x===el);}); render(); };
+    var el=document.createElement('div'); el.className='chip'+((c===cur.cat)?' on':''); el.textContent=c+(c==='全部'?' ('+DATA.length+')':' ('+(cats[c]||0)+')'); el.dataset.cat=c;
+    el.onclick=function(){ cur.cat=c; [].forEach.call(chips.children,function(x){x.classList.toggle('on',x===el);}); saveFilter(); render(); };
     chips.appendChild(el);
   });
-  document.getElementById('q').oninput=function(e){ cur.kw=e.target.value.trim().toLowerCase(); render(); };
+  var qEl = document.getElementById('q');
+  qEl.value = cur.kw;
+  qEl.oninput=function(e){ cur.kw=e.target.value.trim().toLowerCase(); saveFilter(); render(); };
   var pchip = document.getElementById('panchip');
   pchip.textContent = '含网盘 ('+PAN_N+')';
-  pchip.onclick = function(){ cur.panOnly=!cur.panOnly; pchip.classList.toggle('on',cur.panOnly); render(); };
+  pchip.classList.toggle('on', cur.panOnly);
+  pchip.onclick = function(){ cur.panOnly=!cur.panOnly; pchip.classList.toggle('on',cur.panOnly); saveFilter(); render(); };
+  /* 一键还原：清空所有本地记录（筛选/已读/图片模式），回到初始状态 */
+  document.getElementById('resetchip').onclick = function(){
+    if(!confirm('还原将清空所有本地记录（筛选条件 / 已读痕迹 / 图片来源模式），恢复初始状态？')) return;
+    try{ localStorage.clear(); }catch(e){}
+    location.reload();
+  };
 
   function esc(s){return (s||'').replace(/[&<>"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m];});}
   function av(name,sm){ name=(name||'').trim()||'匿'; var ch=Array.from(name)[0]||'?'; var h=0; for(var i=0;i<name.length;i++){h=(h*31+name.charCodeAt(i))>>>0;} return '<span class="av'+(sm?' sm':'')+'" style="background:hsl('+(h%360)+',42%,38%)">'+esc(ch)+'</span>'; }
@@ -208,13 +246,15 @@
   function render(){
     var rows=DATA.filter(pass);
     list.innerHTML=rows.map(function(t){
+      var read = !!readSet[t.tid];
+      var isLast = (t.tid === lastTid);            // 仅最近一次点击的帖子有「上次」角标
       var pg = t.pages>1 ? '<span class="pgtag">'+t.pages+' 页/'+t.post_count+' 楼</span>' : (t.post_count?'<span class="pgtag">'+t.post_count+' 楼</span>':'');
       var thumb = t.cover ? '<div class="rthumb"><img loading="lazy" src="'+esc(t.cover)+'" alt="" onerror="this.parentNode.style.display=\'none\'"></div>' : '';
       var last = t.last_reply ? ('<div class="rlast">最后回复<br><b>'+esc(t.last_reply.author)+'</b><br>'+esc(t.last_reply.date||'')+'</div>') : '<div class="rlast"></div>';
-      return '<div class="row'+(hasPan(t)?' panrow':'')+'">'+
+      return '<div class="row'+(hasPan(t)?' panrow':'')+(read?' read':'')+(isLast?' last':'')+'">'+
         '<div class="rleft">'+av(t.author)+
           '<div class="rbody">'+
-            '<div class="rtit"><a class="tl" href="#tid='+t.tid+'">'+(t.category?'<span class="cat">['+esc(t.category)+']</span>':'')+esc(t.title)+'</a>'+pg+panTags(t)+'</div>'+
+            '<div class="rtit"><a class="tl" href="#tid='+t.tid+'">'+(t.category?'<span class="cat">['+esc(t.category)+']</span>':'')+esc(t.title)+'</a>'+pg+(isLast?'<span class="lastag">上次</span>':'')+(read?'<span class="readtag">已读</span>':'')+panTags(t)+'</div>'+
             (t.preview?'<div class="rprev">'+esc(t.preview)+'</div>':'')+
             '<div class="rmeta"><span class="au">'+esc(t.author||'匿名')+'</span><span>@</span><span>'+esc(t.date||'')+'</span>'+(t.has_detail?'':'<span class="nod">· 未抓详情</span>')+'</div>'+
           '</div>'+
@@ -307,6 +347,9 @@
   }
   function openThread(tid){
     currentTid = tid;
+    listScrollY = window.scrollY || window.pageYOffset || 0;   // 记下列表滚动位置，回退时还原
+    readSet[tid] = 1; saveRead();                              // 标记已读，列表返回后自动置灰
+    lastTid = tid; saveLast();                                 // 记录「上次点击」，每次替换旧的
     viewList.style.display='none'; viewThread.style.display='';
     if(cache[tid]){ renderThread(cache[tid]); return; }   // 已缓存：直接渲染，不再注入
     mainEl.innerHTML='<div class="load">正在载入帖子…</div>';
@@ -319,12 +362,14 @@
       else if(ok){ failThread(null, '帖子 '+esc(tid)+' 不在分片 shard_'+si+'.js 里（该帖可能尚未抓取详情）'); }
     });
   }
+  var listScrollY = 0;                                   // 进入详情前列表的滚动位置
   function showList(){
     currentTid = null;
     viewThread.style.display='none'; viewList.style.display='';
     document.title=GALLERY_TITLE;
     closeLb();
-    window.scrollTo(0,0);
+    render();                                             // 重新渲染以反映已读置灰 / 筛选
+    window.scrollTo(0, listScrollY||0);                   // 回退时还原列表滚动位置
   }
   function route(){
     var m=(location.hash.match(/tid=(\d+)/)||[])[1];

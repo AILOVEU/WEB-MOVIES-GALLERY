@@ -187,7 +187,8 @@ def main():
 
     # 5) 产物完整性
     P("[5] 交付产物检查")
-    for f in ("index.html", os.path.join("assets", "style.css"), "archived.html"):
+    for f in ("index.html", os.path.join("data", "common", "style.css"),
+              os.path.join("data", "common", "archived.js")):
         p = os.path.join(C.ROOT, f)
         ok = os.path.exists(p) and os.path.getsize(p) > 0
         P("    %-14s %s %s" % (f, "OK " if ok else "MISSING",

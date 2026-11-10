@@ -10,8 +10,8 @@ s06_build_site.py — 生成离线交付站点（年度层）
                                  分片在年份目录下（站点根下两层），页内前缀取 years.PART_PAGE_BASE = ../..，图指 assets/images/…
 - index.html          只此一份（站点根）：预枚举 YEAR_MIN..YEAR_MAX + undated，存在即加载、缺失即跳过；
                      统计合并后现算 → 新增年份只建目录，不改任何页面代码
-- _logs/<日期>/report.md / archived.html / assets/style.css / assets/img-fallback.js
-  （站点根只留入口 HTML；样式与图片统一在 assets/ 下）
+- _logs/<日期>/report.md / data/common/archived.js / data/common/style.css / data/common/img-fallback.js
+  （站点根只留入口 HTML；图片仍归 assets/images/，样式/脚本/占位图归 data/common/）
 站点根的旧全局 data.js 已退役（改用各年 data.js 在运行时合并）。
 卡片链接形如 data/<年>/part<p>.html#<slug>，p 由 build_data 按各年 date-desc 顺序连续分配并写进 data.js 的 item.p，
 与 write_article_parts 的分块序号同口径（改一处必须同步另一处，否则深链指错片）。
@@ -271,8 +271,8 @@ def article_unit(a, slug, base):
         if h and base:
             h = h.replace('src="images/', 'src="%s/assets/images/' % base)
             h = h.replace("src='images/", "src='%s/assets/images/" % base)
-            h = h.replace('src="assets/', 'src="%s/assets/' % base)
-            h = h.replace("src='assets/", "src='%s/assets/" % base)
+            h = h.replace('src="assets/', 'src="%s/data/common/' % base)
+            h = h.replace("src='assets/", "src='%s/data/common/" % base)
         return inject_orig(h)
 
     # 分页：站点把长文拆成第 1..N 页，离线页也分页展示（翻页器 + 逐页 div）。
@@ -333,23 +333,25 @@ SHARD_HEAD = """<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>福利吧归档 - %(year)s 第 %(i)d 片</title>
-<link rel="stylesheet" href="%(base)s/assets/style.css">
-<script src="%(base)s/assets/img-fallback.js"></script>
+<link rel="stylesheet" href="%(base)sdata/common/style.css">
+<script src="%(base)sdata/common/img-fallback.js"></script>
 <style>
 .shard-post{display:none}
-.shard-landing{max-width:820px;margin:40px auto;padding:0 20px;line-height:1.9}
-.shard-landing code{background:rgba(127,127,127,.15);padding:1px 5px;border-radius:4px}
+.shard-landing{min-height:60vh;display:flex;align-items:center;justify-content:center;color:var(--fg2,#6b7280);font-size:15px}
+.shard-loading{display:flex;align-items:center;gap:10px}
+.spin{width:22px;height:22px;border:3px solid rgba(127,127,127,.25);border-top-color:var(--acc,#4a90d9);border-radius:50%%;animation:shardspin .8s linear infinite}
+@keyframes shardspin{to{transform:rotate(360deg)}}
 </style>
 </head><body>
 <div class="shard-landing">
-  <p>这是 <b>%(year)s 年</b>归档分片（第 %(i)d 片，本片 %(n)d 篇）。
-  请从 <a href="%(base)s/index.html">首页</a> 选文章进入；或在地址栏末尾加
-  <code>#文章编号</code> 直接定位到某篇。</p>
+  <div class="shard-loading"><span class="spin"></span>加载中… 正在跳转到首页</div>
+  <noscript><p style="margin-left:10px">请 <a href="%(base)s/index.html">点此进入首页</a>。</p></noscript>
 </div>
 """
 
 # 分片底部共享脚本：① 子页翻页作用域到每篇 .shard-post（避免跨文章串页）；
-# ② hash 路由逐篇显示 + 同步标题。图片「本地/原始」模式仍用全局 IMG_MODE_JS。
+# ② hash 路由逐篇显示 + 同步标题；无编号直开分片页时显示加载态并跳回首页。
+# 图片「本地/原始」模式仍用全局 IMG_MODE_JS。
 SHARD_JS = r"""<script>
 (function(){
   var DEFAULT_TITLE=document.title;
@@ -382,7 +384,10 @@ SHARD_JS = r"""<script>
     var hit=byId[id];
     // 命中篇必须显式给 block：CSS 里 .shard-post{display:none}，置空串('')不覆盖 CSS 规则会全隐
     posts.forEach(function(p){p.style.display=(p===hit)?'block':'none';});
-    if(landing) landing.style.display=hit?'none':'block';
+    if(landing){
+      landing.style.display=hit?'none':'block';
+      if(!hit) setTimeout(function(){ location.replace('../../index.html'); },600); // 无编号直开分片页 = 加载页，回首页
+    }
     document.title=hit?((hit.getAttribute('data-title')||'')+' - 福利吧归档'):DEFAULT_TITLE;
     if(hit) window.scrollTo(0,0);
   }
@@ -431,7 +436,23 @@ INDEX_TPL = """<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>福利吧 fuliba2023.net 全站归档</title>
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="data/common/style.css">
+<style>
+.arch-panel{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:50;overflow:auto;padding:24px 0}
+.arch-panel[hidden]{display:none}
+.arch-panel-in{max-width:960px;margin:0 auto;background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px}
+.arch-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 8px}
+.arch-head h2{margin:0;font-size:18px}
+.arch-close{border:1px solid var(--line);background:transparent;color:var(--fg);border-radius:6px;width:32px;height:32px;cursor:pointer;font-size:15px}
+.arch-close:hover{border-color:var(--acc);color:var(--acc)}
+.arch-sub{color:var(--fg2);font-size:13px;line-height:1.7;margin:0 0 12px}
+.arch-sub b{color:var(--acc)}
+.mini{border:1px solid var(--line);background:transparent;color:var(--fg2);border-radius:5px;padding:1px 9px;font-size:12px;cursor:pointer;margin-left:6px}
+.mini:hover{border-color:var(--acc);color:var(--acc)}
+.msg{color:var(--acc);font-size:13px}
+.arch-btn{background:transparent;cursor:pointer;font-family:inherit}
+.arch-list .arch-mark{margin-left:auto}
+</style>
 </head><body>
 <header class="hero">
   <div class="hero-in">
@@ -447,7 +468,7 @@ INDEX_TPL = """<!doctype html>
     <select id="cat"><option value="">全部分类</option></select>
     <select id="year"><option value="">全部年份</option></select>
     <span class="cnt" id="cnt"></span>
-    <a class="arch-btn" href="archived.html" title="归档管理：标记移入/移出，导出名单交 archive.py 执行">归档<span id="archPend"></span></a>
+    <button class="arch-btn" id="archBtn" type="button" title="归档管理：标记移入/移出，导出名单交 archive.py 执行">归档<span id="archPend"></span></button>
     <button id="imgModeBtn" type="button" title="切换所有文章页的图片来源：本机 assets/images（本地）或原始地址（省图库，需联网）">🖼 图片源：<b></b></button>
   </div>
 </nav>
@@ -461,6 +482,32 @@ INDEX_TPL = """<!doctype html>
 <footer class="foot">
   <p>本归档仅收录 fuliba2023.net 公开内容页，版权归原作者所有；评论与图片均已本地化保存。</p>
 </footer>
+
+<section class="arch-panel" id="archPanel" hidden>
+  <div class="arch-panel-in" role="dialog" aria-modal="true" aria-label="归档管理">
+    <div class="arch-head">
+      <h2>归档管理</h2>
+      <button id="archClose" class="arch-close" type="button" aria-label="关闭">✕</button>
+    </div>
+    <p class="arch-sub">已归档 <span id="archTotal">…</span> 篇（仅名录/原地址/发布时间，资源已释放）。在首页文章卡片点「归档」标记<b>待移入</b>，在下方名录点「移出归档」标记<b>待移出</b>；导出名单交 <b>_scripts/audit/archive.py --apply</b> 执行（移入=删资源，移出=重抓）。</p>
+    <section class="ops">
+      <h2>待移入归档 <span id="nIn" class="opn"></span></h2>
+      <ul id="pendIn"></ul>
+      <h2>待移出归档 <span id="nOut" class="opn"></span></h2>
+      <ul id="pendOut"></ul>
+      <div class="ops-bar">
+        <button id="clrBtn" type="button">清空名单</button>
+        <span id="msg" class="msg"></span>
+        <span class="hint">标记保存在浏览器 localStorage（换电脑不迁移）；名单确认后由助手按名单执行
+        <b>_scripts\py.cmd _scripts\audit\archive.py --apply</b>（移入=删资源，移出=重抓）；
+        执行完回到本页点「清空名单」清掉已执行标记。</span>
+      </div>
+    </section>
+    <h2 class="arch-h">已归档名录（<span id="archTotal2">…</span> 篇）</h2>
+    <ul class="arch-list" id="archList"></ul>
+    <p class="arch-note">名录来自 data/common/archived.js；逐篇判定依据见台账 _pipeline/skipped_promo.json 的 source 字段，防抓回登记见 _pipeline/urls_gone.json。</p>
+  </div>
+</section>
 
 <script>
 /* ===== 年度数据加载器（只改造一次，之后逐年零修改）===== */
@@ -514,6 +561,14 @@ INDEX_TPL = """<!doctype html>
     paint(next);
   });
 })();
+/* —— 归档名单（localStorage）：首页卡片「归档」= 待移入，归档面板「移出归档」= 待移出；导出名单交 _scripts/audit/archive.py 执行 —— */
+var OPSKEY='fuliba_arch_ops';
+var OM=loadOps();
+function loadOps(){ try{var o=JSON.parse(localStorage.getItem(OPSKEY)); if(o&&o.in&&o.out) return o;}catch(e){} return {in:{},out:{}}; }
+function saveOps(){ try{localStorage.setItem(OPSKEY,JSON.stringify(OM));}catch(e){} }
+function pendCount(){ var n=0,k; for(k in OM.in)n++; for(k in OM.out)n++; return n; }
+function updBadge(){ var b=document.querySelector('#archPend'); if(b){ var n=pendCount(); b.textContent=n?(' '+n):''; } }
+
 window.__startApp__ = function(){
   var D = window.FULIBA_DATA, A = D.articles;
   var DP = '%(data_prefix)s';   /* 年份目录在站点根下的前缀（data/）*/
@@ -534,14 +589,6 @@ window.__startApp__ = function(){
   });
 
   function esc(s){var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML;}
-
-  /* —— 归档名单（localStorage）：卡片「归档」= 待移入；导出名单交 _scripts/audit/archive.py 执行 —— */
-  var OPSKEY='fuliba_arch_ops';
-  var OM=loadOps();
-  function loadOps(){ try{var o=JSON.parse(localStorage.getItem(OPSKEY)); if(o&&o.in&&o.out) return o;}catch(e){} return {in:{},out:{}}; }
-  function saveOps(){ try{localStorage.setItem(OPSKEY,JSON.stringify(OM));}catch(e){} }
-  function pendCount(){ var n=0,k; for(k in OM.in)n++; for(k in OM.out)n++; return n; }
-  function updBadge(){ var b=$('#archPend'); if(b){ var n=pendCount(); b.textContent=n?(' '+n):''; } }
 
   function card(a){
     var imgs = [];
@@ -638,6 +685,99 @@ window.__startApp__ = function(){
   render();
 };
 if (window.__yearReady) window.__startApp__();
+</script>
+<script>
+/* ===== 归档面板：复用同一份 localStorage 名单（与首页卡片「归档」共享），懒加载 data/common/archived.js 名录 ===== */
+(function(){
+  var panel=document.getElementById('archPanel');
+  var btn=document.getElementById('archBtn');
+  var closeBtn=document.getElementById('archClose');
+  if(!panel||!btn) return;
+  var loaded=false, roster=[];
+  function esc(s){var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML;}
+  function msg(t){ var m=document.getElementById('msg'); if(m) m.textContent=t||''; }
+  function pendLi(v,attr){
+    return '<li><span class="od">'+esc(v.date||'?')+'</span>'+
+      '<span class="ot">'+esc(v.title||'(无标题)')+'</span>'+
+      '<span class="au">'+esc(v.url||'')+'</span>'+
+      '<button class="mini" '+attr+'="'+esc(v.key)+'">移除</button></li>';
+  }
+  function renderPend(){
+    var i='',o='',k;
+    for(k in OM.in){ var v=OM.in[k]; v.key=k; i+=pendLi(v,'data-rin'); }
+    for(k in OM.out){ var w=OM.out[k]; w.key=k; o+=pendLi(w,'data-rout'); }
+    var pin=document.getElementById('pendIn'), pout=document.getElementById('pendOut');
+    if(pin) pin.innerHTML=i||'<li class="none">（空）—— 在首页文章卡片点「归档」标记待移入</li>';
+    if(pout) pout.innerHTML=o||'<li class="none">（空）—— 在下方已归档名录点「移出归档」标记待移出</li>';
+    var nIn=document.getElementById('nIn'), nOut=document.getElementById('nOut');
+    if(nIn) nIn.textContent=Object.keys(OM.in).length?('('+Object.keys(OM.in).length+')'):'';
+    if(nOut) nOut.textContent=Object.keys(OM.out).length?('('+Object.keys(OM.out).length+')'):'';
+    markButtons();
+  }
+  function markButtons(){
+    var bs=document.querySelectorAll('#archList [data-out]');
+    for(var j=0;j<bs.length;j++){
+      var k2=bs[j].getAttribute('data-out');
+      if(OM.out[k2]){ bs[j].classList.add('on'); bs[j].textContent='待移出 ✓'; }
+      else { bs[j].classList.remove('on'); bs[j].textContent='移出归档'; }
+    }
+  }
+  function renderRoster(){
+    var box=document.getElementById('archList'); if(!box) return;
+    var h='';
+    for(var i=0;i<roster.length;i++){
+      var r=roster[i];
+      h+='<li data-url="'+esc(r.url)+'" data-title="'+esc(r.title)+'" data-date="'+esc(r.date)+'" data-cat="'+esc(r.cat)+'">'+
+         '<span class="ad">'+esc(r.date)+'</span>'+
+         '<span class="ac">'+esc(r.cat)+'</span>'+
+         '<a href="'+esc(r.url)+'" target="_blank" rel="noopener">'+esc(r.title)+'</a>'+
+         '<span class="au">'+esc(r.url)+'</span>'+
+         '<button class="arch-mark'+(OM.out[r.key]?' on':'')+'" data-out="'+esc(r.key)+'">'+(OM.out[r.key]?'待移出 ✓':'移出归档')+'</button></li>';
+    }
+    box.innerHTML=h;
+    var t1=document.getElementById('archTotal'), t2=document.getElementById('archTotal2');
+    if(t1) t1.textContent=roster.length; if(t2) t2.textContent=roster.length;
+    markButtons();
+  }
+  function openPanel(){
+    panel.hidden=false;
+    document.body.style.overflow='hidden';
+    if(!loaded){
+      loaded=true;
+      var s=document.createElement('script');
+      s.src='data/common/archived.js';
+      s.onload=function(){ roster=window.ARCHIVED_ROSTER||[]; renderRoster(); };
+      s.onerror=function(){ roster=[]; renderRoster(); };
+      document.head.appendChild(s);
+    }
+    renderPend();
+  }
+  function closePanel(){ panel.hidden=true; document.body.style.overflow=''; }
+  btn.addEventListener('click',function(){ if(panel.hidden) openPanel(); else closePanel(); });
+  if(closeBtn) closeBtn.addEventListener('click',closePanel);
+  panel.addEventListener('click',function(e){ if(e.target===panel) closePanel(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!panel.hidden) closePanel(); });
+  document.addEventListener('click',function(e){
+    var b;
+    if((b=e.target.closest('#archList [data-out]'))){
+      var k=b.getAttribute('data-out'), li=b.closest('li');
+      if(OM.out[k]) delete OM.out[k];
+      else OM.out[k]={key:k,url:li.getAttribute('data-url'),title:li.getAttribute('data-title'),
+                       date:li.getAttribute('data-date'),category:li.getAttribute('data-cat'),ts:Date.now()};
+      saveOps(); renderPend(); updBadge(); msg(''); return;
+    }
+    if((b=e.target.closest('[data-rin]'))){ delete OM.in[b.getAttribute('data-rin')]; saveOps(); renderPend(); updBadge(); return; }
+    if((b=e.target.closest('[data-rout]'))){ delete OM.out[b.getAttribute('data-rout')]; saveOps(); renderPend(); updBadge(); return; }
+  });
+  var clr=document.getElementById('clrBtn');
+  if(clr) clr.addEventListener('click',function(){
+    var n=Object.keys(OM.in).length+Object.keys(OM.out).length;
+    if(!n){ msg('名单已为空'); return; }
+    if(confirm('确定清空待移入/待移出全部 '+n+' 条标记？（应在 archive.py --apply 执行成功后清理）')){
+      OM={in:{},out:{}}; saveOps(); renderPend(); updBadge(); msg('已清空');
+    }
+  });
+})();
 </script>
 </body></html>
 """
@@ -1000,135 +1140,34 @@ def clean_stale_pages(slot, keep_part_count):
     return gone
 
 
-ARCHIVED_TPL = """<!doctype html>
-<html lang="zh-CN"><head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>归档管理 - 福利吧归档</title>
-<link rel="stylesheet" href="assets/style.css">
-</head><body>
-<header class="hero">
-  <div class="hero-in">
-    <h1>归档管理</h1>
-    <p class="sub">已归档 %(total)d 篇（仅名录/原地址/发布时间，资源已释放）。
-    在首页点「归档」标记<b>待移入</b>，在此点「移出归档」标记<b>待移出</b>；
-    导出名单交 <b>_scripts/audit/archive.py --apply</b> 执行（移入=删资源，移出=重抓）。</p>
-    <p class="gen">生成于 %(generated)s</p>
-  </div>
-</header>
-<main class="arch-wrap">
-  <section class="ops">
-    <h2>待移入归档 <span id="nIn" class="opn"></span></h2>
-    <ul id="pendIn"></ul>
-    <h2>待移出归档 <span id="nOut" class="opn"></span></h2>
-    <ul id="pendOut"></ul>
-    <div class="ops-bar">
-      <button id="clrBtn">清空名单</button>
-      <span id="msg" class="msg"></span>
-      <span class="hint">标记保存在浏览器 localStorage（换电脑不迁移）；名单确认后由助手按名单执行
-      <b>_scripts\\py.cmd _scripts\\audit\\archive.py --apply</b>（移入=删资源，移出=重抓）；
-      执行完回到本页点「清空名单」清掉已执行标记。</span>
-    </div>
-  </section>
-  <h2 class="arch-h">已归档名录（%(total)d 篇）</h2>
-  <ul class="arch-list">%(items)s</ul>
-  <p class="arch-note">名录就是本页这份清单；逐篇判定依据见台账 <b>_pipeline/skipped_promo.json</b> 的 source 字段，
-  防抓回登记见 <b>_pipeline/urls_gone.json</b>（两者都是工作台文件，站点本体不依赖它们）。</p>
-</main>
-<footer class="foot"><a href="index.html">← 返回索引</a></footer>
-<script>
-(function(){
-  var $=function(s){return document.querySelector(s)};
-  var OPSKEY='fuliba_arch_ops';
-  var OM=loadOps();
-  function loadOps(){ try{var o=JSON.parse(localStorage.getItem(OPSKEY)); if(o&&o.in&&o.out) return o;}catch(e){} return {in:{},out:{}}; }
-  function saveOps(){ try{localStorage.setItem(OPSKEY,JSON.stringify(OM));}catch(e){} }
-  function esc(s){var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML;}
-  function msg(t){ $('#msg').textContent=t||''; }
-  function pendLi(v,attr){
-    return '<li><span class="od">'+esc(v.date||'?')+'</span>'+
-      '<span class="ot">'+esc(v.title||'(无标题)')+'</span>'+
-      '<span class="au">'+esc(v.url||'')+'</span>'+
-      '<button class="mini" '+attr+'="'+esc(v.key)+'">移除</button></li>';
-  }
-  function renderPend(){
-    var i='',o='',k;
-    for(k in OM.in){ var v=OM.in[k]; v.key=k; i+=pendLi(v,'data-rin'); }
-    for(k in OM.out){ var w=OM.out[k]; w.key=k; o+=pendLi(w,'data-rout'); }
-    $('#pendIn').innerHTML=i||'<li class="none">（空）—— 在首页文章卡片点「归档」标记待移入</li>';
-    $('#pendOut').innerHTML=o||'<li class="none">（空）—— 在下方已归档名录点「移出归档」标记待移出</li>';
-    $('#nIn').textContent=Object.keys(OM.in).length?('('+Object.keys(OM.in).length+')'):'';
-    $('#nOut').textContent=Object.keys(OM.out).length?('('+Object.keys(OM.out).length+')'):'';
-    var bs=document.querySelectorAll('[data-out]');
-    for(var j=0;j<bs.length;j++){
-      var k2=bs[j].getAttribute('data-out');
-      if(OM.out[k2]){ bs[j].classList.add('on'); bs[j].textContent='待移出 ✓'; }
-      else { bs[j].classList.remove('on'); bs[j].textContent='移出归档'; }
-    }
-  }
-  document.addEventListener('click',function(e){
-    var b;
-    if((b=e.target.closest('[data-out]'))){
-      var k=b.getAttribute('data-out'), li=b.closest('li');
-      if(OM.out[k]) delete OM.out[k];
-      else OM.out[k]={key:k,url:li.getAttribute('data-url'),title:li.getAttribute('data-title'),
-                       date:li.getAttribute('data-date'),category:li.getAttribute('data-cat'),ts:Date.now()};
-      saveOps(); renderPend(); msg(''); return;
-    }
-    if((b=e.target.closest('[data-rin]'))){ delete OM.in[b.getAttribute('data-rin')]; saveOps(); renderPend(); return; }
-    if((b=e.target.closest('[data-rout]'))){ delete OM.out[b.getAttribute('data-rout')]; saveOps(); renderPend(); return; }
-  });
-  $('#clrBtn').addEventListener('click',function(){
-    var n=Object.keys(OM.in).length+Object.keys(OM.out).length;
-    if(!n){ msg('名单已为空'); return; }
-    if(confirm('确定清空待移入/待移出全部 '+n+' 条标记？（应在 archive.py --apply 执行成功后清理）')){
-      OM={in:{},out:{}}; saveOps(); renderPend(); msg('已清空');
-    }
-  });
-  renderPend();
-})();
-</script>
-</body></html>
-"""
-
-
 def write_archived_page():
-    """归档管理页：待移入/待移出名单（localStorage）+ 已归档名录。
+    """归档已归档名录 → data/common/archived.js（window.ARCHIVED_ROSTER）。
 
-    名录数据源 _pipeline/skipped_promo.json（删除台账，由促销清理/archive.py 维护），
-    每条带 data-* 属性供「移出归档」按钮取元数据；名单本体存浏览器
-    localStorage，由「导出名单」落盘后交 _scripts/audit/archive.py 执行。
-    台账为空时名录区为空，但管理页仍生成（标记功能不依赖台账）。
+    数据源 _pipeline/skipped_promo.json（删除台账，由促销清理/archive.py 维护），
+    每条导出为 {key,url,title,date,cat}；待移入/待移出名单本体存在浏览器
+    localStorage（fuliba_arch_ops），由 index.html 归档面板读写，交 _scripts/audit/archive.py 执行。
+    台账为空时名录为空，但 archived.js 仍生成（window.ARCHIVED_ROSTER=[]）。
     """
     led = C.read_json(os.path.join(C.SRC, "skipped_promo.json"), []) or []
-    rows = sorted(led, key=lambda r: r.get("date", ""), reverse=True)
-    lis = []
-    for r in rows:
-        lis.append(
-            '<li data-url="%s" data-title="%s" data-date="%s" data-cat="%s">'
-            '<span class="ad">%s</span>'
-            '<span class="ac">%s</span>'
-            '<a href="%s" target="_blank" rel="noopener">%s</a>'
-            '<span class="au">%s</span>'
-            '<button class="arch-mark" data-out="%s">移出归档</button></li>'
-            % (htmlmod.escape(r.get("url", "")),
-               htmlmod.escape(r.get("title", "")),
-               htmlmod.escape(r.get("date", "")),
-               htmlmod.escape(r.get("category", "") or "未分类"),
-               htmlmod.escape(r.get("date", "")),
-               htmlmod.escape(r.get("category", "") or "未分类"),
-               htmlmod.escape(r.get("url", "")),
-               htmlmod.escape(r.get("title", "")),
-               htmlmod.escape(r.get("url", "")),
-               htmlmod.escape(r.get("key", "")))
-        )
-    page = ARCHIVED_TPL % {
-        "total": len(rows),
-        "generated": time_str(),
-        "items": "\n".join(lis),
-    }
-    write_if_changed(os.path.join(C.ROOT, "archived.html"), page)
-    C.log("[s06] archived.html 写入（管理页，已归档 %d 篇）" % len(rows))
+    rows, seen = [], set()
+    for r in sorted(led, key=lambda x: x.get("date", ""), reverse=True):
+        key = r.get("key", "")
+        if key in seen:
+            continue
+        seen.add(key)
+        rows.append({
+            "key": key,
+            "url": r.get("url", ""),
+            "title": r.get("title", ""),
+            "date": r.get("date", ""),
+            "cat": r.get("category", "") or "未分类",
+        })
+    body = "window.ARCHIVED_ROSTER=" + json.dumps(rows, ensure_ascii=False, separators=(",", ":")) + ";\n"
+    cdir = os.path.join(C.ROOT, "data", "common")
+    if not os.path.isdir(cdir):
+        os.makedirs(cdir, exist_ok=True)
+    write_if_changed(os.path.join(cdir, "archived.js"), body)
+    C.log("[s06] archived.js 写入（已归档 %d 篇，data/common/）" % len(rows))
     return len(rows)
 
 
@@ -1161,13 +1200,13 @@ def main():
         "year_slots": json.dumps(C.Y.all_slots()),
         "data_prefix": C.Y.SITE_PREFIX,
     })
-    # 站点根只留入口 HTML：样式与图片都归 assets/（分片页引用 ../../assets/style.css）
-    adir = os.path.join(C.ROOT, "assets")
-    if not os.path.isdir(adir):
-        os.makedirs(adir, exist_ok=True)
-    write_if_changed(os.path.join(adir, "style.css"), STYLE_CSS)
-    # 图片兜底脚本：图不在本机时页面仍正常打开（占位图在同一个 assets/ 目录）
-    write_if_changed(os.path.join(adir, "img-fallback.js"), IMG_FALLBACK_JS)
+    # 站点根只留入口 HTML；图片仍归 assets/images/，而样式/脚本/占位图归 data/common/（分片页引用 ../common/style.css）
+    sdir = os.path.join(C.ROOT, "data", "common")
+    if not os.path.isdir(sdir):
+        os.makedirs(sdir, exist_ok=True)
+    write_if_changed(os.path.join(sdir, "style.css"), STYLE_CSS)
+    # 图片兜底脚本：图不在本机时页面仍正常打开（占位图在同目录 data/common/ 下）
+    write_if_changed(os.path.join(sdir, "img-fallback.js"), IMG_FALLBACK_JS)
     write_archived_page()
 
     # 3) 文章分片：按各年 data.js 的 date-desc 顺序把整年聚合成 data/<年>/part<i>.html。

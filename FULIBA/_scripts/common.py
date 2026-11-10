@@ -12,7 +12,7 @@ fuliba2023 抓取工具链 — 共享库
   （例外：年度容器一篇一文件、一次改一处，中途打断会整篇丢，所以 years.py 内部用 tmp+换名）
 
 ** 2026-11-04 目录分层 **（根目录只留站点外壳与资源，其余带下划线的都是工作台）：
-    <ROOT>/index.html|style.css|archived.html   站点入口（浏览器直接打开 index.html）
+    <ROOT>/index.html                         站点入口（浏览器直接打开 index.html；归档管理已并入此页，名录数据在 data/common/archived.js）
     <ROOT>/assets/                              站点资源；图片库在 assets/images/
     <ROOT>/data/<年>/                           年份文章目录（发布层，一年一个自包含目录）
     <ROOT>/_scripts/                            脚本；共享层在本目录顶层，步骤脚本按功能分子目录

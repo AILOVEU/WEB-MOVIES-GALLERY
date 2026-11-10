@@ -3,16 +3,16 @@
 archive.py — 归档名单执行器（配合站内「归档」按钮的标记名单）
 
 完整流程：
-  1) 站内标记：index 卡片「归档」= 待移入；archived.html 名录「移出归档」= 待移出
+  1) 站内标记：index 卡片「归档」= 待移入；index 归档面板名录「移出归档」= 待移出
      （标记存浏览器 localStorage，顶部「归档」按钮带待办角标）
-  2) 导出：archived.html「导出名单」→ 下载 archive_ops.json
+  2) 导出：index 归档面板「导出名单」→ 下载 archive_ops.json
   3) 合并：_scripts\\py.cmd _scripts\\audit\\archive.py --import <archive_ops.json>   → 合并进 _pipeline/archive_ops.json
   4) 执行：_scripts\\py.cmd _scripts\\audit\\archive.py --apply
      - move_in  移入归档：删专属图片（与保留文章共用比对）+ html/parsed/子页/单篇页，
        urls.json 移除、urls_gone 登记（防增量更新抓回）、skipped_promo 台账登记
      - move_out 移出归档：urls_gone/台账移除、url 写回 urls.json，
        增量跑 s02→s03→s04i→s04l→s04f→s04d→s06→verify 重抓；抓取失败自动回滚登记
-  5) 回到 archived.html 点「清空名单」清掉已执行标记
+  5) 回到 index 归档面板点「清空名单」清掉已执行标记
 
 用法:
   _scripts\\py.cmd _scripts\\audit\\archive.py                     # 查看当前名单

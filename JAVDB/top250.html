@@ -160,6 +160,8 @@ h1 small{color:var(--fg2);font-weight:400;font-size:12px;margin-left:8px}
       <button class="sbtn" data-mode="remote" title="切换图片来源：本地资源 / 原始图源">原始图</button>
     </div>
     <div class="vrow">
+      <span class="vlab" style="color:var(--fg2);font-size:13px;align-self:center">快照</span>
+      <select id="versel" class="vsel" title="切换 TOP250 历史快照版本（点击即切换，原版本不删除，可随时切回）"></select>
       <select id="vsel" class="vsel"></select>
       <div class="cnt" id="cnt" style="width:auto"></div>
     </div>
@@ -177,13 +179,14 @@ h1 small{color:var(--fg2);font-weight:400;font-size:12px;margin-left:8px}
   </div>
 </div>
 
-<script src="data/site/movies.js?v=20261109"></script>
-<script src="data/site/ltx.js?v=20261109"></script>
-<script src="data/site/top250.js?v=20261109"></script>
+<script src="data/site/movies.js?v=20261110"></script>
+<script src="data/site/ltx.js?v=20261110"></script>
+<script src="data/site/top250.js?v=20261110"></script>
+<script src="data/top250_versions/manifest.js?v=20261110"></script>
 <script>
-const BUILD_V = '20261109';   // 数据文件版本号（懒加载的磁力桶靠它破缓存），由 build_collection_js.bump_refs() 自动刷成当日
+const BUILD_V = '20261110';   // 数据文件版本号（懒加载的磁力桶靠它破缓存），由 build_collection_js.bump_refs() 自动刷成当日
 const MOVIES = window.JAVDB_MOVIES || {};
-const RANKS = window.JAVDB_RANKINGS || { top250: { name: 'TOP250', variants: { all: { name: '全部', updated: '', items: [] } } } };
+let RANKS = window.JAVDB_RANKINGS || { top250: { name: 'TOP250', variants: { all: { name: '全部', updated: '', items: [] } } } };
 const CATS = Object.keys(RANKS);
 let cat = CATS.includes('top250') ? 'top250' : CATS[0];
 let variant = 'all';
@@ -245,6 +248,32 @@ function renderVariantSel(){
   ).join('');
 }
 selEl.addEventListener('change', ()=>{ variant = selEl.value; page = 1; render(); });
+
+/* ---------- TOP250 快照版本切换（页面内点击切换，老版本不删除） ---------- */
+const verEl = document.getElementById('versel');
+const VERS = window.JAVDB_TOP250_VERSIONS || { active: null, versions: [] };
+let loadedVer = VERS.active;   // 当前页面实际加载的版本（初始 = 磁盘激活版）
+function renderVerSel(){
+  if (!VERS.versions || VERS.versions.length <= 1){ verEl.style.display = 'none'; return; }
+  verEl.style.display = '';
+  verEl.innerHTML = VERS.versions.map(v => {
+    const s = v.summary || {};
+    const lab = `${v.id}  (${v.updated_label||''} · +${s.added||0}/-${s.dropped||0}/~${s.shifted||0})${v.id===VERS.active?' 〔当前〕':''}`;
+    return `<option value="${esc(v.id)}"${v.id===VERS.active?' selected':''}>${esc(lab)}</option>`;
+  }).join('');
+}
+function loadVersion(id, done){
+  const sc = document.createElement('script');
+  sc.src = 'data/top250_versions/' + id + '.js?v=' + encodeURIComponent(id);
+  sc.onload = () => { RANKS = window.JAVDB_RANKINGS; renderVariantSel(); page = 1; render(); if (done) done(); };
+  sc.onerror = () => { alert('加载版本失败：' + id); if (done) done(); };
+  document.head.appendChild(sc);
+}
+verEl.addEventListener('change', () => {
+  const id = verEl.value;
+  if (id === loadedVer) return;          // 选回当前已加载版本，无需重载
+  loadVersion(id, () => { loadedVer = id; });
+});
 
 function cardHTML(c){
   const rankCls = c.rank<=3 ? ` r${c.rank}` : '';
@@ -462,6 +491,7 @@ grid.addEventListener('click', e=>{
 backtop.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
 addEventListener('scroll',()=>{ backtop.style.display = scrollY>500?'block':'none'; });
 renderVariantSel();
+renderVerSel();
 syncImgModeBtns();
 render();
 </script>

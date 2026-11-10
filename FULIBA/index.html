@@ -3,7 +3,29 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>福利吧 fuliba2023.net 全站归档</title>
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="data/common/style.css">
+<style>
+.arch-panel{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:50;overflow:auto;padding:24px 0}
+.arch-panel[hidden]{display:none}
+.arch-panel-in{max-width:960px;margin:0 auto;background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px}
+.arch-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 8px}
+.arch-head h2{margin:0;font-size:18px}
+.arch-close{border:1px solid var(--line);background:transparent;color:var(--fg);border-radius:6px;width:32px;height:32px;cursor:pointer;font-size:15px}
+.arch-close:hover{border-color:var(--acc);color:var(--acc)}
+.arch-sub{color:var(--fg2);font-size:13px;line-height:1.7;margin:0 0 12px}
+.arch-sub b{color:var(--acc)}
+.mini{border:1px solid var(--line);background:transparent;color:var(--fg2);border-radius:5px;padding:1px 9px;font-size:12px;cursor:pointer;margin-left:6px}
+.mini:hover{border-color:var(--acc);color:var(--acc)}
+.msg{color:var(--acc);font-size:13px}
+.arch-btn{background:transparent;cursor:pointer;font-family:inherit}
+#resetBtn{margin-left:6px;border:1px solid var(--line);border-radius:6px;padding:5px 10px;color:var(--fg2)}
+#resetBtn:hover{border-color:var(--acc);color:var(--acc)}
+.arch-list .arch-mark{margin-left:auto}
+/* 已读（点过）文章置灰痕迹 */
+.card.visited{opacity:.5;filter:grayscale(100%)}
+.card.visited .c-title{text-decoration:line-through;color:var(--fg2)}
+.read-badge{display:inline-block;margin-left:8px;font-size:11px;color:#fff;background:var(--acc);border-radius:4px;padding:1px 6px;vertical-align:middle}
+</style>
 </head><body>
 <header class="hero">
   <div class="hero-in">
@@ -19,8 +41,9 @@
     <select id="cat"><option value="">全部分类</option></select>
     <select id="year"><option value="">全部年份</option></select>
     <span class="cnt" id="cnt"></span>
-    <a class="arch-btn" href="archived.html" title="归档管理：标记移入/移出，导出名单交 archive.py 执行">归档<span id="archPend"></span></a>
+    <button class="arch-btn" id="archBtn" type="button" title="归档管理：标记移入/移出，导出名单交 archive.py 执行">归档<span id="archPend"></span></button>
     <button id="imgModeBtn" type="button" title="切换所有文章页的图片来源：本机 assets/images（本地）或原始地址（省图库，需联网）">🖼 图片源：<b></b></button>
+    <button id="resetBtn" type="button" title="一键还原：清除所有筛选、已读标记与本地记录">↺ 还原</button>
   </div>
 </nav>
 
@@ -33,6 +56,32 @@
 <footer class="foot">
   <p>本归档仅收录 fuliba2023.net 公开内容页，版权归原作者所有；评论与图片均已本地化保存。</p>
 </footer>
+
+<section class="arch-panel" id="archPanel" hidden>
+  <div class="arch-panel-in" role="dialog" aria-modal="true" aria-label="归档管理">
+    <div class="arch-head">
+      <h2>归档管理</h2>
+      <button id="archClose" class="arch-close" type="button" aria-label="关闭">✕</button>
+    </div>
+    <p class="arch-sub">已归档 <span id="archTotal">…</span> 篇（仅名录/原地址/发布时间，资源已释放）。在首页文章卡片点「归档」标记<b>待移入</b>，在下方名录点「移出归档」标记<b>待移出</b>；导出名单交 <b>_scripts/audit/archive.py --apply</b> 执行（移入=删资源，移出=重抓）。</p>
+    <section class="ops">
+      <h2>待移入归档 <span id="nIn" class="opn"></span></h2>
+      <ul id="pendIn"></ul>
+      <h2>待移出归档 <span id="nOut" class="opn"></span></h2>
+      <ul id="pendOut"></ul>
+      <div class="ops-bar">
+        <button id="clrBtn" type="button">清空名单</button>
+        <span id="msg" class="msg"></span>
+        <span class="hint">标记保存在浏览器 localStorage（换电脑不迁移）；名单确认后由助手按名单执行
+        <b>_scripts\py.cmd _scripts\audit\archive.py --apply</b>（移入=删资源，移出=重抓）；
+        执行完回到本页点「清空名单」清掉已执行标记。</span>
+      </div>
+    </section>
+    <h2 class="arch-h">已归档名录（<span id="archTotal2">…</span> 篇）</h2>
+    <ul class="arch-list" id="archList"></ul>
+    <p class="arch-note">名录来自 data/common/archived.js；逐篇判定依据见台账 _pipeline/skipped_promo.json 的 source 字段，防抓回登记见 _pipeline/urls_gone.json。</p>
+  </div>
+</section>
 
 <script>
 /* ===== 年度数据加载器（只改造一次，之后逐年零修改）===== */
@@ -86,6 +135,27 @@
     paint(next);
   });
 })();
+/* —— 一键还原：清除本站点全部本地记录（筛选 / 已读 / 归档 / 图片源）并重置页面 —— */
+(function(){
+  var r=document.getElementById('resetBtn'); if(!r) return;
+  r.addEventListener('click',function(){
+    if(!confirm('确定还原？将清除本站点所有本地记录：筛选条件、已读标记、归档名单、图片源，并重置页面。')) return;
+    try{
+      var keys=[];
+      for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i); if(k&&k.indexOf('fuliba_')===0) keys.push(k); }
+      keys.forEach(function(k){ localStorage.removeItem(k); });
+    }catch(e){}
+    location.reload();
+  });
+})();
+/* —— 归档名单（localStorage）：首页卡片「归档」= 待移入，归档面板「移出归档」= 待移出；导出名单交 _scripts/audit/archive.py 执行 —— */
+var OPSKEY='fuliba_arch_ops';
+var OM=loadOps();
+function loadOps(){ try{var o=JSON.parse(localStorage.getItem(OPSKEY)); if(o&&o.in&&o.out) return o;}catch(e){} return {in:{},out:{}}; }
+function saveOps(){ try{localStorage.setItem(OPSKEY,JSON.stringify(OM));}catch(e){} }
+function pendCount(){ var n=0,k; for(k in OM.in)n++; for(k in OM.out)n++; return n; }
+function updBadge(){ var b=document.querySelector('#archPend'); if(b){ var n=pendCount(); b.textContent=n?(' '+n):''; } }
+
 window.__startApp__ = function(){
   var D = window.FULIBA_DATA, A = D.articles;
   var DP = 'data/';   /* 年份目录在站点根下的前缀（data/）*/
@@ -98,6 +168,14 @@ window.__startApp__ = function(){
   var $ = function(s){return document.querySelector(s)};
   var catSel = $('#cat'), yearSel = $('#year');
 
+  /* —— 筛选持久化（刷新/回退后保留） + 已读记录（点过的文章置灰）—— */
+  var FKEY='fuliba_filter', VKEY='fuliba_visited';
+  var VIS = loadVisited();
+  function loadVisited(){ try{var v=JSON.parse(localStorage.getItem(VKEY)); return v||{};}catch(e){ return {}; } }
+  function saveVisited(){ try{localStorage.setItem(VKEY,JSON.stringify(VIS));}catch(e){} }
+  function loadFilter(){ try{var f=JSON.parse(localStorage.getItem(FKEY)); if(f) return f;}catch(e){} return {q:'',cat:'',year:'',page:0}; }
+  function saveFilter(){ try{localStorage.setItem(FKEY,JSON.stringify({q:$('#q').value,cat:catSel.value,year:yearSel.value,page:page}));}catch(e){} }
+
   Object.keys(D.meta.categories).sort().forEach(function(c){
     var o=document.createElement('option'); o.value=c; o.textContent=c+' ('+D.meta.categories[c]+')'; catSel.appendChild(o);
   });
@@ -105,15 +183,18 @@ window.__startApp__ = function(){
     var o=document.createElement('option'); o.value=y; o.textContent=y+' ('+D.meta.years[y]+')'; yearSel.appendChild(o);
   });
 
-  function esc(s){var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML;}
+  /* —— 还原上次筛选（刷新/回退后保留） —— */
+  (function restore(){
+    var f=loadFilter();
+    if(f.q) $('#q').value=f.q;
+    if(f.cat) catSel.value=f.cat;
+    if(f.year) yearSel.value=f.year;
+    filter();
+    if(f.page>0 && f.page<Math.ceil(list.length/PAGE)) page=f.page;
+    render();
+  })();
 
-  /* —— 归档名单（localStorage）：卡片「归档」= 待移入；导出名单交 _scripts/audit/archive.py 执行 —— */
-  var OPSKEY='fuliba_arch_ops';
-  var OM=loadOps();
-  function loadOps(){ try{var o=JSON.parse(localStorage.getItem(OPSKEY)); if(o&&o.in&&o.out) return o;}catch(e){} return {in:{},out:{}}; }
-  function saveOps(){ try{localStorage.setItem(OPSKEY,JSON.stringify(OM));}catch(e){} }
-  function pendCount(){ var n=0,k; for(k in OM.in)n++; for(k in OM.out)n++; return n; }
-  function updBadge(){ var b=$('#archPend'); if(b){ var n=pendCount(); b.textContent=n?(' '+n):''; } }
+  function esc(s){var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML;}
 
   function card(a){
     var imgs = [];
@@ -121,8 +202,10 @@ window.__startApp__ = function(){
     (a.page_count>1) && imgs.push('<span class="tag t-pg">全文 '+a.page_count+' 页</span>');
     (a.comments_parsed>0) && imgs.push('<span class="tag t-cmt">评 '+a.comments_parsed+'</span>');
     (a.view_count>0) && imgs.push('<span class="tag t-view">阅 '+a.view_count+'</span>');
-    return '<article class="card">'+
-      '<a class="c-title" href="' + DP + a.y + '/part' + a.p + '.html#' + a.id + '">' + esc(a.title||'(无标题)') + '</a>'+
+    var vis = VIS[a.id] ? ' visited' : '';
+    var badge = VIS[a.id] ? '<span class="read-badge">已读</span>' : '';
+    return '<article class="card'+vis+'" data-id="'+a.id+'">'+
+      '<a class="c-title" href="' + DP + a.y + '/part' + a.p + '.html#' + a.id + '">' + esc(a.title||'(无标题)') + '</a>'+ badge +
       '<div class="c-meta"><span class="c-date">'+esc(a.date)+'</span>'+
       (a.category?'<a class="c-cat" href="#" data-cat="'+esc(a.category)+'">'+esc(a.category)+'</a>':'')+
       imgs.join('')+'</div>'+
@@ -160,6 +243,7 @@ window.__startApp__ = function(){
     $('#cnt').textContent = list.length ? ('第 '+(start+1)+'-'+end+' 篇 / 共 '+list.length+' 篇') : '共 0 篇';
     renderPager();
     $('#empty').hidden = list.length>0;
+    saveFilter();
   }
 
   function filter(){
@@ -206,9 +290,110 @@ window.__startApp__ = function(){
            b.classList.add('on'); b.textContent='已标记 ✓'; }
     saveOps(); updBadge();
   });
+  /* 点击文章（标题进正文 / 原文链接）即标记为已读：置灰并加「已读」徽标 */
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('.c-title, .c-link');
+    if(!a) return;
+    var card=a.closest('.card'); if(!card) return;
+    var id=card.getAttribute('data-id'); if(!id || VIS[id]) return;
+    VIS[id]=true; saveVisited(); render();
+  });
   updBadge();
   render();
 };
 if (window.__yearReady) window.__startApp__();
+</script>
+<script>
+/* ===== 归档面板：复用同一份 localStorage 名单（与首页卡片「归档」共享），懒加载 data/common/archived.js 名录 ===== */
+(function(){
+  var panel=document.getElementById('archPanel');
+  var btn=document.getElementById('archBtn');
+  var closeBtn=document.getElementById('archClose');
+  if(!panel||!btn) return;
+  var loaded=false, roster=[];
+  function esc(s){var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML;}
+  function msg(t){ var m=document.getElementById('msg'); if(m) m.textContent=t||''; }
+  function pendLi(v,attr){
+    return '<li><span class="od">'+esc(v.date||'?')+'</span>'+
+      '<span class="ot">'+esc(v.title||'(无标题)')+'</span>'+
+      '<span class="au">'+esc(v.url||'')+'</span>'+
+      '<button class="mini" '+attr+'="'+esc(v.key)+'">移除</button></li>';
+  }
+  function renderPend(){
+    var i='',o='',k;
+    for(k in OM.in){ var v=OM.in[k]; v.key=k; i+=pendLi(v,'data-rin'); }
+    for(k in OM.out){ var w=OM.out[k]; w.key=k; o+=pendLi(w,'data-rout'); }
+    var pin=document.getElementById('pendIn'), pout=document.getElementById('pendOut');
+    if(pin) pin.innerHTML=i||'<li class="none">（空）—— 在首页文章卡片点「归档」标记待移入</li>';
+    if(pout) pout.innerHTML=o||'<li class="none">（空）—— 在下方已归档名录点「移出归档」标记待移出</li>';
+    var nIn=document.getElementById('nIn'), nOut=document.getElementById('nOut');
+    if(nIn) nIn.textContent=Object.keys(OM.in).length?('('+Object.keys(OM.in).length+')'):'';
+    if(nOut) nOut.textContent=Object.keys(OM.out).length?('('+Object.keys(OM.out).length+')'):'';
+    markButtons();
+  }
+  function markButtons(){
+    var bs=document.querySelectorAll('#archList [data-out]');
+    for(var j=0;j<bs.length;j++){
+      var k2=bs[j].getAttribute('data-out');
+      if(OM.out[k2]){ bs[j].classList.add('on'); bs[j].textContent='待移出 ✓'; }
+      else { bs[j].classList.remove('on'); bs[j].textContent='移出归档'; }
+    }
+  }
+  function renderRoster(){
+    var box=document.getElementById('archList'); if(!box) return;
+    var h='';
+    for(var i=0;i<roster.length;i++){
+      var r=roster[i];
+      h+='<li data-url="'+esc(r.url)+'" data-title="'+esc(r.title)+'" data-date="'+esc(r.date)+'" data-cat="'+esc(r.cat)+'">'+
+         '<span class="ad">'+esc(r.date)+'</span>'+
+         '<span class="ac">'+esc(r.cat)+'</span>'+
+         '<a href="'+esc(r.url)+'" target="_blank" rel="noopener">'+esc(r.title)+'</a>'+
+         '<span class="au">'+esc(r.url)+'</span>'+
+         '<button class="arch-mark'+(OM.out[r.key]?' on':'')+'" data-out="'+esc(r.key)+'">'+(OM.out[r.key]?'待移出 ✓':'移出归档')+'</button></li>';
+    }
+    box.innerHTML=h;
+    var t1=document.getElementById('archTotal'), t2=document.getElementById('archTotal2');
+    if(t1) t1.textContent=roster.length; if(t2) t2.textContent=roster.length;
+    markButtons();
+  }
+  function openPanel(){
+    panel.hidden=false;
+    document.body.style.overflow='hidden';
+    if(!loaded){
+      loaded=true;
+      var s=document.createElement('script');
+      s.src='data/common/archived.js';
+      s.onload=function(){ roster=window.ARCHIVED_ROSTER||[]; renderRoster(); };
+      s.onerror=function(){ roster=[]; renderRoster(); };
+      document.head.appendChild(s);
+    }
+    renderPend();
+  }
+  function closePanel(){ panel.hidden=true; document.body.style.overflow=''; }
+  btn.addEventListener('click',function(){ if(panel.hidden) openPanel(); else closePanel(); });
+  if(closeBtn) closeBtn.addEventListener('click',closePanel);
+  panel.addEventListener('click',function(e){ if(e.target===panel) closePanel(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!panel.hidden) closePanel(); });
+  document.addEventListener('click',function(e){
+    var b;
+    if((b=e.target.closest('#archList [data-out]'))){
+      var k=b.getAttribute('data-out'), li=b.closest('li');
+      if(OM.out[k]) delete OM.out[k];
+      else OM.out[k]={key:k,url:li.getAttribute('data-url'),title:li.getAttribute('data-title'),
+                       date:li.getAttribute('data-date'),category:li.getAttribute('data-cat'),ts:Date.now()};
+      saveOps(); renderPend(); updBadge(); msg(''); return;
+    }
+    if((b=e.target.closest('[data-rin]'))){ delete OM.in[b.getAttribute('data-rin')]; saveOps(); renderPend(); updBadge(); return; }
+    if((b=e.target.closest('[data-rout]'))){ delete OM.out[b.getAttribute('data-rout')]; saveOps(); renderPend(); updBadge(); return; }
+  });
+  var clr=document.getElementById('clrBtn');
+  if(clr) clr.addEventListener('click',function(){
+    var n=Object.keys(OM.in).length+Object.keys(OM.out).length;
+    if(!n){ msg('名单已为空'); return; }
+    if(confirm('确定清空待移入/待移出全部 '+n+' 条标记？（应在 archive.py --apply 执行成功后清理）')){
+      OM={in:{},out:{}}; saveOps(); renderPend(); updBadge(); msg('已清空');
+    }
+  });
+})();
 </script>
 </body></html>

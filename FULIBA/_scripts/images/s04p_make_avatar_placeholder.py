@@ -2,7 +2,7 @@
 """
 s04p_make_avatar_placeholder.py — 生成评论头像占位图
 按用户要求：评论头像不再逐个本地化，统一使用一张默认占位图。
-产物：D:\\FULIBA\\assets\\avatar-placeholder.png（96×96，站点根相对路径 assets/avatar-placeholder.png）
+产物：D:\\FULIBA\\data\\common\\avatar-placeholder.png（96×96，站点根相对路径 data/common/avatar-placeholder.png）
 用法: python s04p_make_avatar_placeholder.py
 """
 import os, sys
@@ -17,12 +17,12 @@ BG = (238, 240, 243)
 FG = (176, 182, 190)
 RING = (214, 218, 223)
 
-ASSETS = os.path.join(C.ROOT, "assets")
-OUT = os.path.join(ASSETS, "avatar-placeholder.png")
+STYLE_DIR = os.path.join(C.ROOT, "data", "common")
+OUT = os.path.join(STYLE_DIR, "avatar-placeholder.png")
 
 
 def main():
-    os.makedirs(ASSETS, exist_ok=True)
+    os.makedirs(STYLE_DIR, exist_ok=True)
     im = Image.new("RGB", (SIZE, SIZE), BG)
     d = ImageDraw.Draw(im)
 
@@ -48,7 +48,7 @@ def make_img_placeholder():
     BG = (243, 244, 246)
     FG = (203, 208, 214)
     FG2 = (166, 172, 180)
-    OUT2 = os.path.join(ASSETS, "img-placeholder.png")
+    OUT2 = os.path.join(STYLE_DIR, "img-placeholder.png")
     im = Image.new("RGB", (W, H), BG)
     d = ImageDraw.Draw(im)
     # 图标区：太阳 + 双山（经典 image placeholder 图形，中心区域）

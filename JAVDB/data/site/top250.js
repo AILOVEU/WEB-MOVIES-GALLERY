@@ -5,7 +5,7 @@ window.JAVDB_RANKINGS = {
   "variants": {
    "all": {
     "name": "全部",
-    "updated": "2026-10-11",
+    "updated": "2026-11-10",
     "items": [
      {
       "rank": 1,
@@ -25,11 +25,11 @@ window.JAVDB_RANKINGS = {
      },
      {
       "rank": 5,
-      "code": "SNOS-334"
+      "code": "STARS-804"
      },
      {
       "rank": 6,
-      "code": "STARS-804"
+      "code": "SNOS-334"
      },
      {
       "rank": 7,
@@ -37,15 +37,15 @@ window.JAVDB_RANKINGS = {
      },
      {
       "rank": 8,
-      "code": "IPX-177"
-     },
-     {
-      "rank": 9,
       "code": "IPX-697"
      },
      {
-      "rank": 10,
+      "rank": 9,
       "code": "SMBD-115"
+     },
+     {
+      "rank": 10,
+      "code": "IPX-177"
      },
      {
       "rank": 11,
@@ -57,195 +57,195 @@ window.JAVDB_RANKINGS = {
      },
      {
       "rank": 13,
-      "code": "CAWD-365"
-     },
-     {
-      "rank": 14,
-      "code": "STARS-979"
-     },
-     {
-      "rank": 15,
       "code": "IPX-776"
      },
      {
-      "rank": 16,
-      "code": "MIAB-317"
-     },
-     {
-      "rank": 17,
+      "rank": 14,
       "code": "IPX-118"
      },
      {
-      "rank": 18,
+      "rank": 15,
       "code": "ABP-159"
      },
      {
-      "rank": 19,
+      "rank": 16,
+      "code": "CAWD-365"
+     },
+     {
+      "rank": 17,
       "code": "ABW-096"
      },
      {
-      "rank": 20,
+      "rank": 18,
       "code": "IPX-534"
      },
      {
-      "rank": 21,
+      "rank": 19,
       "code": "IPX-726"
      },
      {
-      "rank": 22,
+      "rank": 20,
       "code": "PRED-483"
      },
      {
-      "rank": 23,
-      "code": "DASS-092"
+      "rank": 21,
+      "code": "STARS-979"
      },
      {
-      "rank": 24,
+      "rank": 22,
       "code": "IPX-536"
      },
      {
-      "rank": 25,
-      "code": "ABW-087"
-     },
-     {
-      "rank": 26,
+      "rank": 23,
       "code": "CWPBD-120"
      },
      {
-      "rank": 27,
+      "rank": 24,
+      "code": "ABW-087"
+     },
+     {
+      "rank": 25,
       "code": "IPX-620"
      },
      {
-      "rank": 28,
+      "rank": 26,
       "code": "IPX-149"
      },
      {
-      "rank": 29,
+      "rank": 27,
       "code": "SHKD-744"
      },
      {
-      "rank": 30,
+      "rank": 28,
+      "code": "MIAB-317"
+     },
+     {
+      "rank": 29,
       "code": "IPX-867"
      },
      {
-      "rank": 31,
+      "rank": 30,
       "code": "LULU-234"
      },
      {
-      "rank": 32,
+      "rank": 31,
       "code": "MIDA-234"
      },
      {
-      "rank": 33,
-      "code": "IPX-743"
+      "rank": 32,
+      "code": "DASS-092"
      },
      {
-      "rank": 34,
+      "rank": 33,
       "code": "IPZZ-037"
      },
      {
-      "rank": 35,
-      "code": "SSIS-465"
-     },
-     {
-      "rank": 36,
+      "rank": 34,
       "code": "SMD-115"
      },
      {
-      "rank": 37,
+      "rank": 35,
       "code": "IPZZ-003"
      },
      {
-      "rank": 38,
+      "rank": 36,
       "code": "ABP-968"
      },
      {
-      "rank": 39,
+      "rank": 37,
       "code": "CAWD-243"
      },
      {
-      "rank": 40,
-      "code": "ABF-087"
+      "rank": 38,
+      "code": "IPX-743"
      },
      {
-      "rank": 41,
+      "rank": 39,
       "code": "CJOD-439"
      },
      {
-      "rank": 42,
-      "code": "ABP-933"
-     },
-     {
-      "rank": 43,
+      "rank": 40,
       "code": "STARS-734"
      },
      {
-      "rank": 44,
+      "rank": 41,
       "code": "SSIS-698"
      },
      {
-      "rank": 45,
+      "rank": 42,
       "code": "MEYD-831"
      },
      {
-      "rank": 46,
+      "rank": 43,
       "code": "MEYD-605"
      },
      {
-      "rank": 47,
-      "code": "IPX-633"
+      "rank": 44,
+      "code": "SSIS-465"
      },
      {
-      "rank": 48,
+      "rank": 45,
       "code": "LAF-41"
      },
      {
-      "rank": 49,
+      "rank": 46,
+      "code": "IPX-633"
+     },
+     {
+      "rank": 47,
       "code": "PFES-107"
      },
      {
-      "rank": 50,
+      "rank": 48,
       "code": "MIDV-530"
      },
      {
-      "rank": 51,
+      "rank": 49,
       "code": "121914-760"
      },
      {
-      "rank": 52,
-      "code": "SSIS-437"
+      "rank": 50,
+      "code": "ABF-087"
      },
      {
-      "rank": 53,
+      "rank": 51,
       "code": "MIDA-039"
      },
      {
-      "rank": 54,
+      "rank": 52,
       "code": "START-257"
      },
      {
-      "rank": 55,
+      "rank": 53,
       "code": "ABW-108"
      },
      {
-      "rank": 56,
+      "rank": 54,
       "code": "SSIS-622"
      },
      {
-      "rank": 57,
+      "rank": 55,
       "code": "MIDA-241"
      },
      {
-      "rank": 58,
+      "rank": 56,
       "code": "MIAB-043"
      },
      {
-      "rank": 59,
+      "rank": 57,
+      "code": "ABP-933"
+     },
+     {
+      "rank": 58,
       "code": "MIDE-020"
      },
      {
-      "rank": 60,
+      "rank": 59,
       "code": "JUR-615"
+     },
+     {
+      "rank": 60,
+      "code": "CWP-120"
      },
      {
       "rank": 61,
@@ -253,27 +253,27 @@ window.JAVDB_RANKINGS = {
      },
      {
       "rank": 62,
-      "code": "CWP-120"
-     },
-     {
-      "rank": 63,
-      "code": "SSIS-082"
-     },
-     {
-      "rank": 64,
-      "code": "ABP-601"
-     },
-     {
-      "rank": 65,
       "code": "SONE-308"
      },
      {
-      "rank": 66,
+      "rank": 63,
+      "code": "ABP-601"
+     },
+     {
+      "rank": 64,
+      "code": "SSIS-437"
+     },
+     {
+      "rank": 65,
       "code": "IPX-643"
      },
      {
-      "rank": 67,
+      "rank": 66,
       "code": "PRED-193"
+     },
+     {
+      "rank": 67,
+      "code": "START-046"
      },
      {
       "rank": 68,
@@ -289,35 +289,35 @@ window.JAVDB_RANKINGS = {
      },
      {
       "rank": 71,
-      "code": "MIDV-682"
-     },
-     {
-      "rank": 72,
       "code": "IPX-850"
      },
      {
-      "rank": 73,
+      "rank": 72,
       "code": "ABW-324"
      },
      {
-      "rank": 74,
+      "rank": 73,
       "code": "IPX-247"
      },
      {
-      "rank": 75,
+      "rank": 74,
       "code": "FSDSS-077"
      },
      {
-      "rank": 76,
-      "code": "DASS-787"
-     },
-     {
-      "rank": 77,
+      "rank": 75,
       "code": "JUR-020"
      },
      {
-      "rank": 78,
+      "rank": 76,
+      "code": "PRWF-017"
+     },
+     {
+      "rank": 77,
       "code": "EBWH-090"
+     },
+     {
+      "rank": 78,
+      "code": "JUR-897"
      },
      {
       "rank": 79,
@@ -337,19 +337,19 @@ window.JAVDB_RANKINGS = {
      },
      {
       "rank": 83,
-      "code": "MIDE-906"
+      "code": "SSIS-082"
      },
      {
       "rank": 84,
-      "code": "SSIS-338"
+      "code": "MIDE-906"
      },
      {
       "rank": 85,
-      "code": "FSDSS-272"
+      "code": "SSIS-338"
      },
      {
       "rank": 86,
-      "code": "START-046"
+      "code": "FSDSS-272"
      },
      {
       "rank": 87,
@@ -357,23 +357,23 @@ window.JAVDB_RANKINGS = {
      },
      {
       "rank": 88,
-      "code": "SSNI-392"
-     },
-     {
-      "rank": 89,
       "code": "MKBD-S89"
      },
      {
+      "rank": 89,
+      "code": "SSNI-392"
+     },
+     {
       "rank": 90,
-      "code": "MNGS-060"
+      "code": "MIDV-682"
      },
      {
       "rank": 91,
-      "code": "SSNI-865"
+      "code": "MNGS-060"
      },
      {
       "rank": 92,
-      "code": "ABW-339"
+      "code": "DASS-787"
      },
      {
       "rank": 93,
@@ -381,11 +381,11 @@ window.JAVDB_RANKINGS = {
      },
      {
       "rank": 94,
-      "code": "ABW-032"
+      "code": "ABW-339"
      },
      {
       "rank": 95,
-      "code": "MIDA-439"
+      "code": "ABW-032"
      },
      {
       "rank": 96,
@@ -393,79 +393,79 @@ window.JAVDB_RANKINGS = {
      },
      {
       "rank": 97,
-      "code": "NMSL-030"
-     },
-     {
-      "rank": 98,
       "code": "IPX-416"
      },
      {
-      "rank": 99,
-      "code": "START-463"
-     },
-     {
-      "rank": 100,
+      "rank": 98,
       "code": "HEYZO-0783"
      },
      {
-      "rank": 101,
+      "rank": 99,
       "code": "IPZ-127"
      },
      {
-      "rank": 102,
+      "rank": 100,
       "code": "SSIS-588"
      },
      {
-      "rank": 103,
+      "rank": 101,
       "code": "SSIS-743"
      },
      {
-      "rank": 104,
+      "rank": 102,
       "code": "ABW-043"
      },
      {
-      "rank": 105,
+      "rank": 103,
       "code": "HEYZO-1031"
      },
      {
-      "rank": 106,
+      "rank": 104,
       "code": "MIAA-548"
      },
      {
-      "rank": 107,
+      "rank": 105,
       "code": "STARS-145"
      },
      {
-      "rank": 108,
+      "rank": 106,
       "code": "SONE-576"
      },
      {
-      "rank": 109,
+      "rank": 107,
       "code": "START-169"
      },
      {
-      "rank": 110,
+      "rank": 108,
       "code": "CAWD-628"
      },
      {
-      "rank": 111,
+      "rank": 109,
       "code": "URE-055"
      },
      {
-      "rank": 112,
+      "rank": 110,
       "code": "MIDV-850"
      },
      {
-      "rank": 113,
+      "rank": 111,
+      "code": "SSNI-865"
+     },
+     {
+      "rank": 112,
       "code": "MEYD-698"
      },
      {
+      "rank": 113,
+      "code": "ABW-153"
+     },
+     {
       "rank": 114,
-      "code": "SSNI-618"
+      "code": "MIDA-439"
      },
      {
       "rank": 115,
-      "code": "ABW-153"
+      "code": "NMSL-030"
      },
      {
       "rank": 116,
@@ -473,19 +473,19 @@ window.JAVDB_RANKINGS = {
      },
      {
       "rank": 117,
-      "code": "IPX-515"
-     },
-     {
-      "rank": 118,
       "code": "LULU-249"
      },
      {
-      "rank": 119,
+      "rank": 118,
       "code": "SKY-247"
      },
      {
+      "rank": 119,
+      "code": "DLDSS-493"
+     },
+     {
       "rank": 120,
-      "code": "SHKD-724"
+      "code": "START-463"
      },
      {
       "rank": 121,
@@ -513,7 +513,7 @@ window.JAVDB_RANKINGS = {
      },
      {
       "rank": 127,
-      "code": "SSIS-932"
+      "code": "STARS-981"
      },
      {
       "rank": 128,
@@ -525,115 +525,115 @@ window.JAVDB_RANKINGS = {
      },
      {
       "rank": 130,
-      "code": "STARS-981"
-     },
-     {
-      "rank": 131,
-      "code": "MIDV-229"
-     },
-     {
-      "rank": 132,
       "code": "WAAA-288"
      },
      {
-      "rank": 133,
+      "rank": 131,
       "code": "ADN-499"
      },
      {
-      "rank": 134,
+      "rank": 132,
       "code": "IPX-660"
      },
      {
-      "rank": 135,
+      "rank": 133,
       "code": "CAWD-658"
      },
      {
-      "rank": 136,
-      "code": "MIDV-433"
+      "rank": 134,
+      "code": "SSNI-618"
      },
      {
-      "rank": 137,
+      "rank": 135,
       "code": "URE-091"
      },
      {
-      "rank": 138,
+      "rank": 136,
       "code": "092415_159"
      },
      {
-      "rank": 139,
+      "rank": 137,
       "code": "IPX-484"
      },
      {
-      "rank": 140,
-      "code": "IPX-868"
-     },
-     {
-      "rank": 141,
+      "rank": 138,
       "code": "PRED-743"
      },
      {
-      "rank": 142,
-      "code": "ABP-171"
+      "rank": 139,
+      "code": "IPX-868"
      },
      {
-      "rank": 143,
+      "rank": 140,
       "code": "JUL-185"
      },
      {
-      "rank": 144,
+      "rank": 141,
       "code": "IPZZ-034"
      },
      {
-      "rank": 145,
+      "rank": 142,
+      "code": "IPX-515"
+     },
+     {
+      "rank": 143,
       "code": "CAWD-589"
      },
      {
-      "rank": 146,
+      "rank": 144,
       "code": "MIAB-418"
      },
      {
-      "rank": 147,
+      "rank": 145,
       "code": "ABP-583"
      },
      {
-      "rank": 148,
+      "rank": 146,
       "code": "SSNI-520"
      },
      {
-      "rank": 149,
+      "rank": 147,
+      "code": "SHKD-724"
+     },
+     {
+      "rank": 148,
       "code": "MIDV-786"
      },
      {
-      "rank": 150,
+      "rank": 149,
       "code": "SSIS-573"
      },
      {
-      "rank": 151,
-      "code": "DLDSS-493"
-     },
-     {
-      "rank": 152,
+      "rank": 150,
       "code": "MEYD-873"
      },
      {
-      "rank": 153,
-      "code": "IPX-398"
-     },
-     {
-      "rank": 154,
+      "rank": 151,
       "code": "MVSD-696"
      },
      {
-      "rank": 155,
+      "rank": 152,
+      "code": "IPX-398"
+     },
+     {
+      "rank": 153,
       "code": "MIMK-009"
      },
      {
-      "rank": 156,
+      "rank": 154,
+      "code": "SSIS-402"
+     },
+     {
+      "rank": 155,
       "code": "STARS-435"
      },
      {
-      "rank": 157,
+      "rank": 156,
       "code": "SHKD-546"
+     },
+     {
+      "rank": 157,
+      "code": "SSIS-932"
      },
      {
       "rank": 158,
@@ -645,51 +645,51 @@ window.JAVDB_RANKINGS = {
      },
      {
       "rank": 160,
-      "code": "SONE-705"
+      "code": "SSIS-776"
      },
      {
       "rank": 161,
-      "code": "SSIS-806"
-     },
-     {
-      "rank": 162,
       "code": "MKBD-S94"
      },
      {
+      "rank": 162,
+      "code": "SONE-705"
+     },
+     {
       "rank": 163,
-      "code": "VDD-123"
+      "code": "SKYHD-084"
      },
      {
       "rank": 164,
-      "code": "MIDV-592"
+      "code": "SSIS-806"
      },
      {
       "rank": 165,
-      "code": "MIAB-502"
+      "code": "MIDV-229"
      },
      {
       "rank": 166,
-      "code": "SMD-136"
+      "code": "MIDV-433"
      },
      {
       "rank": 167,
-      "code": "MXGS-784"
+      "code": "MIDV-592"
      },
      {
       "rank": 168,
-      "code": "MIKR-023"
-     },
-     {
-      "rank": 169,
       "code": "SMBD-108"
      },
      {
-      "rank": 170,
+      "rank": 169,
       "code": "PRED-277"
      },
      {
+      "rank": 170,
+      "code": "MXGS-784"
+     },
+     {
       "rank": 171,
-      "code": "IPX-451"
+      "code": "ABP-171"
      },
      {
       "rank": 172,
@@ -697,43 +697,43 @@ window.JAVDB_RANKINGS = {
      },
      {
       "rank": 173,
-      "code": "DLDSS-325"
+      "code": "IPX-451"
      },
      {
       "rank": 174,
-      "code": "MIDV-391"
-     },
-     {
-      "rank": 175,
-      "code": "IPZZ-477"
-     },
-     {
-      "rank": 176,
       "code": "DASS-777"
      },
      {
+      "rank": 175,
+      "code": "SONE-811"
+     },
+     {
+      "rank": 176,
+      "code": "DLDSS-325"
+     },
+     {
       "rank": 177,
-      "code": "NMSL-013"
+      "code": "MIDV-391"
      },
      {
       "rank": 178,
-      "code": "ABP-554"
+      "code": "IPZZ-477"
      },
      {
       "rank": 179,
-      "code": "SSNI-436"
+      "code": "ABP-554"
      },
      {
       "rank": 180,
-      "code": "IPX-528"
+      "code": "SSNI-436"
      },
      {
       "rank": 181,
-      "code": "PRED-099"
+      "code": "IPX-917"
      },
      {
       "rank": 182,
-      "code": "IPX-917"
+      "code": "PRED-099"
      },
      {
       "rank": 183,
@@ -741,35 +741,35 @@ window.JAVDB_RANKINGS = {
      },
      {
       "rank": 184,
-      "code": "ABP-975"
+      "code": "START-315"
      },
      {
       "rank": 185,
-      "code": "ABP-566"
+      "code": "ABP-975"
      },
      {
       "rank": 186,
-      "code": "n0659"
+      "code": "MNGS-067"
      },
      {
       "rank": 187,
-      "code": "URE-097"
+      "code": "ABP-566"
      },
      {
       "rank": 188,
-      "code": "PRED-262"
+      "code": "CJOD-433"
      },
      {
       "rank": 189,
-      "code": "IPX-690"
+      "code": "n0659"
      },
      {
       "rank": 190,
-      "code": "ATID-637"
+      "code": "PRED-262"
      },
      {
       "rank": 191,
-      "code": "SSIS-402"
+      "code": "IPX-690"
      },
      {
       "rank": 192,
@@ -785,7 +785,7 @@ window.JAVDB_RANKINGS = {
      },
      {
       "rank": 195,
-      "code": "SSIS-776"
+      "code": "NPJS-268"
      },
      {
       "rank": 196,
@@ -793,19 +793,19 @@ window.JAVDB_RANKINGS = {
      },
      {
       "rank": 197,
-      "code": "CAWD-404"
+      "code": "SNIS-854"
      },
      {
       "rank": 198,
-      "code": "SKYHD-084"
+      "code": "CAWD-404"
      },
      {
       "rank": 199,
-      "code": "MIAB-473"
+      "code": "VDD-123"
      },
      {
       "rank": 200,
-      "code": "MIDA-192"
+      "code": "MIAB-473"
      },
      {
       "rank": 201,
@@ -813,199 +813,199 @@ window.JAVDB_RANKINGS = {
      },
      {
       "rank": 202,
-      "code": "ABW-286"
-     },
-     {
-      "rank": 203,
-      "code": "SSNI-424"
-     },
-     {
-      "rank": 204,
       "code": "PRED-785"
      },
      {
+      "rank": 203,
+      "code": "ABW-286"
+     },
+     {
+      "rank": 204,
+      "code": "SSNI-424"
+     },
+     {
       "rank": 205,
-      "code": "STARS-766"
-     },
-     {
-      "rank": 206,
-      "code": "ABF-029"
-     },
-     {
-      "rank": 207,
-      "code": "SSNI-727"
-     },
-     {
-      "rank": 208,
-      "code": "MIDV-236"
-     },
-     {
-      "rank": 209,
       "code": "MKBD-S127"
      },
      {
+      "rank": 206,
+      "code": "IPTD-999"
+     },
+     {
+      "rank": 207,
+      "code": "STARS-766"
+     },
+     {
+      "rank": 208,
+      "code": "MIKR-023"
+     },
+     {
+      "rank": 209,
+      "code": "SSNI-727"
+     },
+     {
       "rank": 210,
-      "code": "MEYD-880"
+      "code": "ABF-029"
      },
      {
       "rank": 211,
-      "code": "JUQ-048"
+      "code": "MIAB-502"
      },
      {
       "rank": 212,
-      "code": "MIDE-767"
+      "code": "MIDV-236"
      },
      {
       "rank": 213,
-      "code": "MIDV-713"
+      "code": "SMD-136"
      },
      {
       "rank": 214,
-      "code": "IPX-557"
+      "code": "MEYD-880"
      },
      {
       "rank": 215,
-      "code": "IPX-540"
+      "code": "EBOD-531"
      },
      {
       "rank": 216,
-      "code": "FSDSS-513"
+      "code": "MIDE-767"
      },
      {
       "rank": 217,
-      "code": "SONE-811"
+      "code": "MIDV-713"
      },
      {
       "rank": 218,
-      "code": "ROYD-110"
+      "code": "JUQ-048"
      },
      {
       "rank": 219,
-      "code": "AVOP-237"
+      "code": "IPX-557"
      },
      {
       "rank": 220,
-      "code": "CWPBD-138"
+      "code": "FSDSS-513"
      },
      {
       "rank": 221,
-      "code": "STARS-133"
+      "code": "CWPBD-138"
      },
      {
       "rank": 222,
-      "code": "ABW-366"
+      "code": "NMSL-013"
      },
      {
       "rank": 223,
-      "code": "MIAA-715"
+      "code": "AVOP-237"
      },
      {
       "rank": 224,
-      "code": "CWPBD-99"
+      "code": "ROYD-110"
      },
      {
       "rank": 225,
-      "code": "EBOD-113"
+      "code": "JUR-110"
      },
      {
       "rank": 226,
-      "code": "STARS-759"
+      "code": "IPX-528"
      },
      {
       "rank": 227,
-      "code": "MIDA-459"
+      "code": "START-290"
      },
      {
       "rank": 228,
-      "code": "MIDA-117"
+      "code": "ABW-366"
      },
      {
       "rank": 229,
-      "code": "PGD-864"
+      "code": "MIAA-715"
      },
      {
       "rank": 230,
-      "code": "IPX-602"
+      "code": "MIDA-459"
      },
      {
       "rank": 231,
-      "code": "START-315"
+      "code": "CWPBD-99"
      },
      {
       "rank": 232,
-      "code": "PRED-772"
+      "code": "STARS-759"
      },
      {
       "rank": 233,
-      "code": "CAWD-259"
+      "code": "MIDA-117"
      },
      {
       "rank": 234,
-      "code": "CJOD-433"
+      "code": "IPX-602"
      },
      {
       "rank": 235,
-      "code": "SSIS-740"
+      "code": "PRED-772"
      },
      {
       "rank": 236,
-      "code": "ABW-216"
+      "code": "S2MBD-050"
      },
      {
       "rank": 237,
-      "code": "SSNI-036"
+      "code": "URE-097"
      },
      {
       "rank": 238,
-      "code": "MNGS-067"
+      "code": "ABW-216"
      },
      {
       "rank": 239,
-      "code": "SSIS-724"
+      "code": "SSIS-740"
      },
      {
       "rank": 240,
-      "code": "MIDV-751"
+      "code": "SSNI-036"
      },
      {
       "rank": 241,
-      "code": "SSIS-531"
+      "code": "ATID-637"
      },
      {
       "rank": 242,
-      "code": "EBWH-063"
+      "code": "PGD-766"
      },
      {
       "rank": 243,
-      "code": "STARS-256"
-     },
-     {
-      "rank": 244,
       "code": "KBR-026"
      },
      {
+      "rank": 244,
+      "code": "MIDV-751"
+     },
+     {
       "rank": 245,
-      "code": "SNIS-854"
+      "code": "SSIS-724"
      },
      {
       "rank": 246,
-      "code": "NPJS-268"
+      "code": "SSIS-531"
      },
      {
       "rank": 247,
-      "code": "SSIS-333"
+      "code": "PPPD-451"
      },
      {
       "rank": 248,
-      "code": "HMN-898"
+      "code": "IPZ-462"
      },
      {
       "rank": 249,
-      "code": "IPVR-050"
+      "code": "EBWH-063"
      },
      {
       "rank": 250,
-      "code": "STARS-141"
+      "code": "STARS-256"
      }
     ]
    },

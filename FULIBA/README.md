@@ -168,7 +168,7 @@
 ```
 D:\FULIBA\
 ├─ index.html                      列表页（搜索/分类/分页），只此一份，预枚举 2011..2050 + undated
-├─ archived.html                   归档管理页（待移入/待移出名单 + 已归档名录，s06 生成）
+├─ data\common\archived.js          已归档名录（209 篇，s06 由 _pipeline/skipped_promo.json 生成；归档管理页已并入 index.html）
 ├─ README.md                        根目录唯一的文档；促销删除的评审过程留档已移到 `_pipeline\promo_review.md`
 ├─ data\                            ★ 年份文章目录（站点发布层）
 │   ├─ 2011\ … 2026\                  一年一个自包含目录（迁移 = 复制这一个文件夹），每个只含 4 项

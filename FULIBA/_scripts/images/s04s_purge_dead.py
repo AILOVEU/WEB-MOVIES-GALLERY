@@ -49,7 +49,7 @@ CACHE_PAGES_DIR = C.PAGES_DIR
 # 图片库模式（mode=incremental 时「本机缺文件」不等于「从未落盘」，见 is_landed）
 NEW_ONLY = C.new_images_only()
 PH_PARSED = "assets/img-placeholder.png"
-PH_ARTICLE = "../../../assets/img-placeholder.png"   # 单篇页在 data/<年>/article/（三层）
+PH_ARTICLE = "../../common/img-placeholder.png"   # 单篇页在 data/<年>/article/（三层），指向 data/common/
 IMG_DEAD = '<img class="fl-deadimg" alt="">'
 TRAILING = "," + "." + ";" + ":" + "'" + '"' + ")" + "&" + ">" + "/" + " " + "\t" + "\r" + "\n" + "\\"
 
