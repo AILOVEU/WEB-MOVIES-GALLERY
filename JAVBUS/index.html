@@ -129,6 +129,12 @@
   var MODE_KEY = 'javbus_img_mode';
   var mode = 'local';
   try { if (localStorage.getItem(MODE_KEY) === 'remote') mode = 'remote'; } catch(e){}
+  // URL 参数强制指定初始图片模式：?img=remote / ?img=local，优先级高于 localStorage。
+  // 给内嵌浏览器（Android WebView）用：它会在 shouldInterceptRequest 里补正确的 Referer，
+  // 页面需默认走"原始"模式；否则仍去读 assets/images（外迁的 6890 张图在手机上必然 404）。
+  // 不加参数时行为完全不变：file:// 双击打开依旧默认本地模式；路由用 hash(#tid=)，与 query 不冲突。
+  var qm = /[?&]img=(remote|local)(?:&|$)/.exec(location.search);
+  if (qm){ mode = qm[1]; try { localStorage.setItem(MODE_KEY, mode); } catch(e){} }
   var modeChips = [].slice.call(document.querySelectorAll('[data-mode-chip]'));
   var IMG_PREFIX = 'assets/images/';
 
