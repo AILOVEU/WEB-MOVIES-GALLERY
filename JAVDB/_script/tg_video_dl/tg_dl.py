@@ -26,6 +26,7 @@ from pathlib import Path
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 from telethon import TelegramClient, errors, functions, types  # noqa: E402
+from telethon.sessions import StringSession  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 VIDEO_EXT = {".mp4", ".mov", ".mkv", ".webm", ".avi", ".m4v", ".3gp", ".ts"}
@@ -73,15 +74,70 @@ def parse_proxy(spec):
     return {"proxy_type": kind, "addr": host, "port": port}
 
 
-def make_client(args, session_name="tgdl"):
+def make_client(args, session_name="tgdl", session_obj=None, timeout=None):
     api_id, api_hash = load_creds(args)
-    session = HERE / "session" / session_name
-    session.parent.mkdir(parents=True, exist_ok=True)
-    return TelegramClient(str(session), api_id, api_hash,
+    if session_obj is not None:
+        sess = session_obj
+    else:
+        session = HERE / "session" / session_name
+        session.parent.mkdir(parents=True, exist_ok=True)
+        sess = str(session)
+    return TelegramClient(sess, api_id, api_hash,
                           proxy=parse_proxy(args.proxy),
                           device_model="pc-cli", system_version="windows",
                           app_version="1.0", request_retries=4, connection_retries=4,
+                          timeout=timeout or getattr(args, "timeout", 30),
                           auto_reconnect=True)
+
+
+def export_string_session(client):
+    """把已登录的 session 导出成 StringSession 字符串，供连接池其它客户端共用授权。
+
+    为什么不用同一个 session 文件：SQLiteSession 被多个客户端并发写会锁库，
+    且各自覆盖 update state。StringSession 是纯内存的，克隆出来互不干扰。
+    """
+    s = client.session
+    if isinstance(s, StringSession):
+        return s.save()
+    ss = StringSession()
+    ss.set_dc(s.dc_id, s.server_address, s.port)
+    ss.auth_key = s.auth_key
+    return ss.save()
+
+
+async def build_pool(client, args, n):
+    """在已登录的主客户端之外再建 n-1 个共用授权的客户端，组成真连接池。
+
+    这是提速的关键。Telethon 的 iter_download 在单条连接上严格串行
+    （downloads.py 的 _load_next_chunk 一次只发一个 GetFileRequest，等回复才发下一个），
+    所以单连接上堆并发只是队头阻塞 —— 这就是旧版 --parts 越多越慢的真正原因。
+    要提速必须有多条独立的 TCP 连接。
+    """
+    n = max(1, int(n or 1))
+    if n == 1:
+        return [client]
+    auth = export_string_session(client)
+    pool = [client]
+    for i in range(1, n):
+        c = make_client(args, session_obj=StringSession(auth))
+        c._receive_updates = False          # 池里的副连接不收更新，省带宽也避免重复处理
+        await c.connect()
+        if not await c.is_user_authorized():
+            await c.disconnect()
+            print("  连接池第 %d 条连接授权失败，池降级为 %d 条" % (i + 1, len(pool)))
+            break
+        pool.append(c)
+    print("连接池就绪：%d 条独立连接（每条各自一条 TCP，分段并行才真正生效）" % len(pool))
+    return pool
+
+
+async def close_pool(pool):
+    for c in pool:
+        try:
+            await c.disconnect()
+        except Exception:
+            pass
+
 
 
 def resolve_target(target):
@@ -354,7 +410,7 @@ async def collect(client, entity, args):
     return items
 
 
-PART = 512 * 1024   # iter_download 默认 request_size，分片边界必须对齐它
+PART = 512 * 1024   # 分片边界对齐单位（Telethon 单请求上限 512 KiB）
 
 
 def slices_for(size, n):
@@ -371,10 +427,28 @@ def slices_for(size, n):
     return out
 
 
-async def _one_slice(client, media, dc_id, size, off, lim, path, prog):
+def _raw_iter(client, media, off, limit, chunk, size, dc_id, msg_data):
+    """优先用带 msg_data 的迭代器，让 Telethon 自己刷新过期的 file_reference。
+
+    downloads.py:118-139 有完整的自愈逻辑（重新 get_messages 取新 file_reference 再续），
+    但只在 msg_data 传进去时才生效；公开的 iter_download 没有这个参数，只有 _iter_download 有。
+    拿不到就退回公开 API，行为与旧版一致。
+    """
+    if msg_data and hasattr(client, "_iter_download"):
+        try:
+            return client._iter_download(media, offset=off, limit=limit, chunk_size=chunk,
+                                         request_size=chunk, file_size=size, dc_id=dc_id,
+                                         msg_data=msg_data)
+        except TypeError:
+            pass
+    return client.iter_download(media, offset=off, limit=limit, chunk_size=chunk,
+                                request_size=chunk, file_size=size, dc_id=dc_id)
+
+
+async def _one_slice(client, media, dc_id, size, off, lim, path, prog, chunk, msg_data=None):
     """拉一个分段；已有部分则从断点接着拉（字节级续传，取消/异常绝不删已下数据）
 
-    iter_download 每次产出一个 request_size（512 KiB）响应，所以已写字节数天然对齐。
+    iter_download 每次产出一个 request_size 响应，所以已写字节数天然对齐。
     """
     have = path.stat().st_size if path.exists() else 0
     if have > lim:                        # 比目标还大只能是脏数据
@@ -388,15 +462,13 @@ async def _one_slice(client, media, dc_id, size, off, lim, path, prog):
     # 传字节数会被当成天文数字个分片 → 一路写到文件末尾（分段超界、合片损坏）。
     left = lim - have
     with open(path, "ab") as fd:
-        async for chunk in client.iter_download(media, offset=off + have, limit=(left + PART - 1) // PART,
-                                                chunk_size=PART, request_size=PART,
-                                                file_size=size, dc_id=dc_id):
-            if got + len(chunk) > lim:          # 双重保险：绝不越段界一个字节
-                chunk = chunk[:lim - got]
-            fd.write(chunk)
-            fd.flush()
-            got += len(chunk)
-            prog["done"] += len(chunk)
+        async for chunk_data in _raw_iter(client, media, off + have,
+                                          (left + chunk - 1) // chunk, chunk, size, dc_id, msg_data):
+            if got + len(chunk_data) > lim:          # 双重保险：绝不越段界一个字节
+                chunk_data = chunk_data[:lim - got]
+            fd.write(chunk_data)                     # 不再逐片 flush：交给 OS 缓冲，省掉每 512 KiB 一次系统调用
+            got += len(chunk_data)
+            prog["done"] += len(chunk_data)
             if got >= lim:
                 break
     if got != lim:
@@ -407,18 +479,23 @@ async def _one_slice(client, media, dc_id, size, off, lim, path, prog):
 async def download_slices(client, item, tmp, prog, args):
     """并行分段下载 + 卡死看门狗
 
-    同一条连接上同时挂 n 个未回复请求，避开 telethon 串行「拉一片等一次往返」的限速；
+    client 可以是单个客户端，也可以是连接池（列表）。池里每条是独立 TCP 连接，
+    分段派发到不同连接才能真正并行 —— 单连接上堆并发只会互相排队。
     连续 stall 秒零字节进账则取消重试。
     """
+    pool = client if isinstance(client, (list, tuple)) else [client]
     media = item["msg"].media
     size = item["size"]
     dc_id = getattr(getattr(media, "document", None), "dc_id", None)
-    parts = slices_for(size, args.parts)
+    chunk = int(getattr(args, "chunk", 0) or PART)
+    parts = slices_for(size, getattr(args, "parts", 1))
     tmps = [tmp.with_name("%s.p%d" % (tmp.name, i)) for i in range(len(parts))]
+    entity = item.get("entity")
+    msg_data = (entity, item["msg"].id) if entity is not None else None
 
     task = asyncio.ensure_future(asyncio.gather(*[
-        _one_slice(client, media, dc_id, size, o, l, p, prog)
-        for (o, l), p in zip(parts, tmps)]))
+        _one_slice(pool[i % len(pool)], media, dc_id, size, o, l, p, prog, chunk, msg_data)
+        for i, ((o, l), p) in enumerate(zip(parts, tmps))]))
     seen, stuck, shown = prog["done"], 0, 0
     while not task.done():
         await asyncio.sleep(5)
@@ -430,7 +507,7 @@ async def download_slices(client, item, tmp, prog, args):
                 print("  %s ... %d%%" % (item["name"][:40], pct), flush=True)
         else:
             stuck += 5
-            if stuck >= args.stall:
+            if stuck >= getattr(args, "stall", 120):
                 task.cancel()
                 try:
                     await task
@@ -494,6 +571,7 @@ async def download_one(client, entity, item, out, man, sem, args):
             tmp.unlink()  # 残留比目标还大，说明脏了，重下
         last = [0]
         prog = {"done": 0}
+        item["entity"] = entity          # 供 download_slices 传 msg_data，让 Telethon 自愈 file_reference
 
         def cb(done, total):
             prog["done"] = done
@@ -511,13 +589,14 @@ async def download_one(client, entity, item, out, man, sem, args):
                     # 单流也走分段路径：目的是拿到 append 模式的字节级续传
                     await download_slices(client, item, tmp, prog, args)
                 else:
-                    await guarded_download(client, item, tmp, cb, prog, args.stall)
+                    await guarded_download(client[0] if isinstance(client, (list, tuple)) else client,
+                                           item, tmp, cb, prog, args.stall)
                 ok = True
                 break
             except asyncio.CancelledError:
                 print("  %s 卡死 %ds 无字节迕移，已中断重试（已下分段会续用）"
                       % (item["name"][:32], args.stall), flush=True)
-                fresh = await client.get_messages(entity, ids=item["msg"].id)
+                fresh = await entity_client(client).get_messages(entity, ids=item["msg"].id)
                 if fresh:
                     item["msg"] = fresh
                 await asyncio.sleep(2)
@@ -527,18 +606,25 @@ async def download_one(client, entity, item, out, man, sem, args):
             except Exception as e:
                 print("  %s 第%d次失败 %s: %s"
                       % (item["name"][:32], attempt + 1, type(e).__name__, str(e)[:100]), flush=True)
-                fresh = await client.get_messages(entity, ids=item["msg"].id)  # 刷新 file_reference
+                fresh = await entity_client(client).get_messages(entity, ids=item["msg"].id)  # 刷新 file_reference
                 if fresh:
                     item["msg"] = fresh
                 await asyncio.sleep(2)
         if not ok:
             return "fail"
         os.replace(tmp, dest)
-        man[item["key"]] = {"name": item["name"], "size": dest.stat().st_size,
-                            "msg": item["msg"].id, "date": str(item["msg"].date)}
-        save_manifest(args.man_path, man)
+        async with args.man_lock:        # 多 worker 并发下 manifest 是 read-modify-write，必须串行落盘
+            man[item["key"]] = {"name": item["name"], "size": dest.stat().st_size,
+                                "msg": item["msg"].id, "date": str(item["msg"].date)}
+            save_manifest(args.man_path, man)
         print("完成 %s (%.1f MB)" % (item["name"], dest.stat().st_size / MB), flush=True)
         return "ok"
+
+
+def entity_client(client):
+    """池里取一条连接做元数据请求（get_messages 之类），固定用第一条避免分散。"""
+    return client[0] if isinstance(client, (list, tuple)) else client
+
 
 
 async def main():
@@ -561,12 +647,23 @@ async def main():
                     help="允许覆盖磁盘上已有的同名文件（默认绝不覆盖，避免删掉已下载的视频）")
     ap.add_argument("--all", action="store_true",
                     help="连没有番号/标题的视频也下（默认只下带编号的，如 video_1.mp4 / 第3集）")
-    ap.add_argument("--workers", type=int, default=2, help="并发下载数，建议 2-3")
+    ap.add_argument("--workers", type=int, default=2, help="并发下载文件数，建议 2-3")
+    ap.add_argument("--conns", type=int, default=6,
+                    help="连接池大小（独立 TCP 连接数）。这是提速的关键：Telethon 单连接严格串行，"
+                         "必须多连接才能真并行。2026-11-11 实测（交错 A/B，排除网络漂移）："
+                         "1 连接 3.2 MB/s、2 连接 6.0、4 连接 11.2、6 连接 12.4（最佳）、"
+                         "8 连接 11.9、12 连接 10.7。默认 6，网络差时可降到 2-4")
+    ap.add_argument("--chunk", type=int, default=PART,
+                    help="单次请求字节数，默认 %d（512 KiB，Telethon 硬上限）。"
+                         "设成 1048576 会尝试 1 MiB 分片（tdl 的做法），但需实测服务端是否接受" % PART)
+    ap.add_argument("--timeout", type=int, default=30,
+                    help="单请求超时秒数，默认 30（Telethon 默认 10 走代理偏紧，是旧版 108 次超时的直接原因）")
     ap.add_argument("--stall", type=int, default=120,
                     help="连续多少秒零字节进账就判定卡死并重试（0=不启用看门狗）")
-    ap.add_argument("--parts", type=int, default=1,
-                    help="单文件切几段。实测并发流越多越慢（同连接 getFile 被服务端节流）："
-                         "1 流 992 KB/s、2 流 922、4 流骤降到 347，所以默认 1")
+    ap.add_argument("--parts", type=int, default=6,
+                    help="单文件切几段。段数应 >= 连接数才能喂满池子，默认 6（与 --conns 对齐）。"
+                         "旧版默认 1 是因为单连接下堆并发只会互相排队；有连接池后必须切段")
+
     ap.add_argument("--manifest", default="",
                     help="已下载记录 json，默认 %s（若资源目录里还有老的 %s 会先读它再自动搬家）"
                          % (STATE_DEFAULT, LEGACY_MANIFEST))
@@ -610,11 +707,17 @@ async def main():
 
     man = load_manifest(args.man_path)
     sem = asyncio.Semaphore(max(1, args.workers))
+    args.man_lock = asyncio.Lock()
+    pool = await build_pool(client, args, args.conns)
     t0 = time.time()
-    res = await asyncio.gather(*[download_one(client, entity, i, out, man, sem, args) for i in items])
+    try:
+        res = await asyncio.gather(*[download_one(pool, entity, i, out, man, sem, args) for i in items])
+    finally:
+        await close_pool(pool)
     print("总计 成功%d 跳过%d 失败%d，用时 %.1f 分钟，目录 %s"
           % (res.count("ok"), res.count("skip"), res.count("fail"), (time.time() - t0) / 60, out))
     await client.disconnect()
+
 
 
 if __name__ == "__main__":

@@ -42,7 +42,13 @@ def parse_args():
     ap.add_argument("--manifest", default="", help="已下载记录路径（默认 data/state/tg_manifest.json）")
     ap.add_argument("--primary", default="", help="主文件名用的番号；默认取 --alias/清单命中的第一个")
     ap.add_argument("--alias", default="", help="逗号分隔的其余番号，为它们建硬链接（同一文件多个名字）")
-    ap.add_argument("--parts", type=int, default=2, help="分段并发数（默认 2）")
+    ap.add_argument("--parts", type=int, default=6, help="分段并发数（默认 6，与 --conns 对齐）")
+    ap.add_argument("--conns", type=int, default=6,
+                    help="连接池大小（独立 TCP 连接数）。Telethon 单连接严格串行，多连接才能真并行。"
+                         "实测最佳 6（1 连接 3.2 MB/s -> 6 连接 12.4 MB/s）")
+    ap.add_argument("--chunk", type=int, default=tg_dl.PART,
+                    help="单次请求字节数，默认 512 KiB（Telethon 硬上限）")
+    ap.add_argument("--timeout", type=int, default=30, help="单请求超时秒数（默认 30）")
     ap.add_argument("--stall", type=int, default=180, help="连续多少秒零字节判卡死（默认 180）")
     ap.add_argument("--proxy", default="127.0.0.1:7890:http")
     ap.add_argument("--overwrite", action="store_true", help="已存在同名文件也重下")
@@ -85,11 +91,13 @@ async def run():
     man_path = tg_dl.manifest_path(out, a.manifest)
     man = tg_dl.load_manifest(man_path) if Path(man_path).exists() else {}
 
-    args = SimpleNamespace(api_id=None, api_hash=None, proxy=a.proxy, session="tgdl")
+    args = SimpleNamespace(api_id=None, api_hash=None, proxy=a.proxy, session="tgdl",
+                           timeout=a.timeout)
     client = tg_dl.make_client(args, "tgdl")
     await client.connect()
     entity = await tg_dl.get_entity(client, a.target)
     print("已连上 %s (id=%s) | 记录 %s（%d 条）" % (entity.title, entity.id, man_path, len(man)))
+    pool = await tg_dl.build_pool(client, args, a.conns)
 
     for mid in ids:
         msg = await client.get_messages(entity, ids=mid)
@@ -118,14 +126,14 @@ async def run():
             print("  主文件已存在（%.1f MB），不覆盖" % (sz / MB))
         else:
             item = {"key": key, "kind": kind, "msg": msg, "size": kind[1],
-                    "name": dest.name}
+                    "name": dest.name, "entity": entity}
             tmp = dest.with_name(dest.name + ".part")
             prog = {"done": 0}
             ok = False
             for attempt in range(3):
                 prog["done"] = 0
                 try:
-                    await tg_dl.download_slices(client, item, tmp, prog, a)
+                    await tg_dl.download_slices(pool, item, tmp, prog, a)
                     ok = True
                     break
                 except asyncio.CancelledError:
@@ -154,7 +162,7 @@ async def run():
             d2 = out / ("%s%s" % (c, ext))
             print("    %-10s -> %s" % (c, link_or_copy(dest, d2)))
 
-    await client.disconnect()
+    await tg_dl.close_pool(pool)
     print("\nmanifest 现有 %d 条记录" % len(man))
 
 

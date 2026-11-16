@@ -32,16 +32,16 @@
 
 ## 3. 数据现状与校验
 
-收录 **2422** 部（源站 2429 帖中排除了 7 篇教程/说明类非影片帖，见 `_scripts/skip_ids.txt`）｜
-海报引用 **2420**（磁盘 2427 个文件；2 部无封面 + 7 张属被排除帖）｜
-剧照引用 **2721**（磁盘 3234 个文件，其中 4 张源站 404）｜最新 id **21315**（2026-10-29）。
+收录 **2426** 部（源站 2433 帖中排除了 7 篇教程/说明类非影片帖，见 `_scripts/skip_ids.txt`）｜
+海报引用 **2424**（本机 assets/images 仅存增量新图，历史海报已外迁；2 部无封面 + 7 张属被排除帖）｜
+剧照引用 **2733**（本机 assets/screenshots 2739 个文件，其中 4 张源站 404）｜最新 id **21440**（2026-11-14）。
 
 数字别凭印象改，随时重算：
 
 ```bash
-grep -c '"p": "assets/images/' data/data.js         # 有海报的记录数 → 2420
-grep -o '"assets/screenshots/' data/data.js | wc -l # 剧照引用数 → 2721
-ls assets/images | wc -l ; ls assets/screenshots | wc -l   # 磁盘文件数 → 2427 / 3234
+grep -c '"p": "assets/images/' data/data.js         # 有海报的记录数 → 2424
+grep -o '"assets/screenshots/' data/data.js | wc -l # 剧照引用数 → 2733
+ls assets/images | wc -l ; ls assets/screenshots | wc -l   # 本机文件数 → 4 / 2739（历史海报已外迁）
 python _scripts/pipeline/02_new_movies.py --dry-run             # 已收录/帖数/新片数/排除命中一行看完
 ```
 
