@@ -60,6 +60,9 @@ STEPS = [
     ("s02", "collect/s02_fetch_html.py"),
     ("s02b", "collect/s02b_fetch_pagenav.py"),
     ("s03", "parse/s03_parse.py"),
+    # s02c 评论增量：放在 s03 之后（新文章的 parsed 要先建好，s02c 才能按 id 并集合并）。
+    # 它自己按「最近 60 天」选帖，不依赖本轮新增；无新文章的轮次也会跑（见下方 302 行白名单）。
+    ("s02c", "collect/s02c_fetch_comments.py"),
     ("s04i", "images/s04i_fetch_body_fast.py"),
     ("s04l", "images/s04l_proxy_unwrap.py"),
     ("s04f", "images/s04f_rebuild_manifest.py"),
@@ -264,7 +267,21 @@ def main():
         return 0
 
     if not new and not changed and not force:
-        say("[结论] 无新增/变化，跳过重建（--force 可强制重建站点）")
+        # 即使没有新文章，评论也会随时间增长：单独跑 s02c（评论增量）+ s06（重建站点）+ verify。
+        # 直接 return 会让「最近 60 天帖子的新评论」永远抓不到。
+        say("[结论] 无新文章/变化：只跑评论增量(s02c) + 建站(s06) + 校验(verify)")
+        for name, script in [s for s in STEPS if s[0] in ("s02c", "s06", "verify")]:
+            say("[步骤] >>> %s" % name)
+            rc, dt, lines = R.run_step(name, script, tail=6, extra=R.step_extra(name, None, yflag))
+            for l in lines:
+                say("   " + l)
+            say("[步骤] <<< %s rc=%d %.1fs" % (name, rc, dt))
+            step_time[name] = dt
+            if rc != 0:
+                say("UPDATE_FAIL %s=%d" % (name, rc))
+                write_report(out)
+                return 1
+        say("UPDATE_OK %d" % int(time.time() - t_all))
         write_report(out)
         return 0
 
@@ -299,7 +316,7 @@ def main():
     # ---------- 4) 跑流水线 ----------
     # 无新增且无变化时默认只重建站点；--force 跑完整流水线（含 s02/s03/s04i）：
     # 上一轮如果在 s04i 之前中断（图片还没下），新文章的图就靠这一档补齐。
-    steps = STEPS if (new or changed or force) else [s for s in STEPS if s[0] in ("s04d", "s06", "verify")]
+    steps = STEPS if (new or changed or force) else [s for s in STEPS if s[0] in ("s02c", "s04d", "s06", "verify")]
     if offline:
         dropped = [s[0] for s in steps if s[0] in IMAGE_STEPS]
         steps = [s for s in steps if s[0] not in IMAGE_STEPS]

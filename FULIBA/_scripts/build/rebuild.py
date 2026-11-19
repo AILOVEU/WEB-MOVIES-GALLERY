@@ -43,6 +43,7 @@ ALL = [
     ("s02", "collect/s02_fetch_html.py"),
     ("s02b", "collect/s02b_fetch_pagenav.py"),
     ("s03", "parse/s03_parse.py"),
+    ("s02c", "collect/s02c_fetch_comments.py"),
     ("s04i", "images/s04i_fetch_body_fast.py"),
     ("s04l", "images/s04l_proxy_unwrap.py"),
     ("s04f", "images/s04f_rebuild_manifest.py"),
@@ -87,7 +88,7 @@ def pick_python():
 # 这些步骤的开销本来与**库规模**成正比（逐篇开容器）；传 --keys-file 后改成与
 # **本轮批大小**成正比。update.py（增量）与 archive.py（移出归档重抓）共用这一套，
 # 所以定义放在流水线层。**不传范围路径就是全树**（rebuild.py --all 走的就是这一档）。
-SCOPE_STEPS = ("s02", "s02b", "s03", "s04i", "s04f", "s04d")
+SCOPE_STEPS = ("s02", "s02b", "s03", "s02c", "s04i", "s04f", "s04d")
 
 
 def touched_years(scope_path):

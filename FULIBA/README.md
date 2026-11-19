@@ -187,7 +187,7 @@ D:\FULIBA\
 ├─ _scripts\                        脚本清单见 §6（共享层在本目录顶层，步骤脚本按功能分组）
 │   ├─ py.cmd                       解释器统一入口（全项目唯一一份；选可用 Python + 强制 UTF-8 + `-u` 转发）
 │   ├─ common.py / years.py / store.py   共享层：路径+HTTP+限速+台账 / 年度层 / 图片库位置层
-│   ├─ collect\   s01 s01b s02 s02b      发现与抓取（sitemap / 列表分页 / 文章 HTML / 内分页）
+│   ├─ collect\   s01 s01b s02 s02b s02c 发现与抓取（sitemap / 列表分页 / 文章 HTML / 内分页 / 评论增量）
 │   ├─ parse\     s03                    解析正文/评论/图片清单
 │   ├─ images\    s04* 共 12 个          图片层（下载/策略/回写/台账/代理还原/抢救/清洗）
 │   ├─ build\     s06 s07 rebuild update 建站 / 旧布局转换 / 一键重建 / 增量更新
@@ -275,6 +275,23 @@ _scripts\py.cmd _scripts\collect\s01b_collect_pages.py --stats  :: 只看分页�
 | `_scripts\py.cmd _scripts\build\update.py --deep` | s01b 穷举全部分页（首次补漏 / 定期深扫，~850 请求） |
 | `_scripts\py.cmd _scripts\build\update.py --pages=5` | 只处理前 5 篇新增（试跑） |
 | `_scripts\py.cmd _scripts\build\update.py --years=2025,2026` | **指定比对年份**；省略则只比对当年，`--years=all` 为全量 |
+
+**评论增量（`s02c`，2026-11-19 上线）**：每次 `update.py` 都会自动跑，抓「最近 60 天发布」帖子的
+新评论，**原有评论一条不删**。评论按 `comments[].id`（WordPress comment id）判重，三链
+（`commentsort=hot/asc/desc` × 各自 `cpage` 翻页）抓全后按 id 与旧评论求并集；只追加新 id，
+旧评论的内容/字段零改动。**即使本轮没有新文章也会跑**（`update.py` 的无新增分支单独调
+`s02c + s06 + verify`），否则新评论永远抓不到。单独跑/调参：
+
+```bat
+_scripts\py.cmd _scripts\collect\s02c_fetch_comments.py --days=60 --dry  :: 只统计将新增多少评论，不写盘
+_scripts\py.cmd _scripts\collect\s02c_fetch_comments.py --days=60        :: 抓最近 60 天（默认）
+_scripts\py.cmd _scripts\collect\s02c_fetch_comments.py --all            :: 全库评论补漏（慢）
+```
+
+> 评论只存在容器 parsed 段的 `comments` 数组，历史有 3 万条只存在于 parsed、不在 raw 首页里
+> （当前 s03 只解析首页约 30~75 条）。**禁止 `drop_parsed` / 整段覆盖 comments**，否则静默丢评论。
+> 翻页是 query 参数 `?cpage=N&commentsort=...`，不是 nextpage 子页（子页里是同一份评论块）。
+> 页面标注数与实际可抓数常有 1~2 条缺口（站点渲染上限），只记台账、不臆造。
 
 只想做「分页发现」本身（不建站）：
 
@@ -364,6 +381,7 @@ _scripts\py.cmd _scripts\collect\s02b_fetch_pagenav.py                 :: 逐页
 | `s02_fetch_html.py` | 抓文章原始 HTML → 写入年度容器的 raw 段（限速、断点续传、熔断）；`--keys-file=` 只抓本轮范围 |
 | `s02b_fetch_pagenav.py` | 逐页抓文章内部分页（nextpage）子页 → 写入同一容器的 sub 段；`--keys-file=` 只探本轮范围，抓到新子页会把该篇**追加回范围**（否则旧文章多出一页时会半新半旧） |
 | `s03_parse.py` | 解析正文 / 评论树 / 图片清单 → 写入容器的 parsed 段（分页文章组装 pages[]/page_count）；按发布日归年；`--keys-file=` 只解析本轮范围（范围模式下不开全树 meta 扫） |
+| `s02c_fetch_comments.py` | **评论增量**：抓最近 `--days=60` 天发布帖子的新评论（`--all` 全库），三链×翻页按 id 与旧评论求并集，只增不删；复用 s03 的评论解析保证字段一致；`--keys-file=` 时额外纳入本轮新文章；`--dry` 只统计不写 |
 | `s04i_fetch_body_fast.py` | 正文图高速下载（manifest 命中即跳过；代理不通自动直连）；`--keys-file=` 只从本轮范围收集待下载 |
 | `s04j_rescue.py` | 未落地图片抢救（强制代理 + 域名级 referer + 死域自动拉黑 + 畸形 URL 重建） |
 | `s04l_proxy_unwrap.py` | 还原站点图片代理地址后直取 |
