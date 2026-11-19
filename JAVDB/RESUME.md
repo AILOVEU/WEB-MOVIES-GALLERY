@@ -378,7 +378,7 @@ $py='python'; $w='<工程根>/script'   # 在本机：d:/workspace/z_WEB-MOVIES-
 | 看本地视频记录（在场/已移走） | `python _script/manifest/media_scan.py stats` |
 | 查某番号有无解说/预告 | `python _script/manifest/media_scan.py check <code> --source talk` |
 | 误删记录后从备份灌回（只补不覆盖） | `python _script/manifest/media_scan.py restore --from _backup/movies_before_media_fields.js` |
-| **LTX 资源库增量抓取**（只增不删；先看量再落盘） | `python _script/crawl/ltx_fetch.py --dry-run` → `python _script/crawl/ltx_fetch.py`（收尾自动写本轮工作集 `_pipeline/<日期>/ltx_new_codes.txt`，只作留档复核） |
+| **LTX 资源库增量抓取**（只增不删；先看量再落盘；2026-11-19 接口迁移后两步走） | ① 可视 Chrome 过 Turnstile（CDP 9333，profile `_pipeline/ltx_chrome`）→ `node _script/cookie/ltx_harvest.js 9333`（导出 `_pipeline/<日期>/items_all.json`）；② `python _script/crawl/ltx_merge_harvest.py --dry-run` → 去掉 `--dry-run` 落盘；③ 刷版本号 `bump_refs(html_files=('index.html',))`。详见第 6.1 节。⚠ 旧 `ltx_fetch.py` 现已抓到 0 条，别单跑 |
 | ~~LTX 新 magnet 补体积~~ **已停用，不要跑**（2026-11-06 定：以后获取 ltx 一律跳过 `ltx_magnet_size.py`，就用没 size 的版本） | 命令仍可用（`--codes-file` / `--codes` 可收窄），但增量流程里没有这一步；magnet 的 `size`/`sizeMB` 留空即为终态 |
 | **看过/想看增量**（~110 请求/4–5 分钟） | `python _script/crawl/users_spider.py` |
 | 只看清单差异不写盘 | `python _script/crawl/users_spider.py --dry-run` |
@@ -400,7 +400,26 @@ $py='python'; $w='<工程根>/script'   # 在本机：d:/workspace/z_WEB-MOVIES-
 
 ### 6.1 LTX 磁力库（`data/site/ltx.js`）一步到位
 
-增量只有一步：`ltx_fetch.py`（源 `https://ltx.libray.workers.dev/api/items`，走代理、不要 cookie）。
+> ⚠ **2026-11-19 接口迁移，抓取方式已变（旧 `ltx_fetch.py` 单跑会静默抓到 0 条）**：
+> 旧接口 `ltx.libray.workers.dev/api/items` 已停用，现返回 `{"reason":"migrated","url":"https://ltxlib.dpdns.org/"}`；
+> `ltx_fetch.py` 把这段提示当空 catalog，dry-run 报「抓取 0 条 / 新增 0」——**别被这个数字骗了**。
+> 新站 `ltxlib.dpdns.org` 的 `/api/items` 加了 **Cloudflare Turnstile 人机验证 + ECDH(P-256)/HKDF-SHA256/AES-GCM 响应加密**，
+> 纯 Python/curl 过不去（握手先要 `X-LTX-Session`+`X-LTX-Request`，且 session 接口先要 Turnstile 放行的 cookie）。
+> 现行两步流程（已实跑成功，2026-11-19 那轮 3938 条全量）：
+> 1. **抓**（浏览器）：开一个可视 Chrome（走 7890 代理 + CDP 端口，profile 用 `_pipeline/ltx_chrome`，别动 jdb_chrome），
+>    打开 `https://ltxlib.dpdns.org/` 等 Turnstile 自动放行（页面出现 3936+ 部作品即通过）；
+>    然后 `node _script/cookie/ltx_harvest.js 9333`（Node 22+，需全局 WebSocket）→ 导出
+>    `_pipeline/<日期>/items_all.json`（全量 code->link，含 ed2k/magnet）。脚本在页面内做握手+解密+分页
+>    （`POST /api/items/query` 只认 `{snapshot,offset,limit}` 三个字段，多传一个就 `invalidQuery`；每页 60 条）。
+> 2. **并**（Python）：`python _script/crawl/ltx_merge_harvest.py --dry-run` 看增量 → 去掉 `--dry-run` 落盘
+>    （复用 `ltx_fetch.parse_link`/`write_ltxjs`，schema 与去重规则完全一致：只增不删、magnet 体积留空）。
+>
+> 下面第 3 步「刷版本号」照旧，但**注意**：站点已合并成单页 `index.html`（`mylist/top250/collection.html` 已不存在），
+> `bump_refs()` 默认还指向那三个旧文件 → 直接跑会「touch 0 个」。必须显式传参：
+> `python -c "import sys;sys.path.insert(0,'_script/build');import build_collection_js as b;print(b.bump_refs(html_files=('index.html',)))"`。
+> 不刷的话 `index.html` 里 `ltx.js?v=` 还是旧日期，浏览器吃缓存看不到新数据。
+
+历史（接口停用前）做法，留档：`ltx_fetch.py`（源 `https://ltx.libray.workers.dev/api/items`，走代理、不要 cookie）。
 它把远端 `code -> links` 按「只增不删」并进 `ltx.js`：**新番号整条追加，旧番号只补没见过的链接**，
 旧链接与旧番号永远保留；改前快照落 `_backup/<日期>/ltx.js`，原始响应落 `_pipeline/<日期>/ltx_items.json`。
 `ed2k` 的体积直接来自链接第 4 段（自带），**`magnet` 的 `size`/`sizeMB` 一律留空就是终态**：
