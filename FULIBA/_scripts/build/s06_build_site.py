@@ -306,11 +306,14 @@ def article_unit(a, slug, base):
     # 分片页在 data/<年>/ 下（base=years.PART_PAGE_BASE=`../..`）：既要补深度前缀，也要把 images/ 翻成 assets/images/
     def base_fix(h):
         h = h or ""
-        if h and base:
-            h = h.replace('src="images/', 'src="%s/assets/images/' % base)
-            h = h.replace("src='images/", "src='%s/assets/images/" % base)
-            h = h.replace('src="assets/', 'src="%s/data/common/' % base)
-            h = h.replace("src='assets/", "src='%s/data/common/" % base)
+        # base 是回站点根的相对前缀（../.. 或 .），模板里直接拼成 %(base)sdata/...，
+        # 所以必须保证以 / 结尾，否则会拼出 ../..data/ 这种坏路径（样式 404、页面裸奔）。
+        b = base if (not base or base.endswith("/")) else base + "/"
+        if h and b:
+            h = h.replace('src="images/', 'src="%sassets/images/' % b)
+            h = h.replace("src='images/", "src='%sassets/images/" % b)
+            h = h.replace('src="assets/', 'src="%sdata/common/' % b)
+            h = h.replace("src='assets/", "src='%sdata/common/" % b)
         return inject_orig(neutralize_embeds(h))
 
     # 分页：站点把长文拆成第 1..N 页，离线页也分页展示（翻页器 + 逐页 div）。

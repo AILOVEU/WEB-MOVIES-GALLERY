@@ -73,7 +73,7 @@ LEGACY_MATERIAL_SUBDIR = "_src"   # 仅改名迁移时识别旧目录用
 
 # 站点根相对的访问前缀（index.html、分片页都从这里取，改目录层深只改这几行）
 SITE_PREFIX = "data/"             # 站点根 → 年份目录：data/<年>/…
-PAGE_BASE = "../../.."            # 旧：data/<年>/article/<key>.html → 站点根（迁移/兼容保留）
+PAGE_BASE = "../../../"           # 旧：data/<年>/article/<key>.html → 站点根（迁移/兼容保留，同样带尾斜杠）
 
 # 年度目录名的样子：4 位年份，或 undated
 _YEAR_RE = re.compile(r"^\d{4}$")
@@ -84,7 +84,9 @@ _KEY_PAGE_RE = re.compile(r"^[0-9a-f]{16}\.html$")
 # 一篇 = 分片内一个 <div class="shard-post" id="<key>"> 锚点，靠 hash 路由逐篇显示。
 # 分片直接落在年份目录下（不再嵌 article/ 子目录）→ 回站点根比单篇页少一层。
 PART_PREFIX = "part"             # data/<年>/part<i>.html
-PART_PAGE_BASE = "../.."         # data/<年>/part<i>.html → 站点根
+# 必须带尾斜杠：模板里是 %(base)sdata/common/style.css 这种直接拼接，
+# 少了斜杠会拼出 ../..data/ 的坏路径（样式 404、页面裸奔）。
+PART_PAGE_BASE = "../../"       # data/<年>/part<i>.html → 站点根
 ARTICLE_PER_PART = 150           # 每片最多多少篇（控分片体积在几 MB 内）
 _PART_RE = re.compile(r"^part(\d+)\.html$")
 # 分片内每篇文章的包裹锚点：写侧(s06)与摘除侧(remove_article_from_parts)共用，防格式漂移
