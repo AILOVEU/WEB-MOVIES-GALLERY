@@ -53,6 +53,24 @@ REPORT_NAME = "update_report.txt"   # 每轮回报：写 _logs/<当天>/（跟�
 # --refresh 的可逆点：按日期落在 _backup 下（与「大改按日期建目录」的口径一致）
 BK = os.path.join(C.BACKUP_DIR, "update_refresh", time.strftime("%Y%m%d"))
 
+# 每个步骤的中文说明 + 大致耗时，用于屏幕上显示进度。
+# 耗时是经验值，只用来让人心里有数，不参与任何逻辑。
+STEP_DESC = {
+    "s01":   ("抓 sitemap / urls.json", "~30 秒"),
+    "s01b":  ("分页列表补漏", "~1 分钟"),
+    "s02":   ("下载文章 HTML", "视新增篇数，每篇 1-2 秒"),
+    "s02b":  ("补翻页导航", "~10 秒"),
+    "s03":   ("解析 HTML 成结构化数据", "每篇 ~0.2 秒"),
+    "s02c":  ("抓最近 60 天的评论增量", "~1-3 分钟"),
+    "s04i":  ("下载正文图片", "视新图数量，可能几分钟"),
+    "s04l":  ("解代理图床包装", "~10 秒"),
+    "s04f":  ("重建图片台账", "~20 秒"),
+    "s04d":  ("改写正文里的图片地址", "~20 秒"),
+    "s06":   ("重建站点（生成 data.js / 分片页）", "~1-2 分钟"),
+    "verify": ("交付自检", "~30 秒"),
+}
+
+
 STEPS = [
     # 注：s01b 不在这里 —— 它由主流程直接调（需要 --quick/--deep 开关），
     # 放在这里会被 run_step 无参数重跑一遍（= 全量重翻 878 页）。
@@ -155,6 +173,14 @@ def write_report(lines):
 
 
 def main():
+    # Windows 控制台默认按 GBK 解码子进程输出，中文会变成「澧為噺鏇存柊」这种乱码。
+    # 这里强制 stdout 走 utf-8，并关掉缓冲让 print 立即刷屏（抓取期间要实时看进度）。
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace", line_buffering=True)
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace", line_buffering=True)
+    except Exception:
+        pass
+
     dry = "--dry" in sys.argv
     force = "--force" in sys.argv
     refresh = "--refresh" in sys.argv
@@ -214,6 +240,7 @@ def main():
     if dry:
         say("[步骤] --dry：跳过 s01，直接用现有 urls.json 计算")
     else:
+        say("[步骤] s01 抓 sitemap / urls.json ...")
         rc, dt, lines = R.run_step("s01", "collect/s01_collect_urls.py", extra=yflag or [])
         for l in lines[-3:]:
             say("   " + l)
@@ -227,6 +254,7 @@ def main():
     #   默认 --quick：只翻各归档第 1 页（新文章只会出现在第 1 页），~29 请求；
     #   --deep：穷举全部分页，命中 _rawdata/pages/ 缓存的页不再请求。
     extra = [] if deep else ["--quick"]
+    say("[步骤] s01b 分页列表补漏（%s）..." % ("deep" if deep else "quick"))
     rc, dt, lines = R.run_step("s01b", "collect/s01b_collect_pages.py", tail=8, extra=extra)
     for l in lines[-4:]:
         say("   " + l)
@@ -271,7 +299,8 @@ def main():
         # 直接 return 会让「最近 60 天帖子的新评论」永远抓不到。
         say("[结论] 无新文章/变化：只跑评论增量(s02c) + 建站(s06) + 校验(verify)")
         for name, script in [s for s in STEPS if s[0] in ("s02c", "s06", "verify")]:
-            say("[步骤] >>> %s" % name)
+            d, eta = STEP_DESC.get(name, ("", ""))
+            say("[步骤] >>> %s  %s（预计 %s）" % (name, d, eta))
             rc, dt, lines = R.run_step(name, script, tail=6, extra=R.step_extra(name, None, yflag))
             for l in lines:
                 say("   " + l)

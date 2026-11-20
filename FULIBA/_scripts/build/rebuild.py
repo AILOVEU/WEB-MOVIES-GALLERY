@@ -127,32 +127,56 @@ def step_extra(name, scope_path, yflag=None):
     return []
 
 
-def run_step(name, script, tail=6, extra=None):
+def run_step(name, script, tail=6, extra=None, stream=True):
     """执行一个流水线步骤，返回 (rc, 秒, 日志尾部行)。
 
     子进程解释器取自 pick_python() 的探测结果，不用 sys.executable：
     即使父进程能跑，子进程的 venv 目录也可能在同一时刻被抽空（§1.38）。
     extra 传子脚本的命令行参数（如 ["--quick"]）。
+
+    stream=True 时**边跑边把子进程输出打到屏幕**（带 [name] 前缀），
+    不再等整步跑完才回显 —— 抓取动辄几分钟，静默会让人以为死机了。
+    完整输出仍然写进 _logs/<今天>/rebuild_<name>.log。
     """
     logp = C.log_path("rebuild_%s.log" % name)      # 本轮日志：_logs/<今天>/
     py, env = pick_python()
     t0 = time.time()
-    with open(logp, "wb") as f:
-        p = subprocess.run(
-            [py, "-u", C.script_path(script)] + list(extra or []),
-            cwd=C.ROOT, stdout=f, stderr=subprocess.STDOUT, env=env,
-        )
-    dt = time.time() - t0
     lines = []
-    try:
-        size = os.path.getsize(logp)
-        with open(logp, "rb") as f:
-            f.seek(max(0, size - 6000))
-            txt = f.read().decode("utf-8", "replace")
-        lines = [l.rstrip() for l in txt.splitlines() if l.strip()][-tail:]
-    except OSError:
-        pass
-    return p.returncode, dt, lines
+    if not stream:
+        with open(logp, "wb") as f:
+            p = subprocess.run(
+                [py, "-u", C.script_path(script)] + list(extra or []),
+                cwd=C.ROOT, stdout=f, stderr=subprocess.STDOUT, env=env,
+            )
+        dt = time.time() - t0
+        try:
+            size = os.path.getsize(logp)
+            with open(logp, "rb") as f:
+                f.seek(max(0, size - 6000))
+                txt = f.read().decode("utf-8", "replace")
+            lines = [l.rstrip() for l in txt.splitlines() if l.strip()][-tail:]
+        except OSError:
+            pass
+        return p.returncode, dt, lines
+
+    # 流式：逐行读子进程输出，同时写日志 + 打屏幕
+    with open(logp, "wb") as f:
+        p = subprocess.Popen(
+            [py, "-u", C.script_path(script)] + list(extra or []),
+            cwd=C.ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=env,
+        )
+        for raw in iter(p.stdout.readline, b""):
+            f.write(raw)
+            f.flush()
+            line = raw.decode("utf-8", "replace").rstrip()
+            if not line:
+                continue
+            lines.append(line)
+            print("   [%s] %s" % (name, line), flush=True)
+        p.wait()
+    dt = time.time() - t0
+    return p.returncode, dt, lines[-tail:]
+
 
 
 def count_files(top, suffix="", min_size=0):
