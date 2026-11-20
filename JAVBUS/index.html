@@ -49,6 +49,8 @@
   .nums i{font-style:normal;color:var(--muted);font-size:11px}
   .rthumb{width:104px;height:78px;flex:none;border-radius:8px;overflow:hidden;background:#0b0e12;border:1px solid var(--line)}
   .rthumb img{width:100%;height:100%;object-fit:cover;display:block}
+  /* 缩略图失败：保留框体，显示一个灰底图标，不再 display:none 让整块消失 */
+  .rthumb.ph{display:flex;align-items:center;justify-content:center;color:#4a5260;font-size:18px}
   .rlast{width:130px;flex:none;color:var(--muted);font-size:12px;text-align:right;line-height:1.5;padding-top:2px}
   .rlast b{color:#c2cad6;font-weight:600}
   .foot{color:var(--muted);text-align:center;padding:22px;font-size:12px}
@@ -78,7 +80,16 @@
   #view-thread .av.sm{width:22px;height:22px;font-size:11px;vertical-align:middle}
   #view-thread .au{color:#cfd6df;font-weight:600}
   #view-thread .content{word-break:break-word}
-  #view-thread .content img,#view-thread .floor .fb img{max-width:100%;height:auto;border-radius:6px;margin:6px 0;display:block;cursor:zoom-in;background:#000}
+  /* 正文图片：给一个最小尺寸，加载失败时不会塌成一条线，页面不会跳。
+     失败态由 .img-fail 接管（见下面的占位样式）。 */
+  #view-thread .content img,#view-thread .floor .fb img{max-width:100%;height:auto;min-width:120px;min-height:80px;border-radius:6px;margin:6px 0;display:block;cursor:zoom-in;background:#0b0e12;border:1px solid var(--line);object-fit:contain}
+  /* 图片加载失败：保留占位框，显示一个统一的「图片加载失败」提示，
+     而不是 display:none 让整块塌掉（那会让下面的内容突然上移）。 */
+  #view-thread .content img.img-fail,#view-thread .floor .fb img.img-fail{min-width:180px;min-height:120px;background:#12161c;border:1px dashed var(--line);cursor:default;object-fit:contain}
+  .img-ph{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;min-width:180px;min-height:120px;padding:16px;background:#12161c;border:1px dashed var(--line);border-radius:6px;color:var(--muted);font-size:12px;line-height:1.5;text-align:center;margin:6px 0}
+  .img-ph svg{opacity:.5}
+  .img-ph .ph-t{color:#8a93a3}
+  .img-ph .ph-s{color:#5c6572;font-size:11px;word-break:break-all;max-width:100%}
   #view-thread .content .quote,#view-thread .floor .quote{border-left:3px solid var(--line);margin:8px 0;padding:6px 12px;color:#b6bfcc;background:#12161c;border-radius:0 6px 6px 0}
   #view-thread .load,#view-thread .err{padding:60px;text-align:center;color:var(--muted)}
   #view-thread .cmt-title{margin:30px 0 12px;font-size:16px;color:#cfd6df;border-top:1px solid var(--line);padding-top:18px}
@@ -151,6 +162,51 @@
   var modeChips = [].slice.call(document.querySelectorAll('[data-mode-chip]'));
   var IMG_PREFIX = 'assets/images/';
 
+  /* 图片加载失败统一处理：保留占位框，不塌陷、不显示破图图标。
+     正文图与缩略图共用这一套，避免各写各的 onerror 导致行为不一致。 */
+  var PH_SVG = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">'
+    + '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/>'
+    + '<path d="M21 15l-5-5L5 20"/></svg>';
+  function imgPlaceholder(src, reason){
+    var d = document.createElement('div');
+    d.className = 'img-ph';
+    d.innerHTML = PH_SVG
+      + '<span class="ph-t">' + (reason || '图片加载失败') + '</span>'
+      + '<span class="ph-s">' + esc(src || '') + '</span>';
+    return d;
+  }
+  /* 正文图：失败时换成占位块，保留原有尺寸感 */
+  function onImgFail(im){
+    if (!im || im.getAttribute('data-failed') === '1') return;
+    im.setAttribute('data-failed', '1');
+    im.classList.add('img-fail');
+    var src = im.getAttribute('src') || '';
+    im.style.visibility = 'hidden';
+    var ph = imgPlaceholder(src, '图片加载失败');
+    if (im.parentNode) im.parentNode.insertBefore(ph, im.nextSibling);
+  }
+  /* 缩略图：失败时把 .rthumb 变成占位块，不再整块 display:none */
+  function onThumbFail(im){
+    if (!im) return;
+    var box = im.parentNode;
+    if (!box || !box.classList || !box.classList.contains('rthumb')) return;
+    if (box.getAttribute('data-failed') === '1') return;
+    box.setAttribute('data-failed', '1');
+    box.classList.add('ph');
+    box.innerHTML = PH_SVG;
+    box.title = '封面图加载失败';
+  }
+  /* 给 root 下所有正文图挂失败处理（幂等） */
+  function bindImgFallback(root){
+    [].forEach.call(root.querySelectorAll('img'), function(im){
+      if (im.getAttribute('data-fb') === '1') return;
+      im.setAttribute('data-fb', '1');
+      im.addEventListener('error', function(){ onImgFail(im); });
+      /* 已经加载失败的（缓存里就是坏图）补一次 */
+      if (im.complete && im.naturalWidth === 0) onImgFail(im);
+    });
+  }
+
   function applyImgMode(root){
     [].forEach.call(root.querySelectorAll('img'), function(im){
       var loc = im.getAttribute('data-local-src') || im.getAttribute('src') || '';
@@ -181,6 +237,7 @@
       try { localStorage.setItem(MODE_KEY, mode); } catch(e){}    // 记住选择；file:// 下不可用时仅本次会话有效
       syncModeChips();
       applyImgMode(mainEl);      // 详情页：直接改已渲染 img 的 src，保住滚动位置
+      bindImgFallback(mainEl);   // 换源后可能也失败，重新挂一次
       render();                  // 列表页：重建缩略图（render 内部会再 applyImgMode）
       closeLb();                 // 放大图里别留着上一种模式的地址
     };
@@ -256,7 +313,7 @@
       var read = !!readSet[t.tid];
       var isLast = (t.tid === lastTid);            // 仅最近一次点击的帖子有「上次」角标
       var pg = t.pages>1 ? '<span class="pgtag">'+t.pages+' 页/'+t.post_count+' 楼</span>' : (t.post_count?'<span class="pgtag">'+t.post_count+' 楼</span>':'');
-      var thumb = t.cover ? '<div class="rthumb"><img loading="lazy" src="'+esc(t.cover)+'" alt="" onerror="this.parentNode.style.display=\'none\'"></div>' : '';
+      var thumb = t.cover ? '<div class="rthumb"><img loading="lazy" src="'+esc(t.cover)+'" alt="" onerror="onThumbFail(this)"></div>' : '';
       var last = t.last_reply ? ('<div class="rlast">最后回复<br><b>'+esc(t.last_reply.author)+'</b><br>'+esc(t.last_reply.date||'')+'</div>') : '<div class="rlast"></div>';
       return '<div class="row'+(hasPan(t)?' panrow':'')+(read?' read':'')+(isLast?' last':'')+'">'+
         '<div class="rleft">'+av(t.author)+
@@ -274,6 +331,7 @@
       ' 帖（正文 '+PAN_ART+' / 仅楼层 '+(PAN_N-PAN_ART)+'）· 图片来源：'+
       (mode==='remote'?'原始 https 地址（需联网）':'本地 assets（离线可用）');
     applyImgMode(list);
+    bindImgFallback(list);     // 列表缩略图同样兜底
   }
   render();
 
@@ -342,6 +400,7 @@
     html+='</div>';
     mainEl.innerHTML=html;
     applyImgMode(mainEl);
+    bindImgFallback(mainEl);   // 正文/楼层图加载失败 -> 统一占位
     window.scrollTo(0,0);
   }
   function dropScript(s){ if(s && s.parentNode) s.parentNode.removeChild(s); }   // 注入完就摘，别在 head 里堆

@@ -122,10 +122,9 @@ def localize_html(html, imgmap):
         absu = urljoin(BASE, src)
         local = imgmap.get(absu) or imgmap.get(src)
         if local:
-            return '<img src="%s" loading="lazy" class="gimg" alt="" onerror="this.style.display=\'none\'">' % local
-        # 映射不到（失效/表情）：保留可用绝对地址供在线回退，加载失败则隐藏，清掉站点专用属性
+            return '<img src="%s" loading="lazy" class="gimg" alt="" data-local-src="%s">' % (local, local)
+        # 映射不到（失效/表情）：保留可用绝对地址供在线回退，清掉站点专用属性；
         cleaned = ONATTR_RE.sub("", re.sub(r'class="zoom"', "", tag))
-        cleaned = re.sub(r"\s+alt=", " onerror=\"this.style.display='none'\" alt=", cleaned, count=1)
         return cleaned
 
     html = IMG_RE.sub(repl, html)
