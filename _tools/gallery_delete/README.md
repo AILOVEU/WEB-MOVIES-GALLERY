@@ -37,16 +37,21 @@ Linux/macOS 用仓库根的 `./gallery_delete.sh <子命令>`，等价。
 | `--site FULIBA\|JAVBUS` | apply 只处理一个站点 |
 | `--root <路径>` | 覆盖仓库根（默认自动探测） |
 
-## 三个清单文件（都在 `<site>/data/`）
+## 清单文件：权威的一份 + 一个临时中转
 
-**不放 `_pipeline/`**：那是过程区，`.gitignore` 忽略、可随流水线重建。
-删除名单是长期资产，必须跟着项目迁移 —— 丢了已删文章会被重新抓回来。`data/` 是交付层，本来就随项目走。
+**`<site>/data/gallery_deleted.json` 是唯一的删除清单。**
 
-| 文件 | 作用 |
-|---|---|
-| `gallery_deleted.json` | **本地权威全量已删除清单，只增不减**。抓取过滤与删除都以它为准 |
-| `gallery_deleted_remote.json` | 上次从 Supabase 拉到的原始快照，只用于比对排错 |
-| `gallery_resources.json` | **文章 id -> 该 id 名下资源**（`assets/images/...` 路径） |
+| 文件 | 位置 | 作用 |
+|---|---|---|
+| `gallery_deleted.json` | `<site>/data/` | **本地权威全量已删除清单，只增不减**。抓取过滤与删除都以它为准 |
+| `gallery_resources.json` | `<site>/data/` | **文章 id -> 该 id 名下资源**（`assets/images/...` 路径） |
+| `gallery_deleted_remote.json` | `<site>/_pipeline/` | **临时中转**，fetch 写入、merge 后立刻删除 |
+
+`data/` 是交付层，随项目迁移；`_pipeline/` 是过程区（gitignore、可随时清空），
+所以中转文件放 `_pipeline`，不会跟着项目走。
+
+**merge 完就把中转删掉。** 留着会出现两份「删除清单」，早晚有人改错那一份。
+`status` 里如果看到「待合并中转 N 条」，说明 fetch 后还没跑 merge。
 
 ## 文章和资源是两件事
 

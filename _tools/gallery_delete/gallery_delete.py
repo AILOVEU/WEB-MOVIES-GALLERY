@@ -111,7 +111,14 @@ def deleted_path(root, site):
 
 
 def remote_path(root, site):
-    return os.path.join(gallery_dir(root, site), "gallery_deleted_remote.json")
+    """
+    远端快照的落点：<site>/_pipeline/gallery_deleted_remote.json。
+
+    它只是 fetch 到 merge 之间的**临时中转**，不是长期资产 ——
+    合并完立刻删掉，本地只留 data/gallery_deleted.json 一份权威清单。
+    放 _pipeline 是因为那里本来就是过程区（gitignore、可随时清空）。
+    """
+    return os.path.join(pipeline_dir(root, site), "gallery_deleted_remote.json")
 
 
 def resources_path(root, site):
@@ -549,6 +556,23 @@ def load_remote(root, site):
     return {str(k): (v or {}) for k, v in items.items()}
 
 
+def _drop_remote(root, site):
+    """
+    删掉 fetch 写下的中转快照。
+
+    本地只留 data/gallery_deleted.json 一份权威清单 ——
+    留着两份"删除清单"，早晚有人改错那一份。
+    """
+    rp = remote_path(root, site)
+    if not os.path.exists(rp):
+        return
+    try:
+        os.remove(rp)
+        log("[merge]   已清空中转 %s" % os.path.relpath(rp, root))
+    except OSError as e:
+        warn("[merge] 中转文件删除失败 %s（%s）" % (rp, e))
+
+
 def cmd_merge(root, dry_run):
     """
     只增不减：本地已有的保留，远端多出来的加进来。
@@ -566,6 +590,9 @@ def cmd_merge(root, dry_run):
         log("[merge] %s: 本地已有 %d 条，远端 %d 条" % (site, len(local), len(remote)))
         if not remote and not local:
             log("[merge] %s: 两边都为空，跳过" % site)
+            # 即使没东西可合并，中转文件也要清掉 —— 否则空快照会一直躺在 _pipeline 里
+            if not dry_run:
+                _drop_remote(root, site)
             continue
 
         if site == "FULIBA":
@@ -629,6 +656,7 @@ def cmd_merge(root, dry_run):
         if not dry_run:
             save_deleted(root, site, local)
             log("[merge]   写入 %s" % os.path.relpath(deleted_path(root, site), root))
+            _drop_remote(root, site)
 
     if dry_run:
         log("[merge] dry-run：未写任何文件")
@@ -1361,8 +1389,13 @@ def cmd_status(root):
             warn("[status] %s 目录不存在，跳过" % site)
             continue
         items = load_deleted(root, site)
-        remote = len(load_remote(root, site))
-        log("[status] %s: 本地清单 %d 条，远端快照 %d 条" % (site, len(items), remote))
+        # 中转文件正常情况下不存在（merge 完就删）；还在说明 fetch 后没跑 merge
+        rp = remote_path(root, site)
+        pending = len(load_remote(root, site)) if os.path.exists(rp) else 0
+        line = "[status] %s: 本地清单 %d 条" % (site, len(items))
+        if pending:
+            line += "，待合并中转 %d 条（fetch 后还没 merge）" % pending
+        log(line)
         # 最新删除的排最前
         ordered = sorted(items.items(), key=lambda kv: deleted_sort_key(kv[1]), reverse=True)
         for pid, rec in ordered[:8]:
