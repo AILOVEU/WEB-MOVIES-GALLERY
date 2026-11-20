@@ -21,7 +21,7 @@ _scripts\py.cmd _scripts\audit\status.py               进度面板
 | `parse/` | `s03_parse.py`：正文/评论树/图片清单 → 容器 parsed 段，按发布日归年 |
 | `images/` | 图片层 12 个：`s04i`（高速下载）、`s04_fetch_images`/`s04b_image_policy`（公共函数/策略）、`s04l`（代理地址还原）、`s04f`（重建 manifest）、`s04d`（回写容器）、`s04j`/`s04m`（抢救/Wayback）、`s04r`/`s04s`/`s04q2`（修复/清洗/清理）、`s04p`（生成头像占位图） |
 | `build/` | `s06_build_site.py`（建站）、`s07_migrate_years.py`（旧布局转换）、`rebuild.py`（一键重建/体检 + **范围工具 `step_extra`/`touched_years`**）、`update.py`（增量更新） |
-| `audit/` | `_verify.py`（交付自检）、`archive.py`（归档名单执行）、`status.py`（进度面板） |
+| `audit/` | `_verify.py`（交付自检）、`status.py`（进度面板） |
 
 ## 五条硬约定
 
@@ -37,7 +37,7 @@ _scripts\py.cmd _scripts\audit\status.py               进度面板
    ```
    `years.py` / `store.py` 都**不得** import common（common 要 import 它们）。
 3. **被流水线调起的脚本一律登记在 `rebuild.py` 的步骤表里**，路径写相对 `_scripts/` 的
-   （如 `images/s04i_fetch_body_fast.py`）；`update.py`/`archive.py` 复用 `rebuild.run_step()`。
+   （如 `images/s04i_fetch_body_fast.py`）；`update.py` 复用 `rebuild.run_step()`。
    新步骤没登记，就等于没进流水线。
 4. **增量轮只处理本轮范围**（2026-11-04）。`update.py` 把本轮 todo 写成
    `_pipeline/<日期>/update_keys.json`，参数由 `rebuild.step_extra()` 统一给出：
@@ -51,7 +51,7 @@ _scripts\py.cmd _scripts\audit\status.py               进度面板
    - 一天一份 / 一轮一份的新产物 → `C.pipeline_day_dir()` 或 `C.pipeline_rolling_path(name)`
      （落 `_pipeline/<YYYYMMDD>/`）；读取端配套用 `C.pipeline_find(name)`（会回退旧布局的扁平文件）。
    - 持续读写的**单一事实源**（`urls.json`、`image_manifest.json`、`urls_gone.json`、
-     `skipped_promo.json`、`images_store.json`、`categories.json`、`archive_ops.json`、`pacer*`）
+     `skipped_promo.json`、`images_store.json`、`categories.json`、`pacer*`）
      → 留在 `C.PIPELINE_DIR` 根。**日期化它们会打断「全集里有没有这条」的判定**（历史图被重下、已删文章被抓回）。
    - 台账追加走 `C.state_append(stage, …)`、合并读走 `C.state_load(stage)`，不要在脚本里自己拼 `state_*.jsonl`。
 

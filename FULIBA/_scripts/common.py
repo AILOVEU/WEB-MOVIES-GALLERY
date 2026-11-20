@@ -117,7 +117,7 @@ def script_path(rel):
 # ---------------------------------------------------------------- _pipeline 的日期目录
 # 约定（2026-11-04）：_pipeline/ 根只放**持续读写的单一事实源**（urls.json /
 # image_manifest.json / images_store.json / urls_gone.json / skipped_promo.json /
-# categories.json / archive_ops.json / pacer*.json），它们按全集判定，拆到日期目录会
+# categories.json / pacer*.json），它们按全集判定，拆到日期目录会
 # 让「是否已登记」的判据变模糊（死文章会被抓回、历史图会被重下）。
 # **一天一份 / 一轮一份** 的东西一律落 _pipeline/<YYYYMMDD>/：
 #   state_<阶段>.jsonl（审计线索，追加写）、resume_*.json（续跑档）、
@@ -570,7 +570,7 @@ def state_load(stage=None):
 # 一份**范围文件**，各步骤用 `--keys-file=<路径>` 显式接住，只处理这批。
 #
 # 两条红线：
-# 1. **不带 --keys-file 就是全树**（rebuild.py --all / archive.py / 手工单跑都不变），
+# 1. **不带 --keys-file 就是全树**（rebuild.py --all / 手工单跑都不变），
 #    所以半成品自愈、全树兜底能力一直在；范围文件不会被任何脚本「自动发现」，
 #    只有 update.py 显式传路径。（不用 pipeline_find 那种「最新一份」的自动回退：
 #    拿昨天的范围跑今天的一轮 = 静默漏文，比不提速严重得多。）

@@ -131,12 +131,10 @@
 > 2026-10-26 **促销清理**（评审见 `_pipeline\promo_review.md`）：规则历经 v3→v9 共 9 版（整类豁免/强资源
 > 保护/子串边界/硬证据门槛/人工复核），用户最终确认 **T0-T2 全量 204 篇 + 人工复核 5 篇删除**；
 > 资源彻底清除（专属图片比对共用后删除 + html/parsed/单篇页），**合计释放 118.06 MB**
-> （图片 933 文件 81.05 MB + 数据 37.01 MB）；全部 209 篇名录见站内「归档」按钮 → `archived.html`
-> （由 s06 从 `skipped_promo.json` 生成），并登记 `urls_gone.json` 防止增量更新抓回。
-> 同日上线**归档名单闭环**（`_scripts/audit/archive.py` + s06 改造）：首页卡片「归档」/管理页「移出归档」
-> 标记存 localStorage（导航栏带待办角标）；名单确认后执行 `_scripts\py.cmd _scripts\audit\archive.py --apply`
-> （移入=删资源并登记台账/防抓回，移出=重抓 `s02→s03→s04i→s04l→s04f→s04d→s06`，失败自动回滚登记；
-> 也支持 `--import <archive_ops.json>` 手工喂名单）。
+> （图片 933 文件 81.05 MB + 数据 37.01 MB）；全部 209 篇已并入统一删除清单
+> `data/gallery_deleted.json`（`source=archive_merged`），并登记 `urls_gone.json` 防止增量更新抓回。
+> ~~同日上线归档名单闭环（archive.py + s06 改造）~~ —— **2026-11-20 已移除**：
+> 归档按钮/面板/archive.py/archived.js 全部删除，删除统一走 AIO 三点菜单 → `gallery_delete.py`。
 > 2026-10-27 **死链终轮抢救**（`s04m_wayback.py`，新）：s04j 常规救回 0 后，改走 Wayback Machine ——
 > CDX 按域批量查档（688/7354 有存档）→ 限速下载（2s/请求，遭遇 archive.org bot 封锁数小时后解封）
 > **成功 687/688**；另 `--mutant` 畸形双协议 URL 内层重建+referer 修复原站救回 **44** 张。
@@ -205,7 +203,6 @@ D:\FULIBA\
 │   ├─ categories.json              28 个分类归档页清单
 │   ├─ skipped_promo.json           促销清理删除台账（含隔离位置与理由）
 │   ├─ promo_review.md              促销删除的评审过程留档（v3→v9 规则演进；2026-11-06 从根目录移入）
-│   ├─ archive_ops.json             归档名单（浏览器导出后合入，archive.py 消费）
 │   └─ pacer_state.json pacer_sh<N>.json  限速器连续成功/失败计数（跨轮累积 → 改成按天重置就等于取消熔断）
 
     【永远留在根、不许日期化】以上这些的判据是「全集里有没有这条」：漏读 urls_gone 会把已删文章
@@ -395,10 +392,10 @@ _scripts\py.cmd _scripts\collect\s02b_fetch_pagenav.py                 :: 逐页
 | `s04s_purge_dead.py` | 清除「从未落盘」死链图在项目里的全部原文地址记录（默认试运行；`--apply` 要求备份目录在项目外） |
 | `build/s06_build_site.py` | 生成 `index.html`（预枚举年份槽、运行时合并）/ `data/<年>/data.js` / `data/<年>/article/<key>.html` / `data/<年>/_audit.json` / `_logs/<日期>/report.md`；支持 `--years=` 局部重建 |
 | `store.py` | **图片库位置层**：读 `_pipeline/images_store.json`，判 local/attached/detached/incremental/broken 五态，junction 自愈、闸门 `guard_or_exit`、`new_images_only()`、`--status/--json` 状态查询（详见 §13）。只管「库在哪」与「跑增量时能不能动图片层」，**不含任何搬运逻辑** |
-| `archive.py` | 归档名单执行器：`--import` 合并站内导出名单 → `--apply` 移入（删资源+登记）/移出（重抓，走同一套范围口径，失败回滚） |
+
 | `_verify.py` | 交付自检（覆盖 / 评论 / 广告 / 图片 / 结构） |
 | `status.py` | 进度查询 → `_logs/<日期>/_stat.txt` |
-| `rebuild.py` | 一键重建（四档；计数走年度层 meta 行统计）；**范围工具住这里**（`SCOPE_STEPS`/`step_extra`/`touched_years`，update.py 与 archive.py 共用） |
+| `rebuild.py` | 一键重建（四档；计数走年度层 meta 行统计）；**范围工具住这里**（`SCOPE_STEPS`/`step_extra`/`touched_years`，update.py 与手工单跑共用） |
 | `update.py` | 增量更新（s01 + s01b 双发现通道 + `--years` 年份范围 + **范围模式**：写 `update_keys.json` 并给各步骤递 `--keys-file`，`--force` 回到全树档；含校验报告） |
 | `_scripts\py.cmd` | 解释器统一入口（**唯一一份**，在 `_scripts\`）。选可用 Python + 强制 UTF-8 + `-u` 转发 + 原样透传退出码（`rebuild.py` 靠 s04i 的 rc=4/5 判图片库闸门跳过，所以不能吞返回码）。项目根那份 3 行转发壳已于 2026-11-06 删除 —— 它存在的唯一理由是让裸 `py.cmd` 在根目录敲得通，代价是往站点根塞工作台文件；命令一律写成 `_scripts\py.cmd _scripts\<组>\<脚本>.py` |
 

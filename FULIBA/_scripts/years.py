@@ -612,7 +612,7 @@ def _relocate(cur_slot, key, slot_final, subs, raw):
 
 
 def delete_article(url=None, key=None):
-    """archive.py 移入归档用：删容器（返回删除的文件路径列表）。"""
+    """删容器（返回删除的文件路径列表）。"""
     k = key or url_key(url or "")
     slot, path = locate(k)
     gone = []
