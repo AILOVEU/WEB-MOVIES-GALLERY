@@ -61,7 +61,7 @@ STEP_DESC = {
     "s02":   ("下载文章 HTML", "视新增篇数，每篇 1-2 秒"),
     "s02b":  ("补翻页导航", "~10 秒"),
     "s03":   ("解析 HTML 成结构化数据", "每篇 ~0.2 秒"),
-    "s02c":  ("抓最近 60 天的评论增量", "~3-4 分钟；第 1 页无变化的篇直接跳过"),
+    "s02c":  ("抓最近 60 天的评论增量（可选：--comments）", "~3-4 分钟；第 1 页无变化的篇直接跳过"),
     "s04i":  ("下载正文图片", "视新图数量，可能几分钟"),
     "s04l":  ("解代理图床包装", "~10 秒"),
     "s04f":  ("重建图片台账", "~20 秒"),
@@ -185,6 +185,9 @@ def main():
     force = "--force" in sys.argv
     refresh = "--refresh" in sys.argv
     deep = "--deep" in sys.argv
+    # 60 天评论增量（s02c）改为可选：默认不跑，加 --comments 才跑（2026-11-20）。
+    # 即使有第 1 页 probe 跳过，一轮也要 3-4 分钟，而绝大多数时候没有新评论。
+    with_comments = "--comments" in sys.argv
     pages = None
     yarg = next((a.split("=", 1)[1] for a in sys.argv[1:] if a.startswith("--years=")), None)
     years = C.Y.parse_years_arg(yarg) if yarg else None
@@ -295,10 +298,15 @@ def main():
         return 0
 
     if not new and not changed and not force:
-        # 即使没有新文章，评论也会随时间增长：单独跑 s02c（评论增量）+ s06（重建站点）+ verify。
-        # 直接 return 会让「最近 60 天帖子的新评论」永远抓不到。
-        say("[结论] 无新文章/变化：只跑评论增量(s02c) + 建站(s06) + 校验(verify)")
-        for name, script in [s for s in STEPS if s[0] in ("s02c", "s06", "verify")]:
+        # 60 天评论增量（s02c）是可选的：默认不跑，--comments 才跑。
+        # 建站 + 校验足以保持交付最新；评论想更新时手动加 --comments。
+        tail_steps = ("s02c", "s06", "verify") if with_comments else ("s06", "verify")
+        if with_comments:
+            say("[结论] 无新文章/变化：跑评论增量(s02c) + 建站(s06) + 校验(verify)")
+        else:
+            say("[结论] 无新文章/变化：跑建站(s06) + 校验(verify)；"
+                "评论增量默认跳过（加 --comments 启用）")
+        for name, script in [s for s in STEPS if s[0] in tail_steps]:
             d, eta = STEP_DESC.get(name, ("", ""))
             say("[步骤] >>> %s  %s（预计 %s）" % (name, d, eta))
             rc, dt, lines = R.run_step(name, script, tail=6, extra=R.step_extra(name, None, yflag))
@@ -346,6 +354,10 @@ def main():
     # 无新增且无变化时默认只重建站点；--force 跑完整流水线（含 s02/s03/s04i）：
     # 上一轮如果在 s04i 之前中断（图片还没下），新文章的图就靠这一档补齐。
     steps = STEPS if (new or changed or force) else [s for s in STEPS if s[0] in ("s02c", "s04d", "s06", "verify")]
+
+    if not with_comments and any(s[0] == "s02c" for s in steps):
+        steps = [s for s in steps if s[0] != "s02c"]
+        say("[评论] 默认跳过 60 天评论增量（命令行加 --comments 启用）")
     if offline:
         dropped = [s[0] for s in steps if s[0] in IMAGE_STEPS]
         steps = [s for s in steps if s[0] not in IMAGE_STEPS]
