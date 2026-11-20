@@ -84,6 +84,28 @@ def page_count(txt):
     return int(m.group(1)) if m else None
 
 
+def probe_first_page(sess, pacer, url):
+    """只抓第 1 页，返回 (该页评论 id 集合, 页面标注总数)。
+
+    用途：判断「这篇有没有新评论」。
+    站点把总评论数写在「评论 (N)」里，第 1 页还给出最新几条的 id。
+    两个都没变化 = 这篇不可能有新评论，直接跳过，不用抓 3 种排序 × 全部页。
+
+    为什么值得单独做：全量抓一篇要 3 次请求起（三种排序），
+    141 篇就是 400+ 请求、近 10 分钟，而绝大多数篇根本没新评论。
+    """
+    first = url + "?commentsort=new#comments"
+    r, txt = C.fetch(sess, first, pacer, tries=3, ref=C.BASE + "/", timeout=45)
+    if txt is None:
+        return None, None
+    try:
+        ids, _ = comment_ids_and_pages(txt)
+        declared = page_count(txt)
+    except Exception:
+        return None, None
+    return ids, declared
+
+
 def fetch_all_comments(sess, pacer, url):
     """三链×翻页抓全，返回 (id->评论节点 dict, 页面标注数)。
 
@@ -145,6 +167,7 @@ def main():
 
     tot_new = 0
     tot_posts = 0
+    n_skip = 0        # 第 1 页判定无变化、跳过全量的篇数
     t0 = time.time()
     for idx, (url, key, d, by_scope) in enumerate(targets, 1):
         parsed = C.Y.read_parsed(url=url, key=key)
@@ -152,6 +175,31 @@ def main():
             continue
         old = parsed.get("comments") or []
         old_ids = set(str(c.get("id")) for c in old if isinstance(c, dict) and c.get("id"))
+        old_declared = parsed.get("comments_declared")
+
+        # ---- 快速判定：先只抓第 1 页，没变化就跳过全量 ----
+        # 全量抓一篇要 3 种排序 × 全部页（400+ 请求 / 141 篇 ≈ 10 分钟），
+        # 而绝大多数篇根本没新评论。第 1 页给出最新几条的 id + 「评论 (N)」总数，
+        # 两个都没变就说明不可能有新评论，直接跳过。
+        try:
+            probe_ids, probe_declared = probe_first_page(sess, pacer, url)
+        except C.CircuitBreaker as e:
+            C.log("[s02c] 熔断停止: %s" % e)
+            C.state_append("comments", url, "CIRCUIT", msg=str(e))
+            break
+        except Exception:
+            probe_ids, probe_declared = None, None
+
+        if probe_ids is not None:
+            same_count = (probe_declared is not None and old_declared is not None
+                          and probe_declared == old_declared)
+            no_new_id = not (probe_ids - old_ids)
+            if same_count and no_new_id:
+                C.state_append("comments", url, "SKIP_UNCHANGED",
+                               declared=probe_declared, total=len(old_ids))
+                n_skip += 1
+                continue
+
         # dry 也要抓一遍才知道新增多少（否则无法判断）——区别只在下方不写盘
 
         try:
@@ -168,6 +216,10 @@ def main():
 
         new_nodes = [decorate_new(n) for cid, n in found.items() if cid not in old_ids]
         if not new_nodes:
+            # 没有新评论，但把页面标注数记下来 —— 下次 probe 才有 baseline 可比
+            if declared is not None and not dry and parsed.get("comments_declared") != declared:
+                parsed["comments_declared"] = declared
+                C.Y.write_parsed(url, parsed)
             C.state_append("comments", url, "NOCHANGE", total=len(found))
             continue
 
@@ -177,6 +229,9 @@ def main():
             merged = list(old) + new_nodes
             parsed["comments"] = merged
             parsed["comments_parsed"] = len(merged)
+            # 记下页面标注的总数，下次 probe 直接比对，省掉全量抓取
+            if declared is not None:
+                parsed["comments_declared"] = declared
             C.Y.write_parsed(url, parsed)
             if keys_path and scope and url not in scope:
                 C.scope_add(keys_path, url)   # 让 s04d/s06 也重做这篇
@@ -187,9 +242,10 @@ def main():
                   % (idx, len(targets), url.rsplit("/", 1)[-1], len(new_nodes), tot_new, time.time() - t0))
 
     C.state_append("comments", "__summary__", "DONE", posts=tot_posts, added=tot_new,
-                   targets=len(targets), dry=int(bool(dry)))
-    C.log("[s02c] 完成：%d 篇有新增，共 +%d 条评论（只增不删，旧评论零改动）%s  用时 %.0fs"
-          % (tot_posts, tot_new, " [DRY]" if dry else "", time.time() - t0))
+                   targets=len(targets), skipped=n_skip, dry=int(bool(dry)))
+    C.log("[s02c] 完成：%d 篇有新增，共 +%d 条评论；%d/%d 篇第 1 页判定无变化已跳过（只增不删，旧评论零改动）%s  用时 %.0fs"
+          % (tot_posts, tot_new, n_skip, len(targets),
+             " [DRY]" if dry else "", time.time() - t0))
     return 0
 
 

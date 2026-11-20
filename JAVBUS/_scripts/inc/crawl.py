@@ -47,7 +47,10 @@ DONE_PATH = P.CRAWL_DONE
 # 已删除名单（2026-11-20）：由 _tools/gallery_delete 维护，抓取时一并跳过。
 # 与 crawl_done.txt 分开存是有意的 —— 断点是「抓过了」，删除是「不要了」，
 # 两者语义不同：帖子可能被抓过又被删，也可能没抓过就被删。
-DELETED_PATH = os.path.join(P.WORK, "gallery_deleted.json")
+# 位置必须是 data/ 不是 _pipeline/：_tools/gallery_delete 把权威清单放 data/，
+# _pipeline 只是过程区（fetch 的临时中转也在这里，但合并后立即删除）。
+# 之前指向 _pipeline 导致过滤永远读到空文件 —— 已删除的帖会被重新抓回来。
+DELETED_PATH = os.path.join(P.DATA, "gallery_deleted.json")
 PROXY = os.environ.get("JAVBUS_PROXY", "http://127.0.0.1:7890")
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/126.0 Safari/537.36")
@@ -163,15 +166,28 @@ def crawl_list(cookie, pace, pages=10, force=False):
         log("list p%d -> %s (%d threads)" % (p, v, n))
 
 
-def collect_tids(pages=10):
+def collect_tids(pages=10, skip_deleted=True):
+    """
+    列表页里的 tid，按出现顺序去重。
+
+    skip_deleted=True 时剔除已删除的 tid（2026-11-20）。
+
+    这一步必须过滤，不能只在 crawl_threads 里过滤 —— 列表结果会经
+    update.py -> merge_store 直接并进 index.json 入库，
+    threads 阶段的过滤只决定「抓不抓详情」，拦不住「入不入库」。
+    之前就是这个缺口：已删除的帖被 list 重新收进库，详情还是旧的。
+    """
+    deleted = thread_deleted_set() if skip_deleted else set()
     order, seen = [], set()
     for p in range(1, pages + 1):
         path = os.path.join(RAW_DIR, "list_p%d.html" % p)
         if not os.path.exists(path):
             continue
         for r in D.parse_list_page(io.open(path, encoding="utf-8", errors="ignore").read()):
-            if r["tid"] not in seen:
-                seen.add(r["tid"]); order.append(r["tid"])
+            tid = r["tid"]
+            if tid in seen or tid in deleted:
+                continue
+            seen.add(tid); order.append(tid)
     return order
 
 
@@ -219,7 +235,10 @@ def collect_refs_from_parsed():
         blob += [c.get("content_html") or "" for c in d.get("comments") or []]
         for h in blob:
             refs |= {t for t in D.extract_thread_refs(h) if t != own}
-    return refs
+    # 已删除的不能被「引用补录」重新拉回库 —— 别的帖子引用了它，
+    # 不代表我们要把它抓回来入库（2026-11-20）。
+    # 注意：这里必须再减一次，collect_tids 的过滤只管列表页。
+    return refs - thread_deleted_set()
 
 
 def mark_done(tid, pace=None):

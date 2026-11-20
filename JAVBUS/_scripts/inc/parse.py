@@ -41,12 +41,20 @@ def read(p):
 
 
 def build_index(pages=10):
+    """列表页 -> 元数据列表。已删除的 tid 直接跳过（2026-11-20）。
+
+    这是第四条过滤路径：build_index 直接读 list_p*.html，
+    不经过 collect_tids，所以必须自己过滤一遍。
+    """
+    deleted = _deleted_set()
     metas, seen = [], {}
     for p in range(1, pages + 1):
         path = os.path.join(RAW_DIR, "list_p%d.html" % p)
         if not os.path.exists(path):
             continue
         for r in D.parse_list_page(read(path)):
+            if r["tid"] in deleted:
+                continue
             if r["tid"] in seen:
                 seen[r["tid"]]["list_pages"].append(p)
                 continue
@@ -111,6 +119,31 @@ def load_store():
     return []
 
 
+def _deleted_set():
+    """
+    已删除的 tid 集合，供列表/补录阶段过滤（2026-11-20）。
+
+    直接读 data/gallery_deleted.json，不 import crawl ——
+    parse.py 的 sys.path 只加了 _scripts/common，没有 inc，
+    `from . import crawl` 在这里会 ImportError，过滤会静默失效。
+    读不到就返回空集：宁可漏过滤，也不能让一个坏文件卡死整轮抓取。
+    """
+    fp = os.path.join(P.DATA, "gallery_deleted.json")
+    if not os.path.exists(fp):
+        return set()
+    try:
+        d = json.load(io.open(fp, encoding="utf-8"))
+    except Exception as e:
+        log("warn: 读取已删除清单失败（%s），本轮不跳过已删除" % e)
+        return set()
+    items = d.get("items") if isinstance(d, dict) else None
+    if isinstance(items, dict):
+        return {str(k) for k in items.keys()}
+    if isinstance(items, list):
+        return {str(x) for x in items if x}
+    return set()
+
+
 def merge_store(current, store):
     """新帖(当前列表里 store 没过的)插到最前；已存在的保留原条目与位置(不更新)。返回 (merged, new_tids)。"""
     have = {t["tid"] for t in store}
@@ -136,10 +169,14 @@ def main():
     # 帖内引用补录：有原始 HTML、但从未出现在列表页的帖（crawl.py refs 抓回来的），
     # 元数据从帖子页自己解析；拿不到标题（“提示信息”页 = 帖已删）就跳过，不造假条目。
     seen = {t["tid"] for t in merged}
+    # 已删除的不能再被「引用补录」拉回来（2026-11-20）。
+    # 这里必须单独过滤：_rawdata 里的旧 HTML 还在，扫到就会补录，
+    # 与 collect_tids / collect_refs_from_parsed 的过滤是三条独立路径。
+    deleted = _deleted_set()
     extra = []
     for f in sorted(glob.glob(os.path.join(POSTS_DIR, "*_p1.html"))):
         tid = os.path.basename(f).split("_p")[0]
-        if tid in seen:
+        if tid in seen or tid in deleted:
             continue
         meta = D.parse_thread_meta(read(f))
         if meta["tid"] != tid or not meta["title"]:
