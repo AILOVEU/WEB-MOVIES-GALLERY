@@ -509,8 +509,15 @@ def load_remote(root, site):
 
 
 def cmd_merge(root, dry_run):
-    """只增不减：本地已有的保留，远端多出来的加进来。"""
+    """
+    只增不减：本地已有的保留，远端多出来的加进来。
+
+    **本地清单是全量权威，Supabase 只是增量来源。**
+    云端只存 AIO 上点过删除的 op，不含历史归档 / 促销清理并入的条目，
+    所以绝不能拿远端去覆盖或裁剪本地 —— 那会让已删文章被重新抓回来。
+    """
     log("[merge] ========== 第 2 步：合并到本地清单（只增不减） ==========")
+    log("[merge] 本地清单是全量权威，Supabase 只提供增量；不会删减本地任何条目")
     total_added = 0
     for site in SITE_NAMES:
         local = load_deleted(root, site)
@@ -867,8 +874,16 @@ def apply_fuliba(root, ids, dry_run):
             % (idx, len(targets), pid,
                (deleted.get(pid, {}).get("title") or url or "")[:40]))
 
-        # 该篇名下的资源：优先取资源清单，缺失时从容器 parsed 推
-        if resources.get(pid):
+        # 该篇名下的资源：优先取资源清单，缺失时从容器 parsed 推。
+        # 原归档 / 促销清理并入的条目（source=archive_merged）资源当时已被释放，
+        # 容器也多半不在了，这里自然拿不到资源，直接跳过资源步骤。
+        rec = deleted.get(pid) or {}
+        assets_released = rec.get("source") == "archive_merged"
+        if assets_released:
+            if dry_run:
+                log("           · 资源已于归档时释放，跳过资源步骤")
+            own = []
+        elif resources.get(pid):
             own = list(resources[pid].get("images") or [])
         else:
             own = [fuliba_site_rel(k) for k in fuliba_collect_img_keys(parsed)]
@@ -1254,10 +1269,115 @@ def cmd_status(root):
 
 # ============================================================ main
 
+def cmd_all(root, dry_run, only=None):
+    """全流程：fetch + merge + resources（都真写）+ apply（按 dry_run）。"""
+    log("")
+    log("################  gallery_delete 全流程  ################")
+    if dry_run:
+        log("模式: dry-run（fetch/merge/resources 会写文件，apply 只打印）")
+    log("")
+    rc = cmd_fetch(root, False)
+    if rc:
+        return rc
+    log("")
+    cmd_merge(root, False)
+    log("")
+    # 资源清单要在删除前刷新：apply 靠它做「资源是否仍被引用」的独立校验
+    cmd_resources(root, False)
+    log("")
+    return cmd_apply(root, dry_run, only)
+
+# ============================================================ 交互菜单
+
+MENU_ITEMS = [
+    ("1", "status",    [],                     "查看本地已删除清单"),
+    ("2", "fetch",     [],                     "从 Supabase 拉取删除名单"),
+    ("3", "merge",     [],                     "合并远端名单到本地清单"),
+    ("4", "resources", [],                     "重建「文章 - 资源」清单"),
+    ("5", "apply",     ["--dry-run"],          "试运行（只打印，不删任何文件）"),
+    ("6", "apply",     [],                     "正式删除（会真的删文件）"),
+    ("7", "all",       ["--dry-run"],          "全流程试运行（fetch+merge+resources+apply）"),
+]
+
+
+def _ask(prompt):
+    try:
+        return input(prompt).strip()
+    except (EOFError, KeyboardInterrupt):
+        return ""
+
+
+def cmd_menu(root):
+    """
+    交互菜单。中文全部在 Python 里，bat 只负责转发 ——
+    cmd.exe 解析 UTF-8 多字节字符时会按字节偏移吞掉命令，
+    bat 里写中文必然出「命令被吃一半」的怪现象（实测 [2] fetch 变成 ch）。
+    """
+    while True:
+        print("")
+        print("=" * 60)
+        print("  gallery_delete  -  画廊已删除帖子清理工具")
+        print("=" * 60)
+        print("  仓库根 : %s" % root)
+        print("-" * 60)
+        for num, cmd, extra, desc in MENU_ITEMS:
+            print("  [%s] %-10s %s" % (num, cmd, desc))
+        print("  [0] %-10s %s" % ("exit", "退出"))
+        print("-" * 60)
+
+        choice = _ask("请输入编号后回车: ")
+        if choice in ("0", "q", "Q", ""):
+            if choice == "":
+                print("未输入编号，退出。")
+            return 0
+
+        hit = None
+        for num, cmd, extra, desc in MENU_ITEMS:
+            if num == choice:
+                hit = (cmd, extra, desc)
+                break
+        if not hit:
+            print("无效的编号：%s" % choice)
+            continue
+
+        cmd, extra, desc = hit
+        if cmd == "apply" and not extra:
+            print("")
+            print("警告：此操作会真的删除文件。被删文件会先备份到各站点的 _backup 目录。")
+            if _ask("确认请输入 YES 后回车: ").upper() != "YES":
+                print("已取消。")
+                continue
+
+        print("")
+        print("> %s %s" % (cmd, " ".join(extra)))
+        print("-" * 60)
+        try:
+            if cmd == "status":
+                rc = cmd_status(root)
+            elif cmd == "fetch":
+                rc = cmd_fetch(root, False)
+            elif cmd == "merge":
+                cmd_merge(root, False)
+                rc = 0
+            elif cmd == "resources":
+                rc = cmd_resources(root, False)
+            elif cmd == "apply":
+                rc = cmd_apply(root, "--dry-run" in extra, None)
+            elif cmd == "all":
+                rc = cmd_all(root, "--dry-run" in extra, None)
+            else:
+                rc = 2
+        except Exception as e:
+            err("执行出错：%s" % e)
+            rc = 1
+        print("-" * 60)
+        print("退出码: %s" % rc)
+        _ask("按回车返回菜单...")
+
 def main():
     ap = argparse.ArgumentParser(
         description="画廊已删除帖子的资源清理工具（单文件，路径相对脚本自身）")
-    ap.add_argument("cmd", choices=["status", "fetch", "merge", "resources", "apply", "all"],
+    ap.add_argument("cmd", choices=["menu", "status", "fetch", "merge", "resources", "apply", "all"],
                     help="status 看清单 / fetch 拉远端 / merge 合并 / "
                          "resources 重建资源清单 / apply 删资源 / all 全跑")
     ap.add_argument("--dry-run", action="store_true", help="只打印，不写文件不删资源")
@@ -1270,6 +1390,8 @@ def main():
         err("仓库根不存在：%s" % root)
         return 2
 
+    if args.cmd == "menu":
+        return cmd_menu(root)
     if args.cmd == "status":
         return cmd_status(root)
     if args.cmd == "fetch":
@@ -1281,22 +1403,7 @@ def main():
         return cmd_resources(root, args.dry_run)
     if args.cmd == "apply":
         return cmd_apply(root, args.dry_run, args.site)
-    # all：fetch + merge 真写（都是增量安全操作），apply 按 --dry-run 走
-    log("")
-    log("################  gallery_delete 全流程  ################")
-    if args.dry_run:
-        log("模式: dry-run（fetch/merge 会写文件，apply 只打印）")
-    log("")
-    rc = cmd_fetch(root, False)
-    if rc:
-        return rc
-    log("")
-    cmd_merge(root, False)
-    log("")
-    # 资源清单要在删除前刷新：apply 靠它做「资源是否仍被引用」的独立校验
-    cmd_resources(root, False)
-    log("")
-    return cmd_apply(root, args.dry_run, args.site)
+    return cmd_all(root, args.dry_run, args.site)
 
 
 if __name__ == "__main__":
