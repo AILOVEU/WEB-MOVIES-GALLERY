@@ -100,7 +100,7 @@ def snap():
         tid = str(r.get("tid"))
         per_row[tid] = hashlib.md5(json.dumps(r, sort_keys=True, ensure_ascii=False).encode("utf-8", "ignore")).hexdigest()
         order.append(tid)
-    done = sorted(set(io.open(P.CRAWL_DONE, encoding="utf-8").read().split())) if os.path.exists(P.CRAWL_DONE) else []
+    done = sorted(set(io.open(P.CRAWL_DONE, encoding="utf-8-sig").read().split())) if os.path.exists(P.CRAWL_DONE) else []
     imgmap = load_json(P.IMGMAP, {})
     bad_val = sorted(v for v in imgmap.values() if not str(v).startswith(P.IMG_REL + "/"))
     rn, rb, rf = tree(P.RAW_POSTS)

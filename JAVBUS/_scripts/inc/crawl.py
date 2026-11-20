@@ -192,7 +192,7 @@ def collect_tids(pages=10, skip_deleted=True):
 
 
 def thread_done_set():
-    return set(io.open(DONE_PATH, encoding="utf-8").read().split()) if os.path.exists(DONE_PATH) else set()
+    return set(io.open(DONE_PATH, encoding="utf-8-sig").read().split()) if os.path.exists(DONE_PATH) else set()
 
 
 def thread_deleted_set():

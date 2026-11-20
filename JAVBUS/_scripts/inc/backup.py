@@ -68,7 +68,7 @@ def counts():
     """当前几个关键账号数，写进 MANIFEST 方便日后判断该回退到哪一天。"""
     idx = json.load(io.open(P.INDEX_JSON, encoding="utf-8")) if os.path.exists(P.INDEX_JSON) else []
     mapn = len(json.load(io.open(P.IMGMAP, encoding="utf-8"))) if os.path.exists(P.IMGMAP) else 0
-    done = len(io.open(P.CRAWL_DONE, encoding="utf-8").read().split()) if os.path.exists(P.CRAWL_DONE) else 0
+    done = len(io.open(P.CRAWL_DONE, encoding="utf-8-sig").read().split()) if os.path.exists(P.CRAWL_DONE) else 0
     return len(idx), mapn, done
 
 
