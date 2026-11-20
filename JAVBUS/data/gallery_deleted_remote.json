@@ -1,0 +1,10 @@
+{
+  "items": {},
+  "meta": {
+    "count": 0,
+    "fetched": "2026-11-20",
+    "note": "远端快照，只用于比对；权威清单是 gallery_deleted.json",
+    "site": "JAVBUS",
+    "source": "supabase sync_ops app=gallery"
+  }
+}

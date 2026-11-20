@@ -44,6 +44,10 @@ WORK_DIR = P.WORK               # 过程与状态：cookie.txt / crawl_done.txt 
 PARSED_DIR = P.PARSED           # 过程区：refs 模式从这里的正文/楼层提引用
 COOKIE_PATH = P.COOKIE
 DONE_PATH = P.CRAWL_DONE
+# 已删除名单（2026-11-20）：由 _tools/gallery_delete 维护，抓取时一并跳过。
+# 与 crawl_done.txt 分开存是有意的 —— 断点是「抓过了」，删除是「不要了」，
+# 两者语义不同：帖子可能被抓过又被删，也可能没抓过就被删。
+DELETED_PATH = os.path.join(P.WORK, "gallery_deleted.json")
 PROXY = os.environ.get("JAVBUS_PROXY", "http://127.0.0.1:7890")
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/126.0 Safari/537.36")
@@ -175,6 +179,27 @@ def thread_done_set():
     return set(io.open(DONE_PATH, encoding="utf-8").read().split()) if os.path.exists(DONE_PATH) else set()
 
 
+def thread_deleted_set():
+    """
+    已删除的 tid 集合。抓取时要连它一起跳过（2026-11-20 需求）。
+
+    读的是 _tools/gallery_delete 维护的 gallery_deleted.json（结构见该工具 common.py）。
+    文件不存在或格式不对时返回空集合 —— 不能让一个坏文件把整轮抓取卡死。
+    """
+    if not os.path.exists(DELETED_PATH):
+        return set()
+    try:
+        d = json.load(io.open(DELETED_PATH, encoding="utf-8"))
+    except Exception as e:
+        log("warn: gallery_deleted.json 读取失败（%s），本轮不跳过已删除" % e)
+        return set()
+    items = d.get("items") if isinstance(d, dict) else None
+    if isinstance(items, dict):
+        return {str(k) for k in items.keys()}
+    if isinstance(items, list):
+        return {str(x) for x in items if x}
+    return set()
+
 def collect_refs_from_parsed():
     """扫 _pipeline/parsed/*.json 的正文+评论，提被引用的本站 tid。
 
@@ -207,8 +232,10 @@ def crawl_threads(cookie, pace, max_pages=5, only=None, pages=10):
     P.ensure(POSTS_DIR, WORK_DIR)
     tids = only or collect_tids(pages)
     done = thread_done_set()
-    todo = [t for t in tids if t not in done]
-    log("threads total=%d done=%d todo=%d" % (len(tids), len(done), len(todo)))
+    deleted = thread_deleted_set()
+    todo = [t for t in tids if t not in done and t not in deleted]
+    log("threads total=%d done=%d deleted=%d todo=%d"
+        % (len(tids), len(done), len(deleted), len(todo)))
     dp = DONE_PATH
     for idx, tid in enumerate(todo, 1):
         seen_pids = set()

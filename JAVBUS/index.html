@@ -102,7 +102,7 @@
     <h1>老司機論壇 · 福利討論區 <span class="sub">fid=2 · 离线累积库（正文原图已本地化，头像用占位图）</span></h1>
     <div class="bar">
       <div class="chips" id="chips"></div>
-      <div class="chips"><div class="chip" id="panchip" title="只看正文或回复楼层里带网盘分享链接的帖子">含网盘</div></div>
+      <div class="chips"><div class="chip" id="panchip" title="只看正文或回复楼层里带网盘分享链接的帖子">含网盘</div><div class="chip" id="textchip" title="只看正文无任何图片的纯文字帖子（列表无缩略图）">纯文字</div></div>
       <div class="chips"><div class="chip mode" data-mode-chip title="切换图片来源：本地读 assets/images（离线可用，全量图在移动硬盘）；原始直连 https 原图（需联网，且图床强制校验 Referer=https://www.javbus.com/，浏览器直连通常 404，需扩展或本地中转补请求头）">图片：本地</div></div>
       <input type="search" id="q" placeholder="搜索标题/作者/网盘名…">
       <div class="chips"><div class="chip reset" id="resetchip" title="一键还原：清空所有本地记录（筛选条件/已读痕迹/图片来源模式），回到初始状态">还原</div></div>
@@ -200,13 +200,15 @@
   var lastTid = null;
   try { lastTid = localStorage.getItem(LAST_KEY) || null; } catch(e){}
   function saveLast(){ try{ localStorage.setItem(LAST_KEY, lastTid||''); }catch(e){} }
-  var cur = {cat:'全部', kw:'', panOnly:false};
-  try { var sf = JSON.parse(localStorage.getItem(FILTER_KEY)||'null'); if(sf && typeof sf==='object'){ cur.cat=sf.cat||'全部'; cur.kw=sf.kw||''; cur.panOnly=!!sf.panOnly; } } catch(e){}
+  var cur = {cat:'全部', kw:'', panOnly:false, textOnly:false};
+  try { var sf = JSON.parse(localStorage.getItem(FILTER_KEY)||'null'); if(sf && typeof sf==='object'){ cur.cat=sf.cat||'全部'; cur.kw=sf.kw||''; cur.panOnly=!!sf.panOnly; cur.textOnly=!!sf.textOnly; } } catch(e){}
   function saveFilter(){ try{ localStorage.setItem(FILTER_KEY, JSON.stringify(cur)); }catch(e){} }
   function panLabels(t){ return (t.pan||[]).concat(t.pan_floor||[]).map(function(x){return x.label||x.key||'';}).join(' '); }
   var hasPan = function(t){ return (t.pan&&t.pan.length) || (t.pan_floor&&t.pan_floor.length); };
   var PAN_N = DATA.filter(hasPan).length;
   var PAN_ART = DATA.filter(function(t){ return t.pan&&t.pan.length; }).length;
+  var hasImg = function(t){ return !!t.cover; };
+  var TEXT_N = DATA.filter(function(t){ return !hasImg(t); }).length;
   var cats = {};
   DATA.forEach(function(t){ if(t.category) cats[t.category]=(cats[t.category]||0)+1; });
   var order = ['全部'].concat(Object.keys(cats).sort(function(a,b){return cats[b]-cats[a];}));
@@ -224,6 +226,10 @@
   pchip.textContent = '含网盘 ('+PAN_N+')';
   pchip.classList.toggle('on', cur.panOnly);
   pchip.onclick = function(){ cur.panOnly=!cur.panOnly; pchip.classList.toggle('on',cur.panOnly); saveFilter(); render(); };
+  var tchip = document.getElementById('textchip');
+  tchip.textContent = '纯文字 ('+TEXT_N+')';
+  tchip.classList.toggle('on', cur.textOnly);
+  tchip.onclick = function(){ cur.textOnly=!cur.textOnly; tchip.classList.toggle('on',cur.textOnly); saveFilter(); render(); };
   /* 一键还原：清空所有本地记录（筛选/已读/图片模式），回到初始状态 */
   document.getElementById('resetchip').onclick = function(){
     if(!confirm('还原将清空所有本地记录（筛选条件 / 已读痕迹 / 图片来源模式），恢复初始状态？')) return;
@@ -236,6 +242,7 @@
   function pass(t){
     if(cur.cat!=='全部' && t.category!==cur.cat) return false;
     if(cur.panOnly && !hasPan(t)) return false;
+    if(cur.textOnly && hasImg(t)) return false;
     if(cur.kw){ var h=(t.title+' '+(t.author||'')+' '+panLabels(t)).toLowerCase(); if(h.indexOf(cur.kw)<0) return false; }
     return true;
   }
