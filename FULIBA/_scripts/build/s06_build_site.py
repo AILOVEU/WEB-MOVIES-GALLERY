@@ -351,7 +351,7 @@ def article_unit(a, slug, base):
   <h2>评论（%(cc)d）</h2>
   <ol class="cmtlist">%(comments)s</ol>
 </section>
-<footer class="pf"><a href="%(base)s/index.html">← 返回索引</a></footer>""" % {
+<footer class="pf"><a href="%(base)sindex.html">← 返回索引</a></footer>""" % {
         "title": htmlmod.escape(a.get("title", "")),
         "date": htmlmod.escape(a.get("date", "")),
         "cat": htmlmod.escape(a.get("category", "") or "未分类"),
@@ -578,6 +578,28 @@ window.__startApp__ = function(){
   var $ = function(s){return document.querySelector(s)};
   var catSel = $('#cat'), yearSel = $('#year');
 
+  /* 翻页状态存 sessionStorage：点进文章再返回，还停在原来那页。
+     用 sessionStorage 而不是 localStorage —— 关掉标签页就该忘掉，
+     下次打开从头看更符合预期。 */
+  var SS = 'fuliba_list_state_v1';
+  function saveState(){
+    try{
+      sessionStorage.setItem(SS, JSON.stringify({
+        page: page,
+        q: $('#q').value,
+        cat: catSel.value,
+        year: yearSel.value,
+        y: window.scrollY || 0
+      }));
+    }catch(e){}
+  }
+  function loadState(){
+    try{
+      var s = sessionStorage.getItem(SS);
+      return s ? JSON.parse(s) : null;
+    }catch(e){ return null; }
+  }
+
   Object.keys(D.meta.categories).sort().forEach(function(c){
     var o=document.createElement('option'); o.value=c; o.textContent=c+' ('+D.meta.categories[c]+')'; catSel.appendChild(o);
   });
@@ -631,9 +653,12 @@ window.__startApp__ = function(){
     $('#cnt').textContent = list.length ? ('第 '+(start+1)+'-'+end+' 篇 / 共 '+list.length+' 篇') : '共 0 篇';
     renderPager();
     $('#empty').hidden = list.length>0;
+    saveState();
   }
 
-  function filter(){
+  /* keepPage=true 时保留当前页码（用于从 sessionStorage 恢复），
+     用户手动改筛选条件时传 false，回到第一页。 */
+  function filter(keepPage){
     var q=$('#q').value.trim().toLowerCase(), c=catSel.value, y=yearSel.value;
     list = A.filter(function(a){
       if(c && a.category!==c) return false;
@@ -644,7 +669,8 @@ window.__startApp__ = function(){
       }
       return true;
     });
-    page=0; render();
+    if(!keepPage) page=0;
+    render();
   }
 
   var t=null;
@@ -665,7 +691,28 @@ window.__startApp__ = function(){
     var a=e.target.closest('[data-cat]');
     if(a){ e.preventDefault(); catSel.value=a.getAttribute('data-cat'); filter(); }
   });
-  render();
+
+  /* 启动：优先恢复上次的翻页状态（从文章返回时用），否则从头渲染。
+     恢复时要等筛选条件填好再 filter，否则页码会被算错。 */
+  (function boot(){
+    var st = loadState();
+    if(st){
+      if(st.q) $('#q').value = st.q;
+      if(st.cat) catSel.value = st.cat;
+      if(st.year) yearSel.value = st.year;
+      filter(true);                 /* 保留 st.page */
+      var total = Math.ceil(list.length/PAGE);
+      page = Math.min(Math.max(0, st.page|0), Math.max(0, total-1));
+      render();
+      if(st.y) window.scrollTo(0, st.y);
+      return;
+    }
+    render();
+  })();
+
+  /* 离开页面（点进文章、切标签）时再存一次，防止滚动位置丢失 */
+  window.addEventListener('pagehide', saveState);
+  window.addEventListener('beforeunload', saveState);
 };
 if (window.__yearReady) window.__startApp__();
 </script>
