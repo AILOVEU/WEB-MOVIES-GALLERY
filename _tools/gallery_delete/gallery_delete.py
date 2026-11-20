@@ -1242,6 +1242,29 @@ def javbus_delete_images(root, tid, dry_run):
             log("         - tid=%s 没有图片目录" % tid)
         return 0, 0
     files = [os.path.join(dp, fn) for dp, _dn, fns in os.walk(d) for fn in fns]
+
+    # ---- 共用图校验：被保留帖子引用的文件一个都不能删 ----
+    # 之前只有 docstring 声称有校验，实现里根本没调 javbus_referenced_images，
+    # 直接 rmtree 整目录 —— 共用图会被误删（最小布局实测复现）。
+    referenced = javbus_referenced_images(root, {tid})
+    protected = set()
+    for p in files:
+        rel = os.path.relpath(p, site_dir(root, "JAVBUS")).replace(os.sep, "/")
+        if rel in referenced:
+            protected.add(rel)
+    if protected:
+        if dry_run:
+            log("         - assets/images/%s/ 有 %d 个文件被保留帖子引用，整目录跳过"
+                % (tid, len(protected)))
+            for r in sorted(protected)[:5]:
+                log("           - %s" % r)
+            return 0, 0
+        warn("[apply] JAVBUS: assets/images/%s/ 有 %d 个共用图被保留帖子引用，整目录跳过不删"
+             % (tid, len(protected)))
+        for r in sorted(protected)[:5]:
+            warn("           - %s" % r)
+        return 0, 0
+
     size = sum(os.path.getsize(p) for p in files if os.path.exists(p))
     if dry_run:
         log("         - assets/images/%s/ 删 %d 个文件（%s）" % (tid, len(files), human(size)))
