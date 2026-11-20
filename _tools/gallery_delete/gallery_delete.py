@@ -490,6 +490,47 @@ def fuliba_url_index(root):
     return idx
 
 
+def fuliba_article_index(root):
+    """
+    从各年度 data.js 建 id -> {title, url, date} 索引。
+
+    为什么需要它：AIO 早期版本取标题有 bug（分片容器里 querySelector 永远拿第一篇），
+    推上来的 op 里 title 是错的。本地 data.js 是抓取时从原文解析出来的，才是权威。
+    合并时用这份索引纠正云端传来的错误标题。
+    """
+    idx = {}
+    data_dir = os.path.join(site_dir(root, "FULIBA"), "data")
+    if not os.path.isdir(data_dir):
+        return idx
+    for slot in sorted(os.listdir(data_dir)):
+        p = os.path.join(data_dir, slot, "data.js")
+        if not os.path.exists(p):
+            continue
+        try:
+            with io.open(p, "r", encoding="utf-8", errors="replace") as f:
+                text = f.read()
+        except OSError:
+            continue
+        m = re.search(r"(\[\s*\{.*\}\s*\])\s*\)\s*;?\s*$", text, re.S)
+        if not m:
+            continue
+        try:
+            arr = json.loads(m.group(1))
+        except ValueError:
+            continue
+        for row in arr:
+            if not isinstance(row, dict):
+                continue
+            pid = str(row.get("id") or "")
+            if pid:
+                idx[pid] = {
+                    "title": row.get("title") or "",
+                    "url": row.get("url") or "",
+                    "date": row.get("date") or "",
+                }
+    return idx
+
+
 def javbus_index(root):
     raw = read_json(os.path.join(pipeline_dir(root, "JAVBUS"), "index.json"), []) or []
     idx = {}
@@ -529,16 +570,23 @@ def cmd_merge(root, dry_run):
 
         if site == "FULIBA":
             uidx = fuliba_url_index(root)
-            for rec in list(remote.values()) + list(local.values()):
+            aidx = fuliba_article_index(root)
+            fixed = 0
+            for pid, rec in list(remote.items()) + list(local.items()):
+                art = aidx.get(pid) or {}
+                # url 缺失就补
                 if not rec.get("url"):
-                    rec["url"] = uidx.get(rec.get("_id") or "", "")
-            # 上面拿不到 id，单独补一遍
-            for pid, rec in remote.items():
-                if not rec.get("url"):
-                    rec["url"] = uidx.get(pid, "")
-            for pid, rec in local.items():
-                if not rec.get("url"):
-                    rec["url"] = uidx.get(pid, "")
+                    rec["url"] = uidx.get(pid, "") or art.get("url", "")
+                # 标题以本地 data.js 为准：云端可能带着 AIO 老 bug 写错的标题
+                real = art.get("title") or ""
+                if real and rec.get("title") != real:
+                    if rec.get("title"):
+                        fixed += 1
+                    rec["title"] = real
+                if not rec.get("date") and art.get("date"):
+                    rec["date"] = art["date"]
+            if fixed:
+                log("[merge] FULIBA: 用本地 data.js 纠正了 %d 条错误标题" % fixed)
         else:
             jidx = javbus_index(root)
             for pid, rec in remote.items():
