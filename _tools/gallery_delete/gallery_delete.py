@@ -738,17 +738,22 @@ def fuliba_collect_img_keys(parsed):
     return keys
 
 
-def fuliba_remove_from_parts(root, key, dry_run):
+def fuliba_remove_from_parts(root, keys, dry_run):
     """
-    从年度分片里摘掉该篇的整段 <div class="shard-post" id="<key>">…</div>。
+    从年度分片里摘掉这些 key 的整段 <div class="shard-post" id="<key>">…</div>。
+
+    **批量处理**：一次遍历每个分片文件，把所有命中的 key 一起摘掉。
+    早期版本对每个 key 都重读全部 56 个分片（187 MB），211 条就是 40 GB I/O，
+    实测会卡死。现在每个分片只读一次、写一次。
 
     边界判定与 years.py 一致：右边界取「下一个锚点」或「共享脚本区标记」，
     两者都定位后再切除。不做嵌套标签配对 —— 正文里有 <section> 等，配对会误伤。
     """
     data_dir = os.path.join(site_dir(root, "FULIBA"), "data")
-    if not os.path.isdir(data_dir):
+    if not os.path.isdir(data_dir) or not keys:
         return 0
-    marker = FULIBA_SHARD_OPEN + key + '"'
+
+    keyset = {str(k) for k in keys}
     hit = 0
     for slot in sorted(os.listdir(data_dir)):
         sd = os.path.join(data_dir, slot)
@@ -763,24 +768,49 @@ def fuliba_remove_from_parts(root, key, dry_run):
                     txt = f.read()
             except OSError:
                 continue
-            start = txt.find(marker)
-            if start < 0:
+
+            # 先找出本文件里所有命中的 key 及其区间
+            spans = []
+            pos = 0
+            while True:
+                i = txt.find(FULIBA_SHARD_OPEN, pos)
+                if i < 0:
+                    break
+                j = txt.find('"', i + len(FULIBA_SHARD_OPEN))
+                if j < 0:
+                    break
+                k = txt[i + len(FULIBA_SHARD_OPEN):j]
+                if k in keyset:
+                    nxt = txt.find(FULIBA_SHARD_OPEN, j + 1)
+                    tail = txt.find(FULIBA_SHARD_TAIL, i)
+                    cands = [x for x in (nxt, tail) if x >= 0]
+                    e = min(cands) if cands else len(txt)
+                    spans.append((i, e, k))
+                    pos = e
+                else:
+                    pos = j + 1
+
+            if not spans:
                 continue
-            nxt = txt.find(FULIBA_SHARD_OPEN, start + len(marker))
-            tail = txt.find(FULIBA_SHARD_TAIL, start)
-            cands = [x for x in (nxt, tail) if x >= 0]
-            end = min(cands) if cands else len(txt)
+
             if dry_run:
-                log("         - %s/%s 摘除 %d 字符" % (slot, name, end - start))
-                hit += 1
+                for s0, e0, k in spans:
+                    log("         - %s/%s 摘除 %s（%d 字符）" % (slot, name, k, e0 - s0))
+                hit += len(spans)
                 continue
+
+            # 从后往前切，避免前面的偏移失效
+            out = txt
+            for s0, e0, _k in reversed(spans):
+                out = out[:s0] + out[e0:]
+
             backup_file(root, "FULIBA", p)
             tmp = p + ".tmp"
             try:
                 with io.open(tmp, "w", encoding="utf-8", newline="") as f:
-                    f.write(txt[:start] + txt[end:])
+                    f.write(out)
                 os.replace(tmp, p)
-                hit += 1
+                hit += len(spans)
             except OSError as e:
                 warn("[apply] FULIBA: 分片改写失败 %s/%s（%s）" % (slot, name, e))
                 if os.path.exists(tmp):
@@ -982,10 +1012,8 @@ def apply_fuliba(root, ids, dry_run):
             n_files += 1
             n_bytes += size
 
-    # 分片摘锚点
-    n_parts = 0
-    for pid in sorted(keys):
-        n_parts += fuliba_remove_from_parts(root, pid, dry_run)
+    # 分片摘锚点：一次传全部 key，每个分片只读写一次
+    n_parts = fuliba_remove_from_parts(root, keys, dry_run)
 
     # data.js 列表
     n_list = fuliba_remove_from_datajs(root, keys, dry_run)
