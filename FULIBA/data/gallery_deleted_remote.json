@@ -1,7 +1,18 @@
 {
-  "items": {},
+  "items": {
+    "88e17f4fce3366b4": {
+      "deleted_at": 1795141094118,
+      "op_id": "mwocnp46-hk2szfxh",
+      "title": "2026年福利汇总第162期 ：分不清你是我还是梦"
+    },
+    "b8e1da579f7f5d8b": {
+      "deleted_at": 1795145201573,
+      "op_id": "mwof3qg3-6gn34voc",
+      "title": "2026年福利汇总第162期 ：分不清你是我还是梦"
+    }
+  },
   "meta": {
-    "count": 0,
+    "count": 2,
     "fetched": "2026-11-20",
     "note": "远端快照，只用于比对；权威清单是 gallery_deleted.json",
     "site": "FULIBA",

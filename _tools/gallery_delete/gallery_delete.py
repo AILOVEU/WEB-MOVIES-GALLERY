@@ -1251,6 +1251,32 @@ def cmd_apply(root, dry_run, only=None):
 
 # ============================================================ status
 
+def deleted_sort_key(rec):
+    """
+    按「删除时间」倒序排，最新的排最前。
+
+    时间来源按可信度依次取：
+      1. deleted_at —— AIO 推上来的 op 时间戳（毫秒或秒，统一归一）
+      2. ts         —— 同上，老记录可能只有这个字段
+      3. date       —— 文章发布日期；归档并入的条目没有删除时间，用这个兜底
+    都没有就排最后（空字符串排序天然靠后）。
+    """
+    for k in ("deleted_at", "ts"):
+        v = rec.get(k)
+        if v in (None, "", 0):
+            continue
+        try:
+            n = float(v)
+        except (TypeError, ValueError):
+            continue
+        # 毫秒时间戳（13 位）归一成秒，避免和秒级混排时错位
+        if n > 1e11:
+            n = n / 1000.0
+        return (1, n)
+    d = rec.get("date") or ""
+    return (0, d) if d else (-1, "")
+
+
 def cmd_status(root):
     log("[status] 仓库根: %s" % root)
     for site in SITE_NAMES:
@@ -1258,12 +1284,19 @@ def cmd_status(root):
         if not os.path.isdir(d):
             warn("[status] %s 目录不存在，跳过" % site)
             continue
-        local = len(load_deleted(root, site))
+        items = load_deleted(root, site)
         remote = len(load_remote(root, site))
-        log("[status] %s: 本地清单 %d 条，远端快照 %d 条" % (site, local, remote))
-        for pid in sorted(deleted_ids(root, site))[:8]:
-            rec = load_deleted(root, site).get(pid) or {}
-            log("           - %s  %s" % (pid, (rec.get("title") or "")[:44]))
+        log("[status] %s: 本地清单 %d 条，远端快照 %d 条" % (site, len(items), remote))
+        # 最新删除的排最前
+        ordered = sorted(items.items(), key=lambda kv: deleted_sort_key(kv[1]), reverse=True)
+        for pid, rec in ordered[:8]:
+            when = ""
+            k = deleted_sort_key(rec)
+            if k[0] == 1:
+                when = datetime.datetime.fromtimestamp(k[1]).strftime("%m-%d %H:%M")
+            elif k[0] == 0:
+                when = k[1]
+            log("           - %s  %-11s %s" % (pid, when, (rec.get("title") or "")[:40]))
     return 0
 
 

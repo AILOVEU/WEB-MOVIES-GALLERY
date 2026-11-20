@@ -1080,6 +1080,13 @@
       "title": "淘宝66元红包，12月31日补救措施，哇偶金卡及10元红包",
       "url": "https://fuliba2023.net/%E6%B7%98%E5%AE%9D66%E5%85%83%E7%BA%A2%E5%8C%85.html"
     },
+    "88e17f4fce3366b4": {
+      "deleted_at": 1795141094118,
+      "op_id": "mwocnp46-hk2szfxh",
+      "source": "supabase",
+      "title": "2026年福利汇总第162期 ：分不清你是我还是梦",
+      "url": "https://fuliba2023.net/blg.html"
+    },
     "89b07fba6dfaaf3a": {
       "category": "购物网赚",
       "date": "2023-01-01",
@@ -1457,6 +1464,13 @@
       "source": "archive_merged",
       "title": "移动用户免费领取和多号一年，类似阿里小号",
       "url": "https://fuliba2023.net/heduohao.html"
+    },
+    "b8e1da579f7f5d8b": {
+      "deleted_at": 1795145201573,
+      "op_id": "mwof3qg3-6gn34voc",
+      "source": "supabase",
+      "title": "2026年福利汇总第162期 ：分不清你是我还是梦",
+      "url": "https://fuliba2023.net/openpros2.html"
     },
     "bb1dc930912819db": {
       "category": "福利吧",
@@ -1883,8 +1897,8 @@
     }
   },
   "meta": {
-    "count": 209,
-    "note": "本地权威全量已删除清单，只增不减；抓取过滤与资源删除都以它为准。Supabase 只是增量来源，不是全量。",
+    "count": 211,
+    "note": "本地权威全量已删除清单，只增不减；抓取过滤与资源删除都以它为准",
     "site": "FULIBA",
     "updated": "2026-11-20"
   }
