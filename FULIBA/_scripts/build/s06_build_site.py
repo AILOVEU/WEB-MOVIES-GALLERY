@@ -1011,8 +1011,11 @@ def write_year_data(items):
         by.setdefault(it["y"], []).append(it)
     n = 0
     for slot, sub in sorted(by.items()):
-        txt = ('window.FULIBA_YEAR && window.FULIBA_YEAR("%s", %s);\n'
-               % (slot, json.dumps(sub, ensure_ascii=False)))
+        # 一行一篇：删除某篇时 git diff 只显示删掉那一行，不再整段重写。
+        # 前端按 JS 数组解析，换行与尾逗号均合法；gallery_delete 的正则(\s*+re.S)也照常读。
+        body = ",\n".join(json.dumps(row, ensure_ascii=False) for row in sub)
+        txt = ('window.FULIBA_YEAR && window.FULIBA_YEAR("%s", [\n%s\n]);\n'
+               % (slot, body))
         C.Y.ensure_slot(slot)      # 新年份只在这里建目录（读路径不顺手 mkdir）
         if write_if_changed(C.Y.data_js_path(slot), txt):
             n += 1

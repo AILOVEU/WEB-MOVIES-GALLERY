@@ -1,7 +1,14 @@
 {
-  "items": {},
+  "items": {
+    "178795": {
+      "deleted_at": 1795150406859,
+      "op_id": "mwoi7avf-fsxfl7v3",
+      "source": "supabase",
+      "title": "如何分辨是否是LTX模型破解的？"
+    }
+  },
   "meta": {
-    "count": 0,
+    "count": 1,
     "note": "本地权威全量已删除清单，只增不减；抓取过滤与资源删除都以它为准",
     "site": "JAVBUS",
     "updated": "2026-11-20"

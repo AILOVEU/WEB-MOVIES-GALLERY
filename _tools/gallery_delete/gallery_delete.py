@@ -881,8 +881,28 @@ def fuliba_remove_from_datajs(root, keys, dry_run):
             removed += n
             continue
         backup_file(root, "FULIBA", p)
+        # 新格式：一行一篇。逐行重建，只真正删掉命中 key 的那些行，
+        # 其余行字节不变 —— git diff 只显示被删的行，不再整段重写。
+        old_block = m.group(1)
+        lines = old_block.split("\n")
+        if len(lines) > 1:
+            new_lines = []
+            for ln in lines:
+                stripped = ln.strip().rstrip(",")
+                if stripped.startswith("{"):
+                    try:
+                        row = json.loads(stripped)
+                        if str(row.get("id")) in keys:
+                            continue
+                    except ValueError:
+                        pass
+                new_lines.append(ln)
+            new_block = "\n".join(new_lines)
+        else:
+            # 兼容旧的单行格式（尚未重建的年份）
+            new_block = json.dumps(kept, ensure_ascii=False)
         with io.open(p, "w", encoding="utf-8") as f:
-            f.write(text[:m.start(1)] + json.dumps(kept, ensure_ascii=False) + text[m.end(1):])
+            f.write(text[:m.start(1)] + new_block + text[m.end(1):])
         removed += n
     return removed
 
