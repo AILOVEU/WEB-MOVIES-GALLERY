@@ -1438,7 +1438,8 @@ MENU_ITEMS = [
     ("4", "resources", [],                     "重建「文章 - 资源」清单"),
     ("5", "apply",     ["--dry-run"],          "试运行（只打印，不删任何文件）"),
     ("6", "apply",     [],                     "正式删除（会真的删文件）"),
-    ("7", "all",       ["--dry-run"],          "全流程试运行（fetch+merge+resources+apply）"),
+    ("7", "all",       ["--dry-run"],          "全流程试运行（fetch+merge+resources+apply 只打印）"),
+    ("8", "all",       [],                     "全流程正式执行（含真删，会先确认）"),
 ]
 
 
@@ -1483,9 +1484,12 @@ def cmd_menu(root):
             continue
 
         cmd, extra, desc = hit
-        if cmd == "apply" and not extra:
+        # 真删确认：apply 和 all 在不带 --dry-run 时都会真的删文件
+        if cmd in ("apply", "all") and not extra:
             print("")
             print("警告：此操作会真的删除文件。被删文件会先备份到各站点的 _backup 目录。")
+            if cmd == "all":
+                print("      全流程会先 fetch / merge / resources，再执行删除。")
             if _ask("确认请输入 YES 后回车: ").upper() != "YES":
                 print("已取消。")
                 continue
