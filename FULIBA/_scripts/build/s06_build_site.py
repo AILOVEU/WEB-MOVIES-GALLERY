@@ -181,6 +181,43 @@ def article_unit(a, slug, base):
     for c in a.get("comments", []):
         by_parent.setdefault(c.get("parent_id") or "", []).append(c)
 
+    # 外链 iframe 一律换成静态链接卡片。
+    #
+    # 为什么必须换：网易云 outchain 播放器、B 站播放器这类 iframe 一旦加载失败
+    # （离线打开、被墙、资源下架），iframe 内部会弹 alert 把整个页面卡住 ——
+    # 本地归档页是 file:// 打开的，几乎必然触发。归档页只求能读，不需要真播放。
+    #
+    # 保留可点击的原链接，想看的人自己点出去。
+    # 不依赖闭合标签：原文里既有 <iframe ...></iframe>，也有 <iframe ...> 后面
+    # 直接跟内容、闭合标签在别处的写法。只匹配开标签本身，把可选的 </iframe> 一起吃掉。
+    _rx_iframe = re.compile(r"<iframe\b[^>]*?\bsrc=\"([^\"]+)\"[^>]*>\s*(?:</iframe>)?", re.I)
+
+    def _embed_label(url):
+        u = url.lower()
+        if "music.163.com" in u:
+            return "网易云音乐"
+        if "bilibili.com" in u:
+            return "B 站视频"
+        if "youtube.com" in u or "youtu.be" in u:
+            return "YouTube"
+        if "qq.com" in u:
+            return "腾讯视频"
+        return "外部嵌入内容"
+
+    def neutralize_embeds(h):
+        if not h or "<iframe" not in h.lower():
+            return h
+
+        def _rep(m):
+            url = m.group(1)
+            label = _embed_label(url)
+            return ('<div class="embed-ph"><span class="embed-tag">%s</span>'
+                    '<a href="%s" target="_blank" rel="noopener">在原始页面打开 ↗</a>'
+                    '<span class="embed-note">（离线归档不加载外部播放器）</span></div>'
+                    % (htmlmod.escape(label), htmlmod.escape(url)))
+
+        return _rx_iframe.sub(_rep, h)
+
     def render(pid, depth):
         out = []
         for c in by_parent.get(pid, []):
@@ -208,7 +245,8 @@ def article_unit(a, slug, base):
                    av_html, htmlmod.escape(c.get("author", "")),
                    htmlmod.escape(c.get("floor", "")), htmlmod.escape(c.get("time", "")),
                    rt, likes,
-                   c.get("content_html", "") or htmlmod.escape(c.get("content", ""))
+                   neutralize_embeds(c.get("content_html", "")
+                                     or htmlmod.escape(c.get("content", "")))
                    )
             )
             kids = render(c.get("id", ""), depth + 1)
@@ -273,7 +311,7 @@ def article_unit(a, slug, base):
             h = h.replace("src='images/", "src='%s/assets/images/" % base)
             h = h.replace('src="assets/', 'src="%s/data/common/' % base)
             h = h.replace("src='assets/", "src='%s/data/common/" % base)
-        return inject_orig(h)
+        return inject_orig(neutralize_embeds(h))
 
     # 分页：站点把长文拆成第 1..N 页，离线页也分页展示（翻页器 + 逐页 div）。
     pages = a.get("pages") or [{"n": 1, "content_html": a.get("content_html", "")}]
@@ -687,6 +725,10 @@ main{max-width:1080px;margin:0 auto;padding:22px 20px 60px}
 .pinfo{color:var(--fg2);font-size:12.5px;margin:0 6px}
 .pc blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--acc);background:var(--panel2);border-radius:0 8px 8px 0}
 .pc iframe{max-width:100%}
+.embed-ph{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0;padding:10px 14px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;font-size:13px}
+.embed-tag{font-weight:600;color:var(--fg)}
+.embed-ph a{color:var(--acc);word-break:break-all}
+.embed-note{color:var(--fg2);font-size:12px}
 .pc h2,.pc h3,.pc h4{margin:20px 0 10px}
 .fimgwrap{max-width:820px;margin:26px auto 0;padding:0 20px}
 .fimgwrap h2{font-size:16px;color:var(--fg2);font-weight:600}

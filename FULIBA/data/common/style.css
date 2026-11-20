@@ -54,6 +54,10 @@ main{max-width:1080px;margin:0 auto;padding:22px 20px 60px}
 .pinfo{color:var(--fg2);font-size:12.5px;margin:0 6px}
 .pc blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--acc);background:var(--panel2);border-radius:0 8px 8px 0}
 .pc iframe{max-width:100%}
+.embed-ph{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0;padding:10px 14px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;font-size:13px}
+.embed-tag{font-weight:600;color:var(--fg)}
+.embed-ph a{color:var(--acc);word-break:break-all}
+.embed-note{color:var(--fg2);font-size:12px}
 .pc h2,.pc h3,.pc h4{margin:20px 0 10px}
 .fimgwrap{max-width:820px;margin:26px auto 0;padding:0 20px}
 .fimgwrap h2{font-size:16px;color:var(--fg2);font-weight:600}
