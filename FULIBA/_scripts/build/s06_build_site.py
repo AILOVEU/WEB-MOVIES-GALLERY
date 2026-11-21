@@ -62,37 +62,159 @@ _BJX_DEC["卜"] = "|"                       # 兼容早期暗号：旧版 | 曾�
 _BJX_CHARS = "".join(_BJX_SURNAME) + "卜"
 # 连续 >=8 个姓氏字才可能是暗号（正常中文姓名不会这么长），避免误伤单字姓氏
 _BJX_RX = re.compile("[" + _BJX_CHARS + "]{8,}")
-# 解码后必须像网址才判定为暗号——这是防误伤的关键二次确认
-_BJX_URL = re.compile(r"(://|magnet:|ed2k:|www\.)")
+# 解码后的明文分类——这是防误伤的关键二次确认：只有落进下面几类才认定是暗号，
+# 否则原样当正常中文保留。明文一定是连续 ASCII 串（表里没有空格），所以可以锚定 ^。
+#   1) 带协议的网址        2) 40 位 hex infohash（可带 &xl= / &dn= 参数）
+#   3) 32 位 base32 infohash  4) 少写一个冒号的网址（https// 、ed2k//）
+#   5) 裸域名（yaseok.com 这种，补 http://）
+_BJX_URL = re.compile(r"^(?:[a-z][a-z0-9+.\-]*://|magnet:\?|ed2k:|www\.)", re.I)
+_BJX_BTIH40 = re.compile(r"^([0-9A-Fa-f]{40})((?:[&?][^\s<>\"']*)?)$")
+_BJX_BTIH32 = re.compile(r"^([A-Z2-7]{32})((?:[&?][^\s<>\"']*)?)$")
+_BJX_NOCOLON = re.compile(r"^(https?|ed2k|ftp)//", re.I)
+_BJX_DOMAIN = re.compile(
+    r"^(?:[a-z0-9](?:[a-z0-9\-]*[a-z0-9])?\.)+"
+    r"(?:com|net|org|cc|la|me|tv|io|xyz|top|info|vip|club|site|online|app|link|"
+    r"pro|shop|store|fun|live|cloud|dev|co|ws|biz|us|uk|jp|kr|tw|hk|ru|in|to|"
+    r"gg|se|nl|de|fr|eu|asia|moe|one|run|work|space|website|host|press|download)"
+    r"(?:[/:?#].*)?$", re.I)
+
+# 整段不像暗号时的兜底：在一段明文里扫出所有可识别的片段。
+# 源站有人把多个字段粘在一起写（hash 直接接 magnet、hash 接网址、
+# 用 : 分隔的复合串），整段锚定匹配不上，只能按片段捞。
+_BJX_SUB = re.compile(
+    r"(?P<magnet>(?i:magnet:\?xt=urn:btih:)[0-9A-Za-z]+(?:&[^\s<>\"']*)?)"
+    r"|(?P<url>(?i:(?:https?|ed2k|ftp)://)[^\s<>\"']+)"
+    r"|(?P<nocolon>(?i:(?:https?|ed2k|ftp)//)[^\s<>\"']+)"
+    r"|(?P<hash40>(?<![0-9A-Fa-f])[0-9A-Fa-f]{40}(?![0-9A-Fa-f])(?:[&?][^\s<>\"']*)?)"
+    # base32 infohash 必须大小写敏感：加了 re.I 会把小写 base32 串也吞进来，
+    # 而小写 base32 在源站里多半是 base64/thunder 串的碎片，补成磁力链是错的
+    r"|(?P<hash32>(?<![A-Z2-7])[A-Z2-7]{32}(?![A-Z2-7]))"
+    r"|(?P<domain>(?i:(?:[a-z0-9\-]+\.)+"
+    r"(?:com|net|org|cc|la|me|tv|io|xyz|top|info|vip|club|site|online|app|link))"
+    r"(?:/[^\s<>\"']*)?)")
+
+# 纯 hex 串可能是「百家姓 → hex → 明文」的双层编码（6D61676E6574 = magnet）。
+# 只认偶数长度、>=48 的串：40 位 hex 是 infohash 本身，不能当编码解。
+_BJX_HEX = re.compile(r"^[0-9A-Fa-f]{48,}$")
 
 
-def _bjx_decode_one(run):
-    """一段连续姓氏字 → 明文；不像网址则返回 None（当正常中文保留）。"""
-    plain = "".join(_BJX_DEC.get(c, c) for c in run)
-    if not _BJX_URL.search(plain):
+def _bjx_hex_unwrap(p):
+    """hex 双层编码 → 明文；解不出可读的网址/磁力链则返回 None。"""
+    if len(p) % 2 or not _BJX_HEX.match(p):
         return None
-    return plain
+    try:
+        s = bytes.fromhex(p).decode("ascii")
+    except (ValueError, UnicodeDecodeError):
+        return None
+    if not s or not all(" " <= c <= "~" for c in s):
+        return None
+    return s if (_BJX_URL.match(s) or _BJX_SUB.match(s)) else None
+
+
+def _bjx_target(plain):
+    """解码后的明文 → (href, label)；不是暗号则返回 None。
+
+    infohash 一律补成 magnet:?xt=urn:btih:<hash>：裸 hash 塞进 href 点不动，
+    补成磁力链才是发帖人本意；hash 后面跟的 &xl= / &dn= 原样接在磁力链接后面。
+    label 用解码后的原文，页面上看到的就是发帖人写的那串字符。
+    """
+    p = plain.strip()
+    if not p:
+        return None
+    # 源站有人把 & 又转义了一层，且常常漏掉分号（&#038dn= 这种），先还原，
+    # 否则 href 里会落成 &amp;#038; 这种坏参数，label 也会把转义符原样显示出来
+    p = (p.replace("&#038;", "&").replace("&#038", "&")
+          .replace("&#38;", "&").replace("&#38", "&")
+          .replace("&amp;", "&"))
+
+    m = _BJX_BTIH40.match(p) or _BJX_BTIH32.match(p)
+    if m:
+        return ("magnet:?xt=urn:btih:%s%s" % (m.group(1), m.group(2)), p)
+
+    if _BJX_NOCOLON.match(p):
+        return (re.sub(r"^(https?|ed2k|ftp)//", r"\1://", p, count=1, flags=re.I), p)
+
+    if _BJX_URL.match(p):
+        return (p if not p.lower().startswith("www.") else "http://" + p, p)
+
+    if _BJX_DOMAIN.match(p):
+        return ("http://" + p, p)
+
+    # 双层 hex 编码：解出来是网址/磁力链才算，否则当普通 hex 留着
+    u = _bjx_hex_unwrap(p)
+    if u:
+        return (u, u)
+
+    return None
+
+
+def _bjx_linkify(plain):
+    """一段明文 → HTML。整段能识别就整体成链；否则按片段逐个识别。"""
+    tgt = _bjx_target(plain)
+    if tgt:
+        href, label = tgt
+        return ('<a class="bjx-link" href="%s" target="_blank" '
+                'rel="noopener noreferrer">%s</a>'
+                % (htmlmod.escape(href, quote=True), htmlmod.escape(label)))
+
+    if not _BJX_SUB.search(plain):
+        return None
+
+    out, pos = [], 0
+    for m in _BJX_SUB.finditer(plain):
+        kind = m.lastgroup or ""
+        frag = m.group(0)
+        if kind == "nocolon":
+            href = re.sub(r"^(https?|ed2k|ftp)//", r"\1://", frag, count=1, flags=re.I)
+        elif kind in ("hash40", "hash32"):
+            mm = _BJX_BTIH40.match(frag) or _BJX_BTIH32.match(frag)
+            href = ("magnet:?xt=urn:btih:%s%s" % (mm.group(1), mm.group(2))
+                    if mm else frag)
+        elif kind == "domain":
+            href = "http://" + frag
+        else:
+            href = frag
+        out.append(htmlmod.escape(plain[pos:m.start()]))
+        out.append('<a class="bjx-link" href="%s" target="_blank" '
+                   'rel="noopener noreferrer">%s</a>'
+                   % (htmlmod.escape(href, quote=True), htmlmod.escape(frag)))
+        pos = m.end()
+    out.append(htmlmod.escape(plain[pos:]))
+    return "".join(out)
 
 
 def bjx_decode_html(h):
     """
     把正文/评论 HTML 文本节点里的百家姓暗号还原成可点击的真实地址。
-    只动连续的姓氏字串，且只在解码后确认为网址时替换；HTML 标签与属性不受影响
-    （标签名/属性名是 ASCII，属性值里连续 8 个姓氏字的情况极罕见且需再过网址判定）。
+
+    只处理文本节点：按标签切开，标签（含 alt/title 这类属性值）原样透传。
+    早先的实现直接对整段 HTML 跑正则，属性值里的长姓氏串也会被换成 <a>，
+    结果是 alt="<a href=...>" 这种坏属性——2025/part3 的 figcaption 就中过。
     """
     if not h or not _BJX_RX.search(h):
         return h
 
-    def rep(m):
-        plain = _bjx_decode_one(m.group(0))
-        if plain is None:
-            return m.group(0)
-        href = htmlmod.escape(plain, quote=True)
-        label = htmlmod.escape(plain)
-        return ('<a class="bjx-link" href="%s" target="_blank" '
-                'rel="noopener noreferrer">%s</a>' % (href, label))
+    out, pos = [], 0
+    for m in re.finditer(r"<[^>]*>", h):
+        out.append(_bjx_text(h[pos:m.start()]))
+        out.append(m.group(0))
+        pos = m.end()
+    out.append(_bjx_text(h[pos:]))
+    return "".join(out)
 
-    return _BJX_RX.sub(rep, h)
+
+def _bjx_text(seg):
+    """一段纯文本 → 还原其中的暗号；没有暗号就原样返回。"""
+    if not seg or not _BJX_RX.search(seg):
+        return seg
+
+    def rep(m):
+        run = m.group(0)
+        plain = "".join(_BJX_DEC.get(c, c) for c in run)
+        got = _bjx_linkify(plain)
+        return got if got is not None else run
+
+    return _BJX_RX.sub(rep, seg)
 
 
 def write_if_changed(path, text):
