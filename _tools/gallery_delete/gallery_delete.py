@@ -670,7 +670,16 @@ def cmd_merge(root, dry_run):
 # ============================================================ 3. apply
 
 def backup_file(root, site, path):
-    """被改写的台账先复制到 _backup/<日期>/gallery_delete/，出问题能捞回来。"""
+    """
+    被改写的台账先复制到 _backup/<日期>/gallery_delete/，出问题能捞回来。
+
+    源不存在时直接跳过：发布副本常常没有 _pipeline，或过程区被人工清空，
+    此时要么本来就没东西可备份，要么紧接着会新建该文件。不能让 copy2
+    的 WinError 2 把整个 apply 打断。
+    """
+    if not os.path.isfile(path):
+        warn("[backup] 源文件不存在，跳过备份：%s" % path)
+        return False
     try:
         rel = os.path.relpath(path, site_dir(root, site))
     except ValueError:
@@ -678,6 +687,7 @@ def backup_file(root, site, path):
     dst = os.path.join(site_dir(root, site), "_backup", TODAY, "gallery_delete", rel)
     ensure_dir(os.path.dirname(dst))
     shutil.copy2(path, dst)
+    return True
 
 
 # ---------------------------------------------------------------- FULIBA 删除

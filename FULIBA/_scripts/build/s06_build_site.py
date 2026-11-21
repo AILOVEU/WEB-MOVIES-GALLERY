@@ -48,6 +48,53 @@ def _norm(text):
     return text
 
 
+# ---------------------------------------------------------------- 百家姓暗号解码
+# 源站部分正文/评论把网址写成百家姓单表替换密码（1 明文字符 ↔ 1 姓氏字）。
+# 表与 AIO App 的 Baijiaxing.kt / uniapp utils/baijiaxing.js 一致（75 字符）。
+_BJX_PLAIN = ("0123456789" + "abcdefghijklmnopqrstuvwxyz"
+              + "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + ".-_+=/?#%&*:|")
+_BJX_SURNAME = ("赵钱孙李周吴郑王冯陈"
+                "褚卫蒋沈韩杨朱秦尤许何吕施张孔曹严华金魏陶姜戚谢邹喻"
+                "福水窦章云苏潘葛奚范彭郎鲁韦昌马苗凤花方俞任袁柳唐罗"
+                "薛伍余米贝姚孟顾尹江钟竺赖")
+_BJX_DEC = {s: p for s, p in zip(_BJX_SURNAME, _BJX_PLAIN)}
+_BJX_DEC["卜"] = "|"                       # 兼容早期暗号：旧版 | 曾用「卜」
+_BJX_CHARS = "".join(_BJX_SURNAME) + "卜"
+# 连续 >=8 个姓氏字才可能是暗号（正常中文姓名不会这么长），避免误伤单字姓氏
+_BJX_RX = re.compile("[" + _BJX_CHARS + "]{8,}")
+# 解码后必须像网址才判定为暗号——这是防误伤的关键二次确认
+_BJX_URL = re.compile(r"(://|magnet:|ed2k:|www\.)")
+
+
+def _bjx_decode_one(run):
+    """一段连续姓氏字 → 明文；不像网址则返回 None（当正常中文保留）。"""
+    plain = "".join(_BJX_DEC.get(c, c) for c in run)
+    if not _BJX_URL.search(plain):
+        return None
+    return plain
+
+
+def bjx_decode_html(h):
+    """
+    把正文/评论 HTML 文本节点里的百家姓暗号还原成可点击的真实地址。
+    只动连续的姓氏字串，且只在解码后确认为网址时替换；HTML 标签与属性不受影响
+    （标签名/属性名是 ASCII，属性值里连续 8 个姓氏字的情况极罕见且需再过网址判定）。
+    """
+    if not h or not _BJX_RX.search(h):
+        return h
+
+    def rep(m):
+        plain = _bjx_decode_one(m.group(0))
+        if plain is None:
+            return m.group(0)
+        href = htmlmod.escape(plain, quote=True)
+        label = htmlmod.escape(plain)
+        return ('<a class="bjx-link" href="%s" target="_blank" '
+                'rel="noopener noreferrer">%s</a>' % (href, label))
+
+    return _BJX_RX.sub(rep, h)
+
+
 def write_if_changed(path, text):
     """忽略生成时间后内容相同 → 不写（mtime 保持），返回是否真写了。
 
@@ -245,8 +292,8 @@ def article_unit(a, slug, base):
                    av_html, htmlmod.escape(c.get("author", "")),
                    htmlmod.escape(c.get("floor", "")), htmlmod.escape(c.get("time", "")),
                    rt, likes,
-                   neutralize_embeds(c.get("content_html", "")
-                                     or htmlmod.escape(c.get("content", "")))
+                   bjx_decode_html(neutralize_embeds(c.get("content_html", ""))
+                                   or htmlmod.escape(c.get("content", "")))
                    )
             )
             kids = render(c.get("id", ""), depth + 1)
@@ -314,7 +361,7 @@ def article_unit(a, slug, base):
             h = h.replace("src='images/", "src='%sassets/images/" % b)
             h = h.replace('src="assets/', 'src="%sdata/common/' % b)
             h = h.replace("src='assets/", "src='%sdata/common/" % b)
-        return inject_orig(neutralize_embeds(h))
+        return bjx_decode_html(inject_orig(neutralize_embeds(h)))
 
     # 分页：站点把长文拆成第 1..N 页，离线页也分页展示（翻页器 + 逐页 div）。
     pages = a.get("pages") or [{"n": 1, "content_html": a.get("content_html", "")}]
@@ -764,6 +811,9 @@ main{max-width:1080px;margin:0 auto;padding:22px 20px 60px}
 .pc img{max-width:100%;height:auto;border-radius:8px;display:block;margin:14px 0}
 .pc p{margin:12px 0}
 .pc a{color:var(--acc);word-break:break-all}
+/* 百家姓暗号还原出来的真实网址（正文/评论里都有） */
+.bjx-link{color:var(--acc);word-break:break-all;text-decoration:underline;text-underline-offset:2px}
+.bjx-link:hover{filter:brightness(1.15)}
 .pm .multi{background:#3b2f5e;color:#d7c8ff;padding:2px 8px;border-radius:20px;font-size:12px}
 .pc-page{}
 .pc-pager{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}

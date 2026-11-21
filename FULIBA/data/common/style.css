@@ -43,6 +43,9 @@ main{max-width:1080px;margin:0 auto;padding:22px 20px 60px}
 .pc img{max-width:100%;height:auto;border-radius:8px;display:block;margin:14px 0}
 .pc p{margin:12px 0}
 .pc a{color:var(--acc);word-break:break-all}
+/* 百家姓暗号还原出来的真实网址（正文/评论里都有） */
+.bjx-link{color:var(--acc);word-break:break-all;text-decoration:underline;text-underline-offset:2px}
+.bjx-link:hover{filter:brightness(1.15)}
 .pm .multi{background:#3b2f5e;color:#d7c8ff;padding:2px 8px;border-radius:20px;font-size:12px}
 .pc-page{}
 .pc-pager{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
