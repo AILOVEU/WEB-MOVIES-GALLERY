@@ -14,7 +14,7 @@
   <div class="hero-in">
     <h1>福利吧 · 全站文章</h1>
     <p class="sub" id="heroSub">fuliba2023.net</p>
-    <p class="gen">数据来档于本地各年目录（data/&lt;年&gt;/）· 生成于 2026-11-20 12:33:37</p>
+    <p class="gen">数据来档于本地各年目录（data/&lt;年&gt;/）· 生成于 2026-11-24 08:54:12</p>
   </div>
 </header>
 
@@ -39,42 +39,7 @@
 </footer>
 
 
-<script>
-/* ===== 年度数据加载器（只改造一次，之后逐年零修改）===== */
-/* 预枚举 YEAR_MIN..YEAR_MAX + undated：data/<年>/data.js 存在就合并，不存在静默跳过；
-   明年新建 data/2027/ 目录后刷新页面就能看到，index.html 一个字都不改。
-   统计（总篇数/评论/图/分类/年份）由各年条目合并后现算。 */
-(function(){
-  var SLOTS = ["2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032", "2033", "2034", "2035", "2036", "2037", "2038", "2039", "2040", "2041", "2042", "2043", "2044", "2045", "2046", "2047", "2048", "2049", "2050", "undated"];
-  var bucket = {}, left = SLOTS.length, pending = left;
-  window.FULIBA_YEAR = function(y, items){ bucket[y] = items || []; return; };
-  function meta(all){
-    var cats = {}, years = {}, tc = 0, ti = 0;
-    all.forEach(function(a){
-      var c = a.category || '未分类', y = (a.date || '').slice(0, 4) || a.y;
-      cats[c] = (cats[c] || 0) + 1; years[y] = (years[y] || 0) + 1;
-      tc += a.comments_parsed || 0; ti += a.imgs || 0;
-    });
-    return {total: all.length, total_comments: tc, total_images: ti,
-            categories: cats, years: years, domain: 'fuliba2023.net'};
-  }
-  function finish(){
-    var all = [];
-    Object.keys(bucket).sort().forEach(function(k){ all = all.concat(bucket[k]); });
-    all.sort(function(x, y){ return (y.date || '').localeCompare(x.date || ''); });
-    window.FULIBA_DATA = {articles: all, meta: meta(all)};
-    /* 年度脚本可能比本文件后面的 app 代码先加载完，两边都要能接住 */
-    window.__yearReady = true;
-    if (window.__startApp__) window.__startApp__();
-  }
-  SLOTS.forEach(function(y){
-    var s = document.createElement('script');
-    s.src = 'data/' + y + '/data.js';
-    s.onload = s.onerror = function(){ if (--pending === 0) finish(); };
-    document.head.appendChild(s);
-  });
-})();
-</script>
+<script src="data/manifest.js"></script>
 <script>
 /* 全局图片来源开关：只读写 localStorage('fuliba_img_mode')，作用于所有文章页
    （文章页 IMG_MODE_JS 启动时读同一 key）。首页自身不展示正文图，这里仅做预设。 */
@@ -91,22 +56,99 @@
     paint(next);
   });
 })();
+</script>
+<script>
+/* ===== 首页：按需加载年份数据 =====
+   不再枚举全部年份。首屏只拉「从最新年份往下、凑够 20 篇」所需的年份文件：
+     - 统计 / 年份下拉 / 分类下拉 全部来自 data/manifest.js（几百字节），不等文章数据
+     - 翻到第 N 页  → 继续加载到 N*20 篇
+     - 选年份       → 只加载该年
+     - 搜索 / 选分类 → 加载全部年份（跨年才准确）
+   关键：按年份倒序累计，凑够 20 篇才停。否则新年份刚建目录只有几篇时，
+   首页会只剩那几篇，上一年的文章全被漏掉。
+   data.js 格式不变，仍是 window.FULIBA_YEAR("<年>", [...])。 */
+(function(){
+  var DP = 'data/';
+  var MAN = window.FULIBA_MANIFEST;
+  var PAGE = 20;
+  var loaded = {};      /* 年 -> items[] */
+  var inflight = {};    /* 年 -> Promise */
+  var page = 0, list = [];
 
-window.__startApp__ = function(){
-  var D = window.FULIBA_DATA, A = D.articles;
-  var DP = 'data/';   /* 年份目录在站点根下的前缀（data/）*/
-  (function(){
-    var m = D.meta, n = document.querySelector('#heroSub');
-    if (n) n.textContent = m.domain + ' — 共 ' + m.total.toLocaleString() + ' 篇文章 · '
-      + m.total_comments.toLocaleString() + ' 条评论 · ' + m.total_images.toLocaleString() + ' 张本地图片';
-  })();
-  var PAGE = 20, page = 0, list = A;
-  var $ = function(s){return document.querySelector(s)};
+  var $ = function(s){ return document.querySelector(s); };
   var catSel = $('#cat'), yearSel = $('#year');
 
-  /* 翻页状态存 sessionStorage：点进文章再返回，还停在原来那页。
-     用 sessionStorage 而不是 localStorage —— 关掉标签页就该忘掉，
-     下次打开从头看更符合预期。 */
+  if(!MAN){
+    var hs = $('#heroSub');
+    if(hs) hs.textContent = '站点清单缺失：请先运行 _scripts\py.cmd _scripts\build\s06_build_site.py';
+    var c0 = $('#cnt'); if(c0) c0.textContent = '清单缺失';
+    return;
+  }
+
+  /* ---- 头部统计与下拉框：只依赖 manifest，不等任何年份数据 ---- */
+  (function(){
+    var n = $('#heroSub');
+    if(n) n.textContent = MAN.domain + ' — 共 ' + MAN.total.toLocaleString() + ' 篇文章 · '
+      + MAN.total_comments.toLocaleString() + ' 条评论 · ' + MAN.total_images.toLocaleString() + ' 张本地图片';
+    Object.keys(MAN.categories).sort().forEach(function(c){
+      var o=document.createElement('option'); o.value=c; o.textContent=c+' ('+MAN.categories[c]+')'; catSel.appendChild(o);
+    });
+    Object.keys(MAN.years).sort().reverse().forEach(function(y){
+      var o=document.createElement('option'); o.value=y; o.textContent=y+' ('+MAN.years[y]+')'; yearSel.appendChild(o);
+    });
+  })();
+
+  /* ---- 加载器 ---- */
+  function loadScript(src){
+    return new Promise(function(res){
+      var s = document.createElement('script');
+      s.src = src;
+      s.onload = function(){ res(true); };
+      s.onerror = function(){ res(false); };
+      document.head.appendChild(s);
+    });
+  }
+  window.FULIBA_YEAR = function(y, items){ loaded[y] = items || []; };
+
+  function loadYear(y){
+    if(loaded[y]) return Promise.resolve(true);
+    if(inflight[y]) return inflight[y];
+    inflight[y] = loadScript(DP + y + '/data.js').then(function(ok){
+      if(!ok) loaded[y] = [];   /* 缺失年份记为空数组，避免反复请求 404 */
+      delete inflight[y];
+      return ok;
+    });
+    return inflight[y];
+  }
+  function yearsDesc(){ return Object.keys(MAN.years).sort().reverse(); }
+  function loadedCount(){
+    var n = 0;
+    for(var k in loaded) n += loaded[k].length;
+    return n;
+  }
+  function allLoaded(){ return loadedCount() >= MAN.total; }
+
+  /* 从最新年份往下加载，累计 >= need 条就停 */
+  function loadUntil(need){
+    var ys = yearsDesc(), i = 0;
+    function step(){
+      if(loadedCount() >= need || i >= ys.length) return Promise.resolve();
+      return loadYear(ys[i++]).then(step);
+    }
+    return step();
+  }
+  function loadAll(){ return Promise.all(yearsDesc().map(loadYear)); }
+
+  function merged(){
+    var all = [];
+    for(var k in loaded) all = all.concat(loaded[k]);
+    all.sort(function(x,y){ return (y.date||'').localeCompare(x.date||''); });
+    return all;
+  }
+
+  function esc(s){ var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
+
+  /* ---- 翻页状态：点进文章再返回，还停在原来那页 ---- */
   var SS = 'fuliba_list_state_v1';
   function saveState(){
     try{
@@ -120,21 +162,11 @@ window.__startApp__ = function(){
     }catch(e){}
   }
   function loadState(){
-    try{
-      var s = sessionStorage.getItem(SS);
-      return s ? JSON.parse(s) : null;
-    }catch(e){ return null; }
+    try{ var s = sessionStorage.getItem(SS); return s ? JSON.parse(s) : null; }
+    catch(e){ return null; }
   }
 
-  Object.keys(D.meta.categories).sort().forEach(function(c){
-    var o=document.createElement('option'); o.value=c; o.textContent=c+' ('+D.meta.categories[c]+')'; catSel.appendChild(o);
-  });
-  Object.keys(D.meta.years).sort().reverse().forEach(function(y){
-    var o=document.createElement('option'); o.value=y; o.textContent=y+' ('+D.meta.years[y]+')'; yearSel.appendChild(o);
-  });
-
-  function esc(s){var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML;}
-
+  /* ---- 渲染 ---- */
   function card(a){
     var imgs = [];
     (a.imgs>0) && imgs.push('<span class="tag t-img">图 '+a.imgs+'</span>');
@@ -151,6 +183,17 @@ window.__startApp__ = function(){
       '</article>';
   }
 
+  function isFiltered(){
+    return !!(yearSel.value || catSel.value || $('#q').value.trim());
+  }
+  /* 未筛选且未加载全量时，总篇数用 manifest 的真值，不用已加载条数 */
+  function totalForCount(){
+    return (!isFiltered() && !allLoaded()) ? MAN.total : list.length;
+  }
+  function totalForPager(){
+    return (!isFiltered() && !allLoaded()) ? MAN.total : list.length;
+  }
+
   function pageNumbers(cur, total){
     var arr=[], lo=Math.max(0,cur-2), hi=Math.min(total-1,cur+2), i;
     if(lo>0){ arr.push(0); if(lo>1) arr.push('…'); }
@@ -160,7 +203,7 @@ window.__startApp__ = function(){
   }
   function renderPager(){
     var box=$('#pager'); if(!box) return;
-    var total=Math.ceil(list.length/PAGE);
+    var total=Math.ceil(totalForPager()/PAGE);
     if(total<=1){ box.innerHTML=''; return; }
     var h='<button class="pnav" data-pg="'+(page-1)+'"'+(page<=0?' disabled':'')+'>‹ 上一页</button>';
     var nums=pageNumbers(page,total);
@@ -176,17 +219,20 @@ window.__startApp__ = function(){
     var start=page*PAGE, end=Math.min(start+PAGE, list.length), html='';
     for(var i=start;i<end;i++) html+=card(list[i]);
     $('#list').innerHTML=html;
-    $('#cnt').textContent = list.length ? ('第 '+(start+1)+'-'+end+' 篇 / 共 '+list.length+' 篇') : '共 0 篇';
+    var shown=totalForCount();
+    $('#cnt').textContent = list.length
+      ? ('第 '+(start+1)+'-'+end+' 篇 / 共 '+shown.toLocaleString()+' 篇')
+      : '共 0 篇';
     renderPager();
     $('#empty').hidden = list.length>0;
     saveState();
   }
 
-  /* keepPage=true 时保留当前页码（用于从 sessionStorage 恢复），
-     用户手动改筛选条件时传 false，回到第一页。 */
-  function filter(keepPage){
+  /* ---- 筛选 ---- */
+  function applyFilter(){
     var q=$('#q').value.trim().toLowerCase(), c=catSel.value, y=yearSel.value;
-    list = A.filter(function(a){
+    var src = merged();
+    list = src.filter(function(a){
       if(c && a.category!==c) return false;
       if(y && (a.date||'').slice(0,4)!==y) return false;
       if(q){
@@ -195,51 +241,89 @@ window.__startApp__ = function(){
       }
       return true;
     });
-    if(!keepPage) page=0;
-    render();
   }
 
+  /* 按当前筛选条件决定要加载哪些年份 */
+  function ensureForFilter(){
+    var y=yearSel.value, q=$('#q').value.trim(), c=catSel.value;
+    if(q || c) return loadAll();          /* 跨年搜索 / 分类统计：必须全量才准 */
+    if(y) return loadYear(y);             /* 选定年份：只拉这一年 */
+    return loadUntil((page+1)*PAGE);      /* 默认：够当前页就行 */
+  }
+
+  function busy(on, txt){
+    var el=$('#cnt');
+    if(!el) return;
+    if(on){ el.setAttribute('data-busy','1'); el.textContent = txt || '加载中…'; }
+    else { el.removeAttribute('data-busy'); }
+  }
+
+  /* 统一的「加载 → 筛选 → 渲染」入口 */
+  function go(resetPage){
+    if(resetPage) page = 0;
+    busy(true);
+    return ensureForFilter().then(function(){
+      applyFilter();
+      var tp = Math.ceil(list.length/PAGE);
+      if(page > tp-1) page = Math.max(0, tp-1);
+      busy(false);
+      render();
+    });
+  }
+
+  /* ---- 事件 ---- */
   var t=null;
-  $('#q').addEventListener('input',function(){clearTimeout(t);t=setTimeout(filter,220);});
-  catSel.addEventListener('change',filter);
-  yearSel.addEventListener('change',filter);
+  $('#q').addEventListener('input',function(){
+    clearTimeout(t);
+    t=setTimeout(function(){ go(true); }, 260);
+  });
+  catSel.addEventListener('change',function(){ go(true); });
+  yearSel.addEventListener('change',function(){ go(true); });
+
   document.addEventListener('click',function(e){
     var b=e.target.closest('[data-pg]');
     if(!b || b.hasAttribute('disabled')) return;
     var p=parseInt(b.getAttribute('data-pg'),10);
-    var total=Math.ceil(list.length/PAGE);
-    if(isNaN(p)||p<0||p>=total||p===page) return;
-    page=p; render();
-    var m=document.querySelector('main');
-    window.scrollTo(0, m?m.offsetTop-58:0);
+    var tp=Math.ceil(totalForPager()/PAGE);
+    if(isNaN(p)||p<0||p>=tp||p===page) return;
+    page=p;
+    /* 目标页可能还没加载到，先补数据再渲染 */
+    busy(true);
+    loadUntil((page+1)*PAGE).then(function(){
+      applyFilter();
+      busy(false);
+      render();
+      var m=document.querySelector('main');
+      window.scrollTo(0, m?m.offsetTop-58:0);
+    });
   });
   document.addEventListener('click',function(e){
     var a=e.target.closest('[data-cat]');
-    if(a){ e.preventDefault(); catSel.value=a.getAttribute('data-cat'); filter(); }
+    if(a){ e.preventDefault(); catSel.value=a.getAttribute('data-cat'); go(true); }
   });
 
-  /* 启动：优先恢复上次的翻页状态（从文章返回时用），否则从头渲染。
-     恢复时要等筛选条件填好再 filter，否则页码会被算错。 */
+  /* ---- 启动 ---- */
   (function boot(){
     var st = loadState();
     if(st){
       if(st.q) $('#q').value = st.q;
       if(st.cat) catSel.value = st.cat;
       if(st.year) yearSel.value = st.year;
-      filter(true);                 /* 保留 st.page */
-      var total = Math.ceil(list.length/PAGE);
-      page = Math.min(Math.max(0, st.page|0), Math.max(0, total-1));
-      render();
-      if(st.y) window.scrollTo(0, st.y);
-      return;
+      if(st.page > 0) page = st.page|0;
     }
-    render();
+    busy(true);
+    ensureForFilter().then(function(){
+      applyFilter();
+      var tp = Math.ceil(list.length/PAGE);
+      page = Math.min(Math.max(0, page|0), Math.max(0, tp-1));
+      busy(false);
+      render();
+      if(st && st.y) window.scrollTo(0, st.y);
+    });
   })();
 
-  /* 离开页面（点进文章、切标签）时再存一次，防止滚动位置丢失 */
   window.addEventListener('pagehide', saveState);
   window.addEventListener('beforeunload', saveState);
-};
-if (window.__yearReady) window.__startApp__();
+})();
 </script>
 </body></html>

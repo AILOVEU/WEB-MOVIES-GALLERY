@@ -54,3 +54,5 @@ __pycache__/
 # ============================================================
 FULIBA/data/gallery_resources.json
 JAVBUS/data/gallery_resources.json
+
+tmp/

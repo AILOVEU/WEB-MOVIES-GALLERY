@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T66Y · 草榴國產原創區 離線清單</title>
+<style>
+  :root{
+    --bg:#0e1116; --card:#161a21; --fg:#e6e8eb; --muted:#8a93a3; --line:#232a34;
+    --acc:#e2417a; --link:#5aa9ff; --tc:#8a93a3;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);
+       font:14px/1.6 "Segoe UI","Microsoft YaHei",system-ui,sans-serif}
+  a{color:inherit;text-decoration:none}
+
+  header{position:sticky;top:0;z-index:20;background:rgba(14,17,22,.96);
+         backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:12px 18px 10px}
+  h1{margin:0 0 2px;font-size:17px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  h1 .sub{color:var(--muted);font-size:12px;font-weight:400}
+
+  .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:9px}
+  input[type=search]{flex:1;min-width:200px;padding:7px 12px;border:1px solid var(--line);
+    border-radius:8px;background:#0f1319;color:var(--fg);font-size:14px}
+  input[type=search]:focus{outline:none;border-color:#3a4656}
+  select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;
+    background:#0f1319;color:var(--fg);font-size:13px}
+  .btn{padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:#0f1319;
+    color:var(--muted);cursor:pointer;font-size:13px;user-select:none}
+  .btn:hover{background:#1a1f28;color:var(--fg)}
+  .btn.danger{color:#e07a8a;border-color:#5a2f37;background:#1b1216}
+  .btn.danger:hover{background:#241419;border-color:#7a3a45}
+
+  /* 标签 chips：--tc 是每个标签自己的色，未选中时只用它做左边框提示 */
+  #tagchips{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px;max-height:132px;overflow:auto}
+  .chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border:1px solid var(--line);
+    border-left:2px solid var(--tc);border-radius:14px;background:#0f1319;color:#aab3c0;
+    cursor:pointer;font-size:12.5px;user-select:none;transition:.1s;white-space:nowrap}
+  .chip:hover{background:#1a1f28;color:var(--fg)}
+  .chip.on{background:var(--tc);border-color:var(--tc);color:#0e1116;font-weight:600}
+  .chip.on i{color:rgba(0,0,0,.55)}
+  .chip i{font-style:normal;font-size:11px;color:#5c6572}
+  .chip.st{border-style:dashed}
+
+  #activefilters{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px;
+    font-size:12.5px;min-height:20px}
+  .af{background:#1d2430;border:1px solid #2f3a49;border-radius:6px;padding:2px 8px;color:#c2cad6}
+  .af.none{background:none;border:none;color:#5c6572;padding:0}
+  .af.clear{background:#2a1620;border-color:#5a2f37;color:#e07a8a;cursor:pointer}
+  .af.clear:hover{background:#3a1c28}
+
+  .list{max-width:1180px;margin:0 auto;padding:14px 14px 80px}
+  .row{border:1px solid var(--line);background:var(--card);border-radius:9px;
+    padding:11px 14px;margin-bottom:7px;transition:.1s}
+  .row:hover{border-color:#3a4656;background:#1a1f28}
+  .row.stick{border-color:#4a3a17;background:#1b1a13}
+  .row.stick:hover{border-color:#6d5522;background:#211f16}
+
+  .rt{font-size:15px;font-weight:600;line-height:1.45;word-break:break-word}
+  .rt a:hover{color:var(--link)}
+  .pin,.lk,.pg{display:inline-block;font-size:10.5px;line-height:1;padding:2px 6px;
+    border-radius:4px;margin-right:6px;vertical-align:middle;font-weight:600}
+  .pin{background:#4a3a17;color:#f0c060;border:1px solid #6d5522}
+  .lk{background:#2a2f38;color:#8a93a3;border:1px solid #3a444f}
+  .pg{background:#16243a;color:#5aa9ff;border:1px solid #2b4a72;margin-left:6px;margin-right:0}
+
+  .rm{display:flex;gap:11px;flex-wrap:wrap;align-items:center;margin-top:6px;
+    color:var(--muted);font-size:12px}
+  .rm .au{color:#c2cad6;font-weight:600}
+  .rm .n{color:#9aa4b2}
+  .rm .lz{color:#6f7a89}
+  .rm .pgno{margin-left:auto;color:#4a5260;font-size:11px;font-variant-numeric:tabular-nums}
+
+  .rtt{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}
+  .tg{display:inline-block;font-size:11px;line-height:1;padding:3px 7px;border-radius:4px;
+    background:#1a2029;border:1px solid #2a3340;color:var(--tc);letter-spacing:.2px}
+  .tg.sm{font-size:10.5px;padding:2px 6px}
+  .tg.st{border-style:dashed}
+
+  .empty{text-align:center;color:var(--muted);padding:60px 20px}
+  #loading{text-align:center;color:var(--muted);padding:26px;font-size:13px}
+  #more{display:block;margin:16px auto;padding:9px 22px}
+  #stat{color:var(--muted);font-size:12.5px;text-align:center;padding:8px}
+  .foot{color:#4a5260;text-align:center;padding:18px 14px 40px;font-size:11.5px;line-height:1.7}
+
+  @media(max-width:720px){
+    .rm .lz{display:none}
+    #tagchips{max-height:104px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>T66Y · 草榴離線清單 <span class="sub" id="meta">加载中…</span></h1>
+
+  <div class="bar">
+    <input type="search" id="q" placeholder="搜索标题 / 作者…（全库，输入才加载索引）">
+    <select id="sort">
+      <option value="page">按页码（新→旧）</option>
+      <option value="new">按发帖时间</option>
+      <option value="last">按最后回复</option>
+      <option value="replies">按回复数</option>
+      <option value="downloads">按下载数</option>
+    </select>
+    <div class="btn danger" id="reset" title="清空所有筛选条件和排序偏好">还原</div>
+  </div>
+
+  <div id="tagchips"></div>
+  <div id="activefilters"></div>
+</header>
+
+<div class="list">
+  <div id="loading">加载中…</div>
+  <div id="list"></div>
+  <div class="btn" id="more" style="display:none"></div>
+  <div class="btn" id="older" style="display:none;margin:0 auto 16px"></div>
+  <div id="stat"></div>
+  <div class="foot" id="foot">
+    点击标题跳转到 t66y 原页面（新标签打开）。本页只做清单筛选，不抓取帖子内容。
+  </div>
+</div>
+
+<script src="data/index.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
