@@ -32,9 +32,9 @@
 
 ## 3. 数据现状与校验
 
-收录 **2427** 部（源站 2434 帖中排除了 7 篇教程/说明类非影片帖，见 `_scripts/skip_ids.txt`）｜
-海报引用 **2424**（本机 assets/images 仅存增量新图，历史海报已外迁；2 部无封面 + 7 张属被排除帖）｜
-剧照引用 **2734**（本机 assets/screenshots 2740 个文件，其中 4 张源站 404）｜最新 id **21476**（2026-11-19）。
+收录 **2428** 部（源站 2435 帖中排除了 7 篇教程/说明类非影片帖，见 `_scripts/skip_ids.txt`）｜
+海报引用 **2426**（本机 assets/images 仅存增量新图，历史海报已外迁；2 部无封面 + 7 张属被排除帖）｜
+剧照引用 **2743**（本机 assets/screenshots 2749 个文件，其中 4 张源站 404）｜最新 id **21494**（2026-11-22）。
 
 数字别凭印象改，随时重算：
 
@@ -125,7 +125,7 @@ python -X utf8 $S/pipeline/08_build_remote_urls.py --dir=$D                   # 
 
 **验收自检**（每次必做）：① `pipeline/07_build_datajs.py` 重跑 diff 为空（幂等）；② 与本次步骤 0 生成的
 `_backup/<日期>/data.js.pre-update.bak`（路径见该目录 `manifest.txt`）
-逐字段比对，只允许新增记录有差异；③ 记录数 == `_rawdata/_raw_posts.json` 帖数 − `skip_ids.txt` 命中数（现 2429 − 7 = 2422）且 `dt` 降序；
+逐字段比对，只允许新增记录有差异；③ 记录数 == `_rawdata/_raw_posts.json` 帖数 − `skip_ids.txt` 命中数（现 2435 − 7 = 2428）且 `dt` 降序；
 ④ `p`/`sh` 引用文件落地检查（4 张缺失属基线，见第 10 节）。
 
 ## 8. 常见维护操作
