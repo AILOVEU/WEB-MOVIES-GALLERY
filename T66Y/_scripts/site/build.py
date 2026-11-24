@@ -16,12 +16,15 @@
 分片按**页码**切（不是按 tid）：页码是天然的时间轴，第 1 页最新。
 一片 50 页 = 5000 条，约 1.9 MB。
 
+数据源是累积库 `_pipeline/records.json`（按 tid 唯一），不是直接扫 `_rawdata`：
+  列表按发帖时间降序，新帖插最前、旧帖整体后移，按页覆盖会丢帖（详见 store.py）。
+  页码在这里**按顺序重新分配**（虚拟页码），只用于前端分片定位，与抓取时的物理页码无关。
+
 标签：标题关键词标签来自 _scripts/config/tags.json（tag_record），
 结构化标签另加：置顶(stick)、锁帖(locked)、多页(multi)、新回复(new)。
 标签在 build 阶段算，改 tags.json 重跑 build 即可，不用重抓。
 
-去重：同一 tid 可能因置顶/翻页刷新出现在多页，按 tid 保留**页码最小**的那条
-（最早出现 = 最接近原始发帖位置），其余丢弃并在日志里报数。
+去重：累积库本身按 tid 唯一，这里不再需要去重。
 """
 import io
 import json
@@ -33,6 +36,7 @@ import time
 _SCRIPTS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(_SCRIPTS, "common"))
 import paths as P
+import store as S
 import t66y as T
 
 FORUM_NAME = {25: "國產原創區", 2: "亞洲無碼原創區", 15: "亞洲有碼原創區",
@@ -53,23 +57,23 @@ def log(*a):
 
 
 def load_pages(fid):
-    """扫 _rawdata 下该 fid 的所有页，返回 {page: [records]}（只收解析出记录的页）。"""
-    out = {}
-    if not os.path.isdir(P.RAW):
-        return out
-    pat = "fid%d_p" % fid
-    for fn in sorted(os.listdir(P.RAW)):
-        if not (fn.startswith(pat) and fn.endswith(".html")):
-            continue
-        m = fn[len(pat):-5]
-        if not m.isdigit():
-            continue
-        page = int(m)
-        html = io.open(os.path.join(P.RAW, fn), encoding="utf-8", errors="ignore").read()
-        recs = T.parse_list_page(html, page)
-        if recs:
-            out[page] = recs
-    return out
+    """从累积库读记录并按顺序切成虚拟页码，返回 {page: [records]}。
+
+    累积库不存在时自动从 _rawdata 初始化（首次运行/库被删）。
+    """
+    if not os.path.exists(P.RECORDS):
+        log("累积库不存在，从 _rawdata 初始化 …")
+        data, dup = S.init_from_raw(fid)
+        if not data["records"]:
+            return {}
+        S.save(fid, data)
+        log("已建立 %s：%d 条（去重丢 %d）" % (P.RECORDS, len(data["records"]), dup))
+    else:
+        data = S.load(fid)
+    recs = list((data.get("records") or {}).values())
+    if not recs:
+        return {}
+    return S.group_pages(recs)
 
 
 def attach_tags(recs, tags):
@@ -121,33 +125,27 @@ def build(fid=25):
 
     pages = load_pages(fid)
     if not pages:
-        log("_rawdata 下没有 fid=%d 的可用页，先跑 crawl.py" % fid)
+        log("累积库为空且 _rawdata 下没有 fid=%d 的可用页，先跑 crawl.py" % fid)
         return 1
 
-    # 去重：同 tid 保留页码最小的那条
-    seen_tid = {}
+    data = S.load(fid)
+    wm = data.get("watermark") or {}
+
+    # 累积库已按 tid 唯一，这里不再去重（虚拟页码由 store.group_pages 分配）
     dup = 0
-    for pg in sorted(pages):
-        keep = []
-        for r in pages[pg]:
-            tid = r["tid"]
-            if tid in seen_tid:
-                dup += 1
-                continue
-            seen_tid[tid] = pg
-            keep.append(r)
-        pages[pg] = keep
 
     all_recs = [r for pg in sorted(pages) for r in pages[pg]]
     attach_tags(all_recs, tags)
 
-    # 站点真实总页数：从任一页的分页框读（value="1/4957"），读不到就退回已抓最大页码
+    # 站点真实总页数：从任一原始页的分页框读（value="1/4957"），读不到就退回虚拟页数
     total_pages = 0
-    for pg in sorted(pages):
-        fn = os.path.join(P.RAW, "fid%d_p%04d.html" % (fid, pg))
-        if os.path.exists(fn):
+    if os.path.isdir(P.RAW):
+        pat = "fid%d_p" % fid
+        for fn in sorted(os.listdir(P.RAW)):
+            if not (fn.startswith(pat) and fn.endswith(".html")):
+                continue
             total_pages = T.page_count(
-                io.open(fn, encoding="utf-8", errors="ignore").read())
+                io.open(os.path.join(P.RAW, fn), encoding="utf-8", errors="ignore").read())
             if total_pages:
                 break
     if not total_pages:
@@ -254,6 +252,9 @@ def build(fid=25):
         "shards": shard_names,
         "title_shards": title_files,
         "tags": tag_meta,
+        # 水位线：下一轮增量抓取遇到这条就停（store.py 维护）
+        "watermark_tid": wm.get("tid") or "",
+        "watermark_seen": wm.get("seen") or "",
     }
     io.open(P.DATA_INDEX, "w", encoding="utf-8").write(
         "/* T66Y 离线清单 · 自动生成，勿手改 */\n"

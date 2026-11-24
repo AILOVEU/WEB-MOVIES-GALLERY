@@ -18,7 +18,7 @@
 | 项 | 值 |
 |---|---|
 | 已抓页数 | 100 / 4957 |
-| 帖子数 | 9,900 |
+| 帖子数 | 9,912 |
 | 标签数 | 61（含 4 个结构化标签：置頂/鎖帖/多頁/新回復） |
 
 **只抓到了 100 页，因为游客有硬上限。** 详见下面「登录墙」。
@@ -50,12 +50,15 @@ T66Y/
 ├─ _rawdata/             原始 HTML（不可再生，删了要重爬）
 ├─ _pipeline/
 │   ├─ cookie.txt        登录 cookie（可选，没有就只抓游客范围）
-│   └─ crawl_done.txt    已抓页码断点
+│   ├─ crawl_done.txt    已抓页码断点（仅全量模式使用）
+│   └─ records.json      ★ 累积库：按 tid 唯一的全部记录 + 水位线（删了要重爬）
 ├─ _scripts/
 │   ├─ common/paths.py   目录布局单一来源
 │   ├─ common/t66y.py    列表页解析 + 打标签
-│   ├─ inc/crawl.py      抓取（断点续传 + 自适应限速）
-│   ├─ site/build.py     组装 data/
+│   ├─ common/store.py   累积库读写 + 排序 + 虚拟页码分配
+│   ├─ inc/crawl.py      抓取（增量：水位线停止 / 全量：翻到底）
+│   ├─ inc/merge.py      按 tid 合并进累积库 + 推进水位线
+│   ├─ site/build.py     重排页码 + 组装 data/
 │   └─ config/tags.json  标签规则（人工可改）
 ├─ _logs/YYYY-MM-DD/     日志（随便删）
 └─ _bak/YYYY-MM-DD/      data/ 覆盖前的快照
@@ -66,17 +69,28 @@ T66Y/
 ```powershell
 cd D:\workspace\z_WEB-MOVIES-GALLERY\T66Y
 
-# 抓全部（游客上限内）
-python _scripts/inc/crawl.py
+# 增量更新（推荐）：翻到水位线即停，然后合并 + 重组
+python _scripts/inc/crawl.py          # 从 p1 往下翻，遇到上次最新那条就停
+python _scripts/inc/merge.py          # 按 tid 合并进累积库 + 推进水位线
+python _scripts/site/build.py 25      # 重排页码 + 组装 data/
 
-# 只抓前 200 页
+# 全量抓（游客上限内）
+python _scripts/inc/crawl.py --full
+
+# 全量重抓 + 刷新（定期深扫 / 怀疑漏帖）
+python _scripts/inc/crawl.py --full --force
+python _scripts/inc/merge.py
+python _scripts/site/build.py 25
+
+# 只抓前 200 页 / 指定区间
 python _scripts/inc/crawl.py --pages 200
-
-# 指定页码区间
 python _scripts/inc/crawl.py --start 101 --end 300
 
-# 重抓已存在的页
-python _scripts/inc/crawl.py --force
+# 只看合并会新增/更新多少，不写盘
+python _scripts/inc/merge.py --dry
+
+# 从 _rawdata 全量重建累积库（库坏了用）
+python _scripts/inc/merge.py --rebuild
 
 # 重新组装（改完 tags.json 后跑这个，不用重抓）
 python _scripts/site/build.py 25
@@ -84,6 +98,20 @@ python _scripts/site/build.py 25
 # 本地预览
 python -m http.server 8765
 ```
+
+## 增量是怎么工作的
+
+列表按**发帖时间降序**（置顶除外），新帖插最前、旧帖整体后移。所以：
+
+- `crawl.py` 记住上次抓到的最新一条（**水位线**，存在 `_pipeline/records.json`），
+  下一轮从 p1 往下翻，**遇到它就停** —— 之后的内容上轮已全有。
+- `merge.py` 按 **tid** 合并：新 tid 插入，旧 tid 用新数据覆盖（回复/下载/最后回复会变），
+  **旧记录一条不删**。
+- `build.py` 从累积库读，按「置顶在前 + 发帖时间降序」重排，**重新分配虚拟页码**（每页 99 条）。
+
+**为什么不能只重抓前 N 页就完事**：新帖插入后旧页内容整体后移，按页覆盖会让旧页尾部
+被新页开头覆盖，直接丢帖。按 tid 累积才安全 —— 物理页码只用于抓取定位，
+交付层页码是 build 时重排的（前端无感，仍是 1..N 连续、第 1 页最新）。
 
 ## 改标签
 

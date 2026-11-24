@@ -14,11 +14,18 @@
 - 沙盒守卫：直接写目标文件，不用 tmp/os.replace/.part。
 
 用法：
-  python _scripts/inc/crawl.py                    # 抓全部（游客上限内）
+  python _scripts/inc/crawl.py                    # 增量：翻到水位线即停（默认）
+  python _scripts/inc/crawl.py --full             # 全量：翻到底（游客上限内）
   python _scripts/inc/crawl.py --pages 200        # 指定抓前 200 页
   python _scripts/inc/crawl.py --fid 25 --start 1 --end 100
-  python _scripts/inc/crawl.py --force            # 重抓已存在的页
+  python _scripts/inc/crawl.py --force            # 重抓已存在的页（配合 --full 全量刷新）
 环境变量：T66Y_PROXY（默认 http://127.0.0.1:7890）
+
+增量模式（默认）：
+  列表按**发帖时间降序**（置顶除外），新帖插在最前，旧帖整体后移。
+  所以从 p1 往下翻，**遇到上次记录的"最新一条"（水位线）就停** —— 它之后的内容
+  上一轮已经全部拿到。水位线存在 _pipeline/records.json 的 watermark 字段。
+  首次运行没有水位线时，自动退回 --full 行为（翻到底），并建立水位线。
 """
 import argparse
 import io
@@ -32,6 +39,7 @@ import time
 _SCRIPTS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(_SCRIPTS, "common"))
 import paths as P
+import store as S
 import t66y as T
 
 PROXY = os.environ.get("T66Y_PROXY", "http://127.0.0.1:7890")
@@ -167,17 +175,29 @@ def main():
     ap.add_argument("--start", type=int, default=1)
     ap.add_argument("--end", type=int, default=0, help="抓到此页（0=自动探测总页数）")
     ap.add_argument("--force", action="store_true", help="重抓已存在的页")
+    ap.add_argument("--full", action="store_true",
+                    help="全量模式：翻到底，不在水位线停（首次建库/定期深扫用）")
     a = ap.parse_args()
 
     P.ensure(P.RAW, P.WORK, P.log_dir())
     cookie = load_cookie()
     pace = Pace()
 
+    # 水位线：上次抓到的最新一条。增量模式下遇到它就停。
+    data = S.load(a.fid)
+    wm = data.get("watermark") or {}
+    wm_tid = wm.get("tid") or ""
+    incremental = not a.full and bool(wm_tid)
+    if not a.full and not wm_tid:
+        log("没有水位线（首次运行或 records.json 缺失）→ 本轮按全量翻到底，并建立水位线")
+
     total, first = probe_total(a.fid, cookie, pace)
     if not total:
         log("无法读取总页数（第 1 页抓取失败或登录墙）")
         sys.exit(2)
-    log("fid=%d 总页数=%d  登录态=%s" % (a.fid, total, "有 cookie" if cookie else "游客"))
+    log("fid=%d 总页数=%d  登录态=%s  模式=%s"
+        % (a.fid, total, "有 cookie" if cookie else "游客",
+           "增量(水位线 %s)" % wm_tid if incremental else "全量"))
 
     end = a.end or total
     if a.pages:
@@ -188,13 +208,18 @@ def main():
     todo = []
     for pg in range(a.start, end + 1):
         p = page_path(a.fid, pg)
-        if not a.force and pg in done and os.path.exists(p) and os.path.getsize(p) > 8000:
+        # 增量模式必须重抓前几页：新帖插在最前，旧页内容已整体后移，
+        # 断点里"已抓过"的页现在是不同内容，跳过就永远看不到新帖。
+        # 只有全量模式才认断点（那里页码是稳定的，跳过已抓页是安全的）。
+        if not a.force and not incremental and pg in done \
+                and os.path.exists(p) and os.path.getsize(p) > 8000:
             continue
         todo.append(pg)
     log("待抓 %d 页（%d..%d，已完成 %d）" % (len(todo), a.start, end, len(done)))
 
     hit_login = 0
     ok_n = 0
+    hit_wm = False
     for i, pg in enumerate(todo, 1):
         p = page_path(a.fid, pg)
         v = fetch(p, LIST_URL % (a.fid, pg), cookie, pace)
@@ -209,21 +234,29 @@ def main():
             continue
         hit_login = 0
         if v == "ok":
-            n = len(T.parse_list_page(
-                io.open(p, encoding="utf-8", errors="ignore").read(), pg))
+            html = io.open(p, encoding="utf-8", errors="ignore").read()
+            recs = T.parse_list_page(html, pg)
             mark_done(pg)
             ok_n += 1
-            if i % 10 == 0 or i == len(todo):
-                log("page %d/%d -> ok (%d 帖) 累计 %d 页" % (pg, end, n, ok_n))
+            log("page %d/%d -> ok (%d 帖) 累计 %d 页" % (pg, end, len(recs), ok_n))
+            # 增量模式：本页出现水位线 = 它之后的内容上轮已全有，可以停
+            if incremental and any(r["tid"] == wm_tid for r in recs):
+                log("page %d 命中水位线 tid=%s（上一轮最新一条）→ 之后的内容已获取，停止" % (pg, wm_tid))
+                hit_wm = True
+                break
         elif v == "end":
             log("page %d -> end（超出末页），停止" % pg)
             break
         else:
             log("page %d -> fail（留待下轮重试）" % pg)
 
-    log("抓取结束：成功 %d 页，登录墙 %d 次" % (ok_n, hit_login))
+    log("抓取结束：成功 %d 页，登录墙 %d 次%s"
+        % (ok_n, hit_login, "，水位线停止" if hit_wm else ""))
     if hit_login:
         log("提示：游客上限约 100 页。把浏览器里 t66y 的 Cookie 整行写进 %s 后可继续。" % P.COOKIE)
+    if incremental and not hit_wm and not hit_login:
+        log("提示：翻到 %d 页仍未命中水位线 tid=%s —— 新帖量超过本轮翻页范围，"
+            "或水位线帖已被删除/移出版面。建议再跑一次或 --full 核对。" % (end, wm_tid))
 
 
 if __name__ == "__main__":
