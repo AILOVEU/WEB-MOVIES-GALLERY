@@ -86,22 +86,27 @@ def merge(data, new_recs):
     """把新抓到的记录合并进累积库。
 
     - 新 tid：插入
-    - 旧 tid：用新数据覆盖（回复数/下载数/最后回复会变；标题一般不变）
-    返回 (新增数, 更新数)。
+    - 旧 tid：**保留库里原样，不覆盖**（2026-11-25 用户决定：不要计数更新）
+    返回 (新增数, 跳过数)。
+
+    为什么不再覆盖旧记录：
+      旧实现用新抓到的回复数/下载数/最后回复覆盖库里的值，一轮下来 60~70 条
+      「更新」全是这类计数变动，对清单页没有意义，还会让 records.json 每轮都变。
+      现在只认新帖，已入库的 tid 一律不动 —— 重抓同一页是幂等的，库只会增长。
+      代价：旧帖的回复数/最后回复停在首次入库那一刻，不再刷新。
     """
     recs = data["records"]
-    added = updated = 0
+    added = skipped = 0
     for r in new_recs:
         tid = r.get("tid")
         if not tid:
             continue
-        old = recs.get(tid)
-        if old is None:
-            added += 1
-        elif old != r:
-            updated += 1
+        if tid in recs:
+            skipped += 1
+            continue
+        added += 1
         recs[tid] = r
-    return added, updated
+    return added, skipped
 
 
 def pick_watermark(recs):

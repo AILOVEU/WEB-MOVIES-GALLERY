@@ -4,7 +4,7 @@
 流程（crawl.py 之后跑）：
   1) 读累积库（不存在则从 _rawdata 现有页初始化）
   2) 扫 _rawdata 下所有页，解析出记录
-  3) 按 tid 合并：新 tid 插入，旧 tid 用新数据覆盖（回复/下载/最后回复会变）
+  3) 按 tid 合并：新 tid 插入，**旧 tid 原样保留不覆盖**（不刷新回复/下载计数）
   4) 重算水位线 = 全库里 post_ts 最大的非置顶帖
   5) 落盘
 
@@ -14,7 +14,7 @@
 
 用法：
   python _scripts/inc/merge.py            # 合并 + 更新水位线
-  python _scripts/inc/merge.py --dry      # 只看会新增/更新多少，不写盘
+  python _scripts/inc/merge.py --dry      # 只看会新增多少，不写盘
   python _scripts/inc/merge.py --rebuild  # 忽略现有库，从 _rawdata 全量重建
 """
 import argparse
@@ -83,18 +83,18 @@ def main():
     before = len(data["records"])
     old_wm = (data.get("watermark") or {}).get("tid") or ""
 
-    added = updated = 0
+    added = skipped = 0
     for page, recs in pages:
-        a_n, u_n = S.merge(data, recs)
+        a_n, s_n = S.merge(data, recs)
         added += a_n
-        updated += u_n
+        skipped += s_n
 
     # 水位线：全库最新的一条（不只看本轮，避免某轮只抓到旧页时把水位线退回去）
     data["watermark"] = S.pick_watermark(data["records"].values())
 
     after = len(data["records"])
     log("本轮扫描 %d 页 / %d 条记录" % (len(pages), sum(len(r) for _, r in pages)))
-    log("合并结果：新增 %d，更新 %d，库 %d → %d 条" % (added, updated, before, after))
+    log("合并结果：新增 %d，已存在跳过 %d，库 %d → %d 条" % (added, skipped, before, after))
 
     new_wm = data["watermark"].get("tid") or ""
     if new_wm and new_wm != old_wm:
