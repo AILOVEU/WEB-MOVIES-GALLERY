@@ -32,6 +32,7 @@
     foot: document.getElementById('foot'),
     stat: document.getElementById('stat'),
     sort: document.getElementById('sort'),
+    sortdir: document.getElementById('sortdir'),
     seenfilter: document.getElementById('seenfilter'),
     seencount: document.getElementById('seencount'),
     clearseen: document.getElementById('clearseen'),
@@ -44,13 +45,14 @@
   /* ---------------- 状态 ---------------- */
   var KEY = 't66y_state_v1';
   var SEEN_KEY = 't66y_seen_v1';
-  var state = { tags: [], kw: '', sort: 'page', hideStick: false, depth: 100, seenFilter: 'all' };
+  var state = { tags: [], kw: '', sort: 'page', sortAsc: false, hideStick: false, depth: 100, seenFilter: 'all' };
   try {
     var s = JSON.parse(localStorage.getItem(KEY) || 'null');
     if (s && typeof s === 'object') {
       state.tags = (s.tags || []).filter(function (k) { return TAGMAP[k]; });
       state.kw = s.kw || '';
       state.sort = s.sort || 'page';
+      state.sortAsc = !!s.sortAsc;
       state.hideStick = !!s.hideStick;
       if (s.seenFilter === 'only' || s.seenFilter === 'hide') state.seenFilter = s.seenFilter;
     }
@@ -58,7 +60,7 @@
   function save() {
     try {
       localStorage.setItem(KEY, JSON.stringify({
-        tags: state.tags, kw: state.kw, sort: state.sort,
+        tags: state.tags, kw: state.kw, sort: state.sort, sortAsc: state.sortAsc,
         hideStick: state.hideStick, seenFilter: state.seenFilter
       }));
     } catch (e) {}
@@ -307,11 +309,20 @@
   }
 
   function sortRows(rows) {
-    if (state.sort === 'replies') rows.sort(function (a, b) { return (b.replies || 0) - (a.replies || 0); });
-    else if (state.sort === 'downloads') rows.sort(function (a, b) { return (b.downloads || 0) - (a.downloads || 0); });
-    else if (state.sort === 'new') rows.sort(function (a, b) { return (b.post_ts || 0) - (a.post_ts || 0); });
-    else if (state.sort === 'last') rows.sort(function (a, b) { return (b.last_ts || 0) - (a.last_ts || 0); });
-    else rows.sort(function (a, b) { return (a.page - b.page) || ((b.post_ts || 0) - (a.post_ts || 0)); });
+    // 默认降序（新→旧 / 多→少）；sortAsc=true 时整体反转（旧→新 / 少→多）。
+    // 置顶帖始终排在最前，不参与方向反转（它们 post_ts 很老，反转后会沉底，不合理）。
+    var dir = state.sortAsc ? -1 : 1;
+    if (state.sort === 'replies') rows.sort(function (a, b) { return dir * ((b.replies || 0) - (a.replies || 0)); });
+    else if (state.sort === 'downloads') rows.sort(function (a, b) { return dir * ((b.downloads || 0) - (a.downloads || 0)); });
+    else if (state.sort === 'new') rows.sort(function (a, b) { return dir * ((b.post_ts || 0) - (a.post_ts || 0)); });
+    else if (state.sort === 'last') rows.sort(function (a, b) { return dir * ((b.last_ts || 0) - (a.last_ts || 0)); });
+    else rows.sort(function (a, b) {
+      // 置顶优先（固定）。页码升序(P1→P106)本身就是新→旧，所以默认 dir=1 用正号；
+      // sortAsc=true（旧→新）时才反转成降序。
+      var sa = a.stick ? 0 : 1, sb = b.stick ? 0 : 1;
+      if (sa !== sb) return sa - sb;
+      return dir * ((a.page - b.page) || ((b.post_ts || 0) - (a.post_ts || 0)));
+    });
     return rows;
   }
 
@@ -439,10 +450,31 @@
 
   el.sort.addEventListener('change', function (e) {
     state.sort = e.target.value; save();
+    syncSortDir();
     currentRows = sortRows(currentRows);
     el.viewport.scrollTop = 0;
     paintVirtual();
   });
+
+  function syncSortDir() {
+    if (!el.sortdir) return;
+    // 页码/时间类：新→旧 或 旧→新；计数类：多→少 或 少→多
+    var desc, asc;
+    if (state.sort === 'replies') { desc = '↓ 多→少'; asc = '↑ 少→多'; }
+    else if (state.sort === 'downloads') { desc = '↓ 多→少'; asc = '↑ 少→多'; }
+    else { desc = '↓ 新→旧'; asc = '↑ 旧→新'; }
+    el.sortdir.textContent = state.sortAsc ? asc : desc;
+    el.sortdir.title = '当前：' + (state.sortAsc ? asc : desc) + '，点击切换方向';
+  }
+  if (el.sortdir) {
+    el.sortdir.addEventListener('click', function () {
+      state.sortAsc = !state.sortAsc; save();
+      syncSortDir();
+      currentRows = sortRows(currentRows);
+      el.viewport.scrollTop = 0;
+      paintVirtual();
+    });
+  }
 
   el.seenfilter.addEventListener('change', function (e) {
     state.seenFilter = e.target.value; save();
@@ -496,8 +528,9 @@
   el.reset.addEventListener('click', function () {
     if (!confirm('清空所有筛选条件和排序偏好？（点过记录保留，可用「清空点过」单独清）')) return;
     try { localStorage.removeItem(KEY); } catch (e) {}
-    state = { tags: [], kw: '', sort: 'page', hideStick: false, depth: 100, seenFilter: 'all' };
+    state = { tags: [], kw: '', sort: 'page', sortAsc: false, hideStick: false, depth: 100, seenFilter: 'all' };
     el.q.value = ''; el.sort.value = 'page'; el.seenfilter.value = 'all';
+    syncSortDir();
     renderTags(); renderActive(); refresh();
   });
 
@@ -525,6 +558,7 @@
   el.q.value = state.kw;
   el.sort.value = state.sort;
   el.seenfilter.value = state.seenFilter;
+  syncSortDir();
   el.meta.textContent = META.forum + ' (fid=' + META.fid + ') · '
     + META.pages_done + '/' + META.total_pages + ' 页 · ' + META.count + ' 帖 · 生成于 ' + META.generated;
   updateSeenCount();

@@ -118,12 +118,13 @@
   <div class="bar">
     <input type="search" id="q" placeholder="搜索标题 / 作者…（全库，输入才加载索引）">
     <select id="sort">
-      <option value="page">按页码（新→旧）</option>
+      <option value="page">按页码</option>
       <option value="new">按发帖时间</option>
       <option value="last">按最后回复</option>
       <option value="replies">按回复数</option>
       <option value="downloads">按下载数</option>
     </select>
+    <div class="btn" id="sortdir" title="切换排序方向：新→旧 / 旧→新">↓ 新→旧</div>
     <select id="seenfilter" title="按点过状态过滤">
       <option value="all">点过：全部</option>
       <option value="only">只看点过</option>
