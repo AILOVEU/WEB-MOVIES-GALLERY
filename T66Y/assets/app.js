@@ -1,4 +1,4 @@
-/* T66Y 清单前端：标签筛选 + 关键词搜索 + 按需加载分片
+/* T66Y 清单前端：标签筛选 + 关键词搜索 + 点过记录 + 虚拟滚动
  *
  * 数据分三层（见 _scripts/site/build.py 顶部说明）：
  *   index.js   元信息 + 每页标签位图 T66Y_PTAG（几十 KB，首屏就加载）
@@ -6,7 +6,10 @@
  *   titles.js  全库标题索引（约 1 MB，只在输入关键词时加载）
  *
  * 筛选流程：先用位图算出「哪些页可能有命中」，只加载这些页所在的分片，
- * 再在记录级做精确筛选。这样即使全库 4957 页，选一个标签也只需要加载少数分片。
+ * 再在记录级做精确筛选。结果集交给虚拟滚动，只渲染可见行。
+ *
+ * 点过记录：localStorage 存 tid -> 时间，支持取消、过滤（全部/只看/隐藏）。
+ * 点标题打开原帖自动记为点过；行首 ○/✓ 按钮可手动切换。
  */
 (function () {
   var META = window.T66Y_META || {};
@@ -20,22 +23,28 @@
   TAGS.forEach(function (t, i) { t.idx = i; TAGMAP[t.key] = t; });
 
   var el = {
-    list: document.getElementById('list'),
+    list: document.getElementById('vlist'),
+    viewport: document.getElementById('viewport'),
+    spacer: document.getElementById('spacer'),
+    empty: document.getElementById('empty'),
     chips: document.getElementById('tagchips'),
     q: document.getElementById('q'),
     foot: document.getElementById('foot'),
     stat: document.getElementById('stat'),
     sort: document.getElementById('sort'),
+    seenfilter: document.getElementById('seenfilter'),
+    seencount: document.getElementById('seencount'),
+    clearseen: document.getElementById('clearseen'),
     reset: document.getElementById('reset'),
     active: document.getElementById('activefilters'),
     loading: document.getElementById('loading'),
-    more: document.getElementById('more'),
     meta: document.getElementById('meta')
   };
 
   /* ---------------- 状态 ---------------- */
   var KEY = 't66y_state_v1';
-  var state = { tags: [], kw: '', sort: 'page', hideStick: false, limit: 400, depth: 100 };
+  var SEEN_KEY = 't66y_seen_v1';
+  var state = { tags: [], kw: '', sort: 'page', hideStick: false, depth: 100, seenFilter: 'all' };
   try {
     var s = JSON.parse(localStorage.getItem(KEY) || 'null');
     if (s && typeof s === 'object') {
@@ -43,14 +52,39 @@
       state.kw = s.kw || '';
       state.sort = s.sort || 'page';
       state.hideStick = !!s.hideStick;
+      if (s.seenFilter === 'only' || s.seenFilter === 'hide') state.seenFilter = s.seenFilter;
     }
   } catch (e) {}
   function save() {
     try {
       localStorage.setItem(KEY, JSON.stringify({
-        tags: state.tags, kw: state.kw, sort: state.sort, hideStick: state.hideStick
+        tags: state.tags, kw: state.kw, sort: state.sort,
+        hideStick: state.hideStick, seenFilter: state.seenFilter
       }));
     } catch (e) {}
+  }
+
+  /* 点过记录：tid -> 时间戳。独立于筛选状态，单独存。 */
+  var seen = {};
+  try {
+    var sv = JSON.parse(localStorage.getItem(SEEN_KEY) || 'null');
+    if (sv && typeof sv === 'object') seen = sv;
+  } catch (e) {}
+  function saveSeen() {
+    try { localStorage.setItem(SEEN_KEY, JSON.stringify(seen)); } catch (e) {}
+    updateSeenCount();
+  }
+  function isSeen(tid) { return !!seen[String(tid)]; }
+  function markSeen(tid, on) {
+    tid = String(tid);
+    if (on) seen[tid] = Date.now();
+    else delete seen[tid];
+    saveSeen();
+  }
+  function updateSeenCount() {
+    var n = 0;
+    for (var k in seen) if (seen.hasOwnProperty(k)) n++;
+    el.seencount.textContent = '已点过 ' + n;
   }
 
   /* ---------------- 分片加载 ---------------- */
@@ -78,12 +112,9 @@
     for (var i = 0; i < ws.length; i++) ws[i](ok);
   }
 
-  /* ---------------- 标题索引（关键词搜索，按分片渐进加载）----------------
-   * 全库 4957 页时单文件索引约 30 MB，一次拉太重。build.py 按分片切成
-   * titles_XXX.js（每片约 300 KB），这里按需逐片加载，命中足够多就提前停。
-   */
-  var titleShards = {};       // 分片序号 -> [{tid,page,title}]
-  var titleState = {};        // 分片序号 -> 'loading' | 'loaded'
+  /* ---------------- 标题索引（关键词搜索，按分片渐进加载）---------------- */
+  var titleShards = {};
+  var titleState = {};
   var titleWait = {};
 
   function parseTitles(raw) {
@@ -118,7 +149,6 @@
     for (var i = 0; i < ws.length; i++) ws[i](ok);
   }
 
-  /* 逐片加载标题索引，直到全部加载完或命中数超过 cap */
   function scanTitles(kw, cap, done) {
     var shardList = (META.title_shards || []).map(function (n) { return parseInt(n.replace('titles_', ''), 10); });
     var i = 0, hits = [];
@@ -154,13 +184,11 @@
   }
 
   /* ---------------- 候选页计算 ---------------- */
-  /* 返回需要加载的页码数组。标签用位图预筛，关键词用标题索引预筛。 */
   function candidatePages(kwHits) {
     var wantIdx = state.tags.map(function (k) { return TAGMAP[k].idx; });
     var pages = [];
 
     if (state.kw) {
-      // 关键词：kwHits 是标题索引里命中的 {page} 集合，再与标签位图求交
       var allow = {};
       (kwHits || []).forEach(function (h) { allow[h.page] = 1; });
       for (var pg = PAGE_MIN; pg <= PAGE_MAX; pg++) {
@@ -178,14 +206,12 @@
       return pages;
     }
 
-    // 无筛选：只给最新的 state.depth 页（默认 100 页），其余靠「加载更早的页」追加
+    // 无筛选：只给最新的 state.depth 页，其余靠「加载更早的页」追加
     var n = Math.min(PAGE_MAX - PAGE_MIN + 1, state.depth);
     for (var q = PAGE_MIN; q < PAGE_MIN + n; q++) pages.push(q);
     return pages;
   }
 
-  /* 页码 -> 分片序号。必须与 build.py 的 paths.shard_of_page 同口径：
-     分片按**绝对页码**切（第 1-50 页 = 第 0 片），不随 page_min 偏移。 */
   function shardOfPage(pg) { return Math.floor((pg - 1) / PPS); }
 
   function pageHasAllTags(pg, wantIdx) {
@@ -212,6 +238,8 @@
       var h = (r.title + ' ' + (r.author || '')).toLowerCase();
       if (h.indexOf(state.kw) < 0) return false;
     }
+    if (state.seenFilter === 'only' && !isSeen(r.tid)) return false;
+    if (state.seenFilter === 'hide' && isSeen(r.tid)) return false;
     return true;
   }
 
@@ -236,6 +264,8 @@
       if (TAGMAP[k]) bits.push('<span class="af">' + esc(TAGMAP[k].label) + '</span>');
     });
     if (state.hideStick) bits.push('<span class="af">隐藏置顶</span>');
+    if (state.seenFilter === 'only') bits.push('<span class="af">只看点过</span>');
+    if (state.seenFilter === 'hide') bits.push('<span class="af">隐藏点过</span>');
     if (bits.length) {
       bits.push('<span class="af clear" id="clearf">清空筛选</span>');
       el.active.innerHTML = bits.join('');
@@ -247,8 +277,8 @@
   }
 
   function clearFilters() {
-    state.tags = []; state.kw = ''; state.hideStick = false;
-    el.q.value = '';
+    state.tags = []; state.kw = ''; state.hideStick = false; state.seenFilter = 'all';
+    el.q.value = ''; el.seenfilter.value = 'all';
     save(); renderTags(); renderActive(); refresh();
   }
 
@@ -257,8 +287,11 @@
     var pin = r.stick ? '<span class="pin">置頂</span>' : '';
     var lk = r.locked ? '<span class="lk">鎖</span>' : '';
     var multi = r.pages > 1 ? '<span class="pg">' + r.pages + '頁</span>' : '';
-    return '<div class="row' + (r.stick ? ' stick' : '') + '">'
-      + '<div class="rt"><a href="' + esc(r.url) + '" target="_blank" rel="noopener">'
+    var sv = isSeen(r.tid);
+    return '<div class="row' + (r.stick ? ' stick' : '') + (sv ? ' seen' : '') + '" data-tid="' + esc(r.tid) + '">'
+      + '<div class="rt">'
+      + '<button class="seen-btn' + (sv ? ' on' : '') + '" data-seen="' + esc(r.tid) + '" title="' + (sv ? '取消点过' : '标记点过') + '">' + (sv ? '✓' : '○') + '</button> '
+      + '<a href="' + esc(r.url) + '" target="_blank" rel="noopener" data-open="' + esc(r.tid) + '">'
       + pin + lk + esc(r.title) + '</a>' + multi + '</div>'
       + '<div class="rm">'
       + '<span class="au">' + esc(r.author || '匿名') + '</span>'
@@ -282,15 +315,43 @@
     return rows;
   }
 
-  function paint() {
-    var shown = currentRows.slice(0, state.limit);
-    el.list.innerHTML = shown.map(rowHtml).join('')
-      || '<div class="empty">没有符合条件的帖子。放宽筛选试试。</div>';
-    el.stat.textContent = '命中 ' + currentRows.length + ' 帖'
-      + (currentRows.length > shown.length ? '（显示前 ' + shown.length + ' 条）' : '');
-    el.more.style.display = currentRows.length > shown.length ? '' : 'none';
-    el.more.textContent = '继续显示（还有 ' + (currentRows.length - shown.length) + ' 条）';
+  /* ---------------- 虚拟滚动 ---------------- */
+  var ROW_H = 116;          // 行高 109 + margin-bottom 7
+  var BUFFER = 8;           // 上下各多渲染几行，减少滚动白边
+  var rafPending = false;
+
+  function paintVirtual() {
+    var total = currentRows.length;
+    el.spacer.style.height = (total * ROW_H) + 'px';
+    if (!total) {
+      el.list.innerHTML = '';
+      el.empty.style.display = '';
+      el.stat.textContent = '命中 0 帖';
+      return;
+    }
+    el.empty.style.display = 'none';
+
+    var top = el.viewport.scrollTop;
+    var vh = el.viewport.clientHeight || 600;
+    var start = Math.max(0, Math.floor(top / ROW_H) - BUFFER);
+    var end = Math.min(total, Math.ceil((top + vh) / ROW_H) + BUFFER);
+    var chunk = currentRows.slice(start, end);
+
+    el.list.style.transform = 'translateY(' + (start * ROW_H) + 'px)';
+    el.list.innerHTML = chunk.map(rowHtml).join('');
+    el.stat.textContent = '命中 ' + total + ' 帖 · 已渲染 ' + (end - start) + ' 行';
   }
+
+  function onScroll() {
+    if (rafPending) return;
+    rafPending = true;
+    requestAnimationFrame(function () {
+      rafPending = false;
+      paintVirtual();
+    });
+  }
+  el.viewport.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
 
   /* ---------------- 主流程 ---------------- */
   var refreshToken = 0;
@@ -343,9 +404,9 @@
           }
         }
         currentRows = sortRows(rows);
-        state.limit = 400;
         el.loading.style.display = 'none';
-        paint();
+        el.viewport.scrollTop = 0;
+        paintVirtual();
         syncOlder();
       }
     }
@@ -378,20 +439,66 @@
 
   el.sort.addEventListener('change', function (e) {
     state.sort = e.target.value; save();
-    currentRows = sortRows(currentRows); paint();
+    currentRows = sortRows(currentRows);
+    el.viewport.scrollTop = 0;
+    paintVirtual();
+  });
+
+  el.seenfilter.addEventListener('change', function (e) {
+    state.seenFilter = e.target.value; save();
+    renderActive(); refresh();
+  });
+
+  el.clearseen.addEventListener('click', function () {
+    var n = Object.keys(seen).length;
+    if (!n || !confirm('清空全部 ' + n + ' 条点过记录？')) return;
+    seen = {}; saveSeen(); paintVirtual();
+  });
+
+  // 点过按钮 / 点标题自动标记：事件委托
+  el.list.addEventListener('click', function (e) {
+    var sb = e.target.closest('.seen-btn');
+    if (sb) {
+      e.preventDefault();
+      var tid = sb.getAttribute('data-seen');
+      var on = !isSeen(tid);
+      markSeen(tid, on);
+      if (state.seenFilter === 'only' && !on) {
+        // 在「只看点过」里取消 → 该行要消失，重筛
+        refresh();
+      } else {
+        // 更新当前可见行的按钮状态，不整页重刷
+        var row = sb.closest('.row');
+        if (row) {
+          row.classList.toggle('seen', on);
+          sb.classList.toggle('on', on);
+          sb.textContent = on ? '✓' : '○';
+          sb.title = on ? '取消点过' : '标记点过';
+        }
+      }
+      return;
+    }
+    var a = e.target.closest('a[data-open]');
+    if (a) {
+      var id = a.getAttribute('data-open');
+      if (!isSeen(id)) {
+        markSeen(id, true);
+        var row2 = a.closest('.row');
+        if (row2) {
+          row2.classList.add('seen');
+          var btn = row2.querySelector('.seen-btn');
+          if (btn) { btn.classList.add('on'); btn.textContent = '✓'; btn.title = '取消点过'; }
+        }
+      }
+    }
   });
 
   el.reset.addEventListener('click', function () {
-    if (!confirm('清空所有筛选条件和排序偏好？')) return;
+    if (!confirm('清空所有筛选条件和排序偏好？（点过记录保留，可用「清空点过」单独清）')) return;
     try { localStorage.removeItem(KEY); } catch (e) {}
-    state = { tags: [], kw: '', sort: 'page', hideStick: false, limit: 400, depth: 100 };
-    el.q.value = ''; el.sort.value = 'page';
+    state = { tags: [], kw: '', sort: 'page', hideStick: false, depth: 100, seenFilter: 'all' };
+    el.q.value = ''; el.sort.value = 'page'; el.seenfilter.value = 'all';
     renderTags(); renderActive(); refresh();
-  });
-
-  el.more.addEventListener('click', function () {
-    state.limit += 400;
-    paint();
   });
 
   /* 无筛选时「加载更早的页」：按片追加，每次多 100 页 */
@@ -417,8 +524,10 @@
   /* ---------------- 启动 ---------------- */
   el.q.value = state.kw;
   el.sort.value = state.sort;
+  el.seenfilter.value = state.seenFilter;
   el.meta.textContent = META.forum + ' (fid=' + META.fid + ') · '
     + META.pages_done + '/' + META.total_pages + ' 页 · ' + META.count + ' 帖 · 生成于 ' + META.generated;
+  updateSeenCount();
   renderTags();
   renderActive();
   refresh();
