@@ -56,3 +56,6 @@ FULIBA/data/gallery_resources.json
 JAVBUS/data/gallery_resources.json
 
 tmp/
+# ---- 原子写入临时备份（.a/.b 轮转，不进库）----
+JAVDB/data/state/*.a
+JAVDB/data/state/*.b
