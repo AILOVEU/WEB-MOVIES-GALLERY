@@ -183,6 +183,26 @@ main{max-width:var(--maxw);margin:0 auto;padding:22px 20px 60px}
 .mmag-copy:hover,.mmag-open:hover{border-color:var(--acc);color:var(--acc)}
 .mmag-copy.ok{color:var(--acc);border-color:var(--acc)}
 
+/* 剧照（樣品圖像）：只引用远程地址，不下载。网格自适应，窄屏自动变 3 列 */
+.msmp{margin:0 22px 18px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.msmp-h{padding:9px 14px;font-size:13px;font-weight:700;color:var(--fg2);background:var(--card2);border-bottom:1px solid var(--line)}
+.msmp-h small{font-weight:400;color:var(--fg3);margin-left:6px}
+.msmp-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;padding:12px}
+.msmp-i{display:block;aspect-ratio:16/10;border-radius:7px;overflow:hidden;background:#0a0b0e;border:1px solid var(--line)}
+.msmp-i:hover{border-color:var(--acc)}
+.msmp-i img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .25s ease}
+@media(max-width:720px){
+  .msmp{margin:0 12px 14px}
+  .msmp-g{grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:6px;padding:9px}
+  /* 弹窗头部：窄屏改成上下堆叠。原来 .mside 固定 340px 会把 .minfo 挤成 0 宽（2026-11-25 实测） */
+  .mbody{flex-direction:column;gap:12px;padding:14px}
+  .mside{width:100%;flex:none}
+  .minfo{width:100%;flex:none}
+  .mmag,.msmp{margin:0 12px 14px}
+  .mmag-item{padding:8px 10px;gap:8px}
+  .mmag-copy,.mmag-open{padding:5px 9px;font-size:11px}
+}
+
 /* ===== 空状态 ===== */
 .empty{text-align:center;padding:80px 20px;color:var(--fg3)}
 .empty .big{font-size:42px;margin-bottom:12px;opacity:.5}
@@ -458,6 +478,21 @@ function magBucket(code){const s=String(code||'').toUpperCase().replace(/[^A-Z0-
 function magWin(b){return window['JAVDB_MAG_'+b];}
 function loadMag(code){const b=magBucket(code);if(magWin(b))return Promise.resolve();if(MAG_LOAD[b])return MAG_LOAD[b];MAG_LOAD[b]=new Promise((res,rej)=>{const s=document.createElement('script');s.src='data/site/mag/mag_'+b+'.js?v='+BUILD_V;s.onload=res;s.onerror=()=>rej(new Error('mag_'+b));document.head.appendChild(s);});return MAG_LOAD[b];}
 function renderMagSlots(){document.querySelectorAll('.mmag-loading[data-mag]').forEach(el=>{if(!magWin(magBucket(el.dataset.mag)))return;const html=magnetHTML(el.dataset.mag);if(html){const t=document.createElement('div');t.innerHTML=html;const nd=t.firstElementChild;if(nd)el.replaceWith(nd);}else{el.remove();}});}
+
+/* ---- 剧照分桶懒加载（只记远程地址，不下载；与磁力同一套 bucket 函数）---- */
+const SMP_LOAD={};
+function smpWin(b){return window['JAVDB_SMP_'+b];}
+function loadSmp(code){const b=magBucket(code);if(smpWin(b))return Promise.resolve();if(SMP_LOAD[b])return SMP_LOAD[b];SMP_LOAD[b]=new Promise((res,rej)=>{const s=document.createElement('script');s.src='data/site/smp/smp_'+b+'.js?v='+BUILD_V;s.onload=res;s.onerror=()=>rej(new Error('smp_'+b));document.head.appendChild(s);});return SMP_LOAD[b];}
+function renderSmpSlots(){document.querySelectorAll('.msmp-loading[data-smp]').forEach(el=>{if(!smpWin(magBucket(el.dataset.smp)))return;const html=sampleHTML(el.dataset.smp);if(html){const t=document.createElement('div');t.innerHTML=html;const nd=t.firstElementChild;if(nd)el.replaceWith(nd);}else{el.remove();}});}
+function sampleHTML(code){
+  const _b = magBucket(code), _W = smpWin(_b);
+  if (!_W){ loadSmp(code).then(renderSmpSlots).catch(()=>{});
+    return `<div class="msmp msmp-loading" data-smp="${esc(code)}"><div class="msmp-h">剧照 <small>加载中…</small></div></div>`; }
+  const urls = _W[code] || [];
+  if (!urls.length) return '';
+  const imgs = urls.map((u,i)=>`<a class="msmp-i" href="${esc(u)}" target="_blank" rel="noopener" title="第 ${i+1} 张（点击看原图）"><img src="${esc(u)}" loading="lazy" alt="" onerror="this.closest('.msmp-i').style.display='none'"></a>`).join('');
+  return `<div class="msmp"><div class="msmp-h">剧照 <small>${urls.length} 张 · 远程地址</small></div><div class="msmp-g">${imgs}</div></div>`;
+}
 function magnetHTML(code){
   const _b = magBucket(code), _W = magWin(_b);
   const _ltx = (LT && LT[code]) || [];
@@ -496,7 +531,7 @@ function openModal(c){
   const votes = (c.votes!=null) ? `${c.votes.toLocaleString()} 人评价` : (c.date||'');
   mbodyEl.innerHTML = `<div class="mbody"><div class="mside">${poster?coverImg(poster, c.code):''}</div>
     <div class="minfo"><div class="mtitle">${esc(c.code)} ${esc(c.title||'')}</div><div class="mmeta">${rk}${score}<span>${votes}</span></div><div class="mtags2">${tags}</div></div></div>
-    ${mediaHTML(c)}${magnetHTML(c.code)}
+    ${mediaHTML(c)}${magnetHTML(c.code)}${sampleHTML(c.code)}
     <div class="mfoot"><a href="${esc(c.url)}" target="_blank" rel="noopener">前往 JavDB 详情页 &rarr;</a></div>`;
   mask.classList.add('show');
   document.body.style.overflow='hidden';

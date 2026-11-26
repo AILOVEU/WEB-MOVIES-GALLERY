@@ -1,6 +1,13 @@
 {
   "desc": "确认无预告片的番号持久记录（m3u8=404，以后也不会有）；与 videos_manifest.json 的已下载/已迁移记录分开。默认跳过不重下，除非 --refetch-no-preview。",
   "items": {
+    "010115_001": {
+      "code": "010115_001",
+      "first_seen": "2026-11-25",
+      "last_seen": "2026-11-25",
+      "reason": "m3u8_404",
+      "vid": "pPORm"
+    },
     "011115-781": {
       "code": "011115-781",
       "first_seen": "2026-10-31",
@@ -1393,6 +1400,13 @@
       "last_seen": "2026-10-31",
       "reason": "backfill_ckpt",
       "vid": "OX1zZB"
+    },
+    "DLDSS-493": {
+      "code": "DLDSS-493",
+      "first_seen": "2026-11-25",
+      "last_seen": "2026-11-25",
+      "reason": "m3u8_404",
+      "vid": "P91mbr"
     },
     "DMDG-033": {
       "code": "DMDG-033",
@@ -2794,6 +2808,13 @@
       "reason": "backfill_ckpt",
       "vid": "ZYDV"
     },
+    "IPZ-462": {
+      "code": "IPZ-462",
+      "first_seen": "2026-11-25",
+      "last_seen": "2026-11-25",
+      "reason": "m3u8_404",
+      "vid": "E2Nbx"
+    },
     "IPZ-689": {
       "code": "IPZ-689",
       "first_seen": "2026-10-31",
@@ -3332,6 +3353,13 @@
       "last_seen": "2026-10-31",
       "reason": "backfill_ckpt",
       "vid": "V4VzvQ"
+    },
+    "JUR-897": {
+      "code": "JUR-897",
+      "first_seen": "2026-11-25",
+      "last_seen": "2026-11-25",
+      "reason": "m3u8_404",
+      "vid": "OXRKQv"
     },
     "JUVR-234": {
       "code": "JUVR-234",
@@ -5104,6 +5132,13 @@
       "reason": "backfill_ckpt",
       "vid": "GZMEpq"
     },
+    "PRWF-017": {
+      "code": "PRWF-017",
+      "first_seen": "2026-11-25",
+      "last_seen": "2026-11-25",
+      "reason": "m3u8_404",
+      "vid": "WwWEVQ"
+    },
     "Pornstars Like it Big": {
       "code": "Pornstars Like it Big",
       "first_seen": "2026-10-31",
@@ -5229,6 +5264,13 @@
       "last_seen": "2026-10-31",
       "reason": "backfill_ckpt",
       "vid": "mOORMr"
+    },
+    "S2MBD-050": {
+      "code": "S2MBD-050",
+      "first_seen": "2026-11-25",
+      "last_seen": "2026-11-25",
+      "reason": "m3u8_404",
+      "vid": "ZyeQq"
     },
     "S2MBD-055": {
       "code": "S2MBD-055",
@@ -5558,6 +5600,13 @@
       "last_seen": "2026-10-31",
       "reason": "backfill_ckpt",
       "vid": "zkndb"
+    },
+    "SNIS-352": {
+      "code": "SNIS-352",
+      "first_seen": "2026-11-25",
+      "last_seen": "2026-11-25",
+      "reason": "m3u8_404",
+      "vid": "mO38n"
     },
     "SNIS-585": {
       "code": "SNIS-585",
@@ -5950,6 +5999,13 @@
       "last_seen": "2026-10-31",
       "reason": "backfill_ckpt",
       "vid": "6dWQ8a"
+    },
+    "SNOS-334": {
+      "code": "SNOS-334",
+      "first_seen": "2026-11-25",
+      "last_seen": "2026-11-25",
+      "reason": "m3u8_404",
+      "vid": "nK7zbV"
     },
     "SOAN-002": {
       "code": "SOAN-002",
@@ -7198,7 +7254,7 @@
       "vid": "y09Ed"
     }
   },
-  "total": 1028,
-  "updated_at": "2026-11-02 15:31:24",
+  "total": 1036,
+  "updated_at": "2026-11-25 09:30:19",
   "version": 1
 }

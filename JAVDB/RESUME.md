@@ -83,7 +83,13 @@ JAVDB/
 #### `data/state/`（7 个 json，页面不读，全部是脚本的判定依据）
 - `covers_manifest.json` — **封面已下载清单**（判定「重不重下」的唯一真相，文件搬走记录不删）
 - `videos_manifest.json` — **预告片已下载清单**（同上，见第 5.5 节）
-- `videos_no_preview.json` — 确认「没有预告片」的番号终态名单（第 7 节）
+- `videos_no_preview.json` — **javdb 源**确认「没有预告片」的番号终态名单（第 7 节）
+- `javbus_no_preview.json` — **javbus 源**确认「没有预告片」的番号记录（2026-11-25 新增）
+  ⚠ **两张表严格独立，不可合并、不可互相推断**：javdb 记的是「javdb 的 m3u8 返回 404」，
+  javbus 记的是「详情页没有视频入口 / 连剧照都没有」。一个源没有不代表另一个源没有。
+  混用会导致互相误跳过（javdb 记了「无」→ javbus 永远不再查，反之亦然）。
+  javbus 表每条带 `source: "javbus"` 字段，由 `magnet_spider.py` 独占读写；
+  `trailers_download.py` / `trailers_sweep.py` 一律不读不写它。
 - `covers_unavailable.json` — CDN 上确实拿不到的封面名单（默认不再重试，只记 403/404/410）
 - `media_unmatched.json` — 目录里有、但番号对不上 `movies.js` 的视频文件清单
 - `move_manifest.json` — `assets/` 三个目录的**迁移清单与校验基准**（`move_check.py export` 产出）
